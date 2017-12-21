@@ -1,0 +1,23 @@
+<table>
+  <thead>
+    <tr>
+      <th class="text--left">Key</th>
+      <th class="text--left">Name</th>
+      <th class="text--right">Status</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngIf="scopes.length === 0">
+      <td colspan="4" class="text--center">No Scopes</td>
+    </tr>
+    <tr *ngFor="let scope of scopes">
+      <td class="text--left">{{ scope.name }}</td>
+      <td class="text--left">{{ scope.description }}</td>
+      <td class="text--right">{{ scope.status }}</td>
+      <td class="text--right">
+        <button class="button button--danger">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

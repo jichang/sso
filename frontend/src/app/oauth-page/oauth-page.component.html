@@ -1,0 +1,17 @@
+<div class="page page--oauth">
+  <div *ngIf="authorization.client_app">
+    <p>Application <span>{{authorization.client_app.name}}</span></p>
+  </div>
+  <p>request</p>
+  <div *ngIf="authorization.server_app">
+    <p>Application <span>{{authorization.server_app.name}}</span></p>
+  </div>
+  <div *ngIf="authorization.scope">
+    <p>Priviledge <span>{{authorization.scope.name}}</span></p>
+    <p><span>{{authorization.scope.description}}</span></p>
+  </div>
+  <div>
+    <button type="button">Cancel</button>
+    <button type="button" (click)="authorize()">Authorize</button>
+  </div>
+</div>

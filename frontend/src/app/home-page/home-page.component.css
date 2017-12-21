@@ -1,0 +1,33 @@
+.logo {
+  display: block;
+  margin: 2rem auto;
+
+  width: 256px;
+  height: auto;
+}
+
+.link--action {
+  display: inline-block;
+  margin: 0.5rem 1rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid transparent;
+
+  text-decoration: none;
+  border-radius: 0.5rem;
+}
+
+.link--primary {
+  border-color: black;
+
+  color: white;
+
+  background: black;
+}
+
+.link--outline {
+  border-color: currentColor;
+
+  color: black;
+
+  background: white;
+}

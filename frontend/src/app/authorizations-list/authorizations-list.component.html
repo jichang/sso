@@ -1,0 +1,34 @@
+<table>
+  <thead>
+    <tr>
+      <th class="text--left">Name</th>
+      <th class="text--left">Website</th>
+      <th class="text--left">Client Id</th>
+      <th class="text--left">Client Secret</th>
+      <th class="text--left">Redirect Uri</th>
+      <th class="text--right"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let application of applications">
+      <td class="text--left">{{ application.name }}</td>
+      <td class="text--left">
+        <a class="text--link" [href]="application.website_uri" target="_blank">{{ application.website_uri }}</a>
+      </td>
+      <td class="text--left">
+        <copy-text-span [text]="application.client_id">
+          <span>{{application.client_id | mask: 4}}</span>
+        </copy-text-span>
+      </td>
+      <td class="text--left">
+        <copy-text-span [text]="application.client_secret.Plaintext">
+          <span>{{application.client_secret.Plaintext | mask: 4}}</span>
+        </copy-text-span>
+      </td>
+      <td class="text--left">{{ application.callback_uri }}</td>
+      <td class="text--right">
+        <a class="text--link" [routerLink]="[application.id]">Details</a>
+      </td>
+    </tr>
+  </tbody>
+</table>

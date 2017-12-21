@@ -1,0 +1,8 @@
+:host {
+  width: 100%;
+}
+
+.form__control__errors {
+  position: relative;
+  width: 100%;
+}

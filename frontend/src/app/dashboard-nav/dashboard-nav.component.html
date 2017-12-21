@@ -1,0 +1,14 @@
+<div>
+  <img alt="home page" class="logo" src="/assets/logo.svg" />
+</div>
+<nav class="site__nav">
+  <ul class="menu">
+    <li class="menu__item"><a class="site__nav__link" [routerLink]="['applications']" routerLinkActive="site__nav__link--active">Applications</a></li>
+    <li class="menu__item"><a class="site__nav__link" [routerLink]="['authorizations']" routerLinkActive="site__nav__link--active">Authorizations</a></li>
+  </ul>
+</nav>
+<div>
+  <a class="site__nav__link" [routerLink]="['settings']" routerLinkActive="site__nav__link--active">
+    <img alt="settings" src="/assets/settings.svg" />
+  </a>
+</div>

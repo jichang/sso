@@ -1,0 +1,49 @@
+:host {
+  display: inline-block;
+
+  vertical-align: middle;
+}
+
+button {
+  position: relative;
+  padding: 0;
+  border: none;
+
+  vertical-align: middle;
+
+  cursor: pointer;
+
+  background: transparent;
+}
+
+button::before {
+  position: absolute;
+  top: 100%;
+  left: -1.5rem;
+  display: none;
+  margin: 0 auto;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #e4e4e4;
+
+  width: 4rem;
+
+  content: 'Copied';
+
+  text-align: center;
+
+  background:#fff;
+}
+
+button.button--copied::after {
+  display: block;
+}
+
+span {
+  position: fixed;
+  top: -100px;
+}
+
+svg {
+  width: 1rem;
+  height: auto;
+}

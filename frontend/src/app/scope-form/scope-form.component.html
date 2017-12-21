@@ -1,0 +1,22 @@
+<header class="table__header">
+  <h4 class="table__header__title">
+    <a [routerLink]="['..']"><img src="/assets/arrow-left.svg" /></a>
+    <span>New Scope</span>
+  </h4>
+</header>
+
+<form class="form" [formGroup]="scope" (ngSubmit)="create(scope)" novalidate>
+  <div class="form__field">
+    <label class="form__field__label">Name</label>
+    <input class="form__field__control" type="text" placeholder="name" name="name" formControlName="name" />
+  </div>
+  <div class="form__field">
+    <label class="form__field__label">Description</label>
+    <input class="form__field__control" type="text" placeholder="description" name="description" formControlName="description" />
+  </div>
+
+  <div class="form__field text--center">
+    <a class="button button--outline" [routerLink]="['..']">Cancel</a>
+    <button class="button button--primary" [disabled]="!scope.valid">Create</button>
+  </div>
+</form>

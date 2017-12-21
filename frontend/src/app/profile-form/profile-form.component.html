@@ -1,0 +1,24 @@
+<form class="form" [formGroup]="profile" (ngSubmit)="update(profile)" novalidate>
+  <div class="form__field">
+    <label class="form__field__label" for="profileName">Name</label>
+    <input class="form__field__control" id="profileName" type="text" placeholder="name" name="name" formControlName="name"/>
+  </div>
+  <div class="form__field">
+    <label class="form__field__label" for="profileGender">Gender</label>
+    <select class="form__field__control" id="profileGender" name="gender" formControlName="gender_id">
+      <option *ngFor="let gender of genders" [value]="gender.id">{{gender.name}}</option>
+    </select>
+  </div>
+  <div class="form__field">
+    <label class="form__field__label" for="profileBirthday">Birthday</label>
+    <input class="form__field__control" id="profileBirthday" type="date" placeholder="Birthday" name="birthday" formControlName="birthday"/>
+  </div>
+  <div class="form__field">
+    <label class="form__field__label" for="profileIntroduction">Introduction</label>
+    <textarea class="form__field__control" id="profileIntroduction" type="text" placeholder="Introduction" name="introduction" formControlName="introduction"></textarea>
+  </div>
+
+  <div class="form__field">
+    <button class="button button--primary button--block" [disabled]="!profile.valid">Update</button>
+  </div>
+</form>

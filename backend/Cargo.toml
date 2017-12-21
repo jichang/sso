@@ -1,0 +1,29 @@
+[package]
+name = "backend"
+version = "0.1.0"
+authors = ["Jacob Chang <mrchangji@outlook.com>"]
+
+[dependencies]
+error-chain="*"
+toml = "*"
+serde = "*"
+serde_derive = "*"
+serde_json = "*"
+rand = "*"
+url = "*"
+hex = "*"
+md5 = "*"
+argon2rs = "*"
+chrono = { version = "*", features = ["serde"] }
+lettre = "*"
+dotenv = "*"
+rocket = "*"
+rocket_codegen = "*"
+rocket_contrib = { version = "*", features = ["json", "handlebars_templates"] }
+jsonwebtoken = { version="*" }
+redis = "*"
+postgres = { version = "*", features = ["with-chrono", "with-uuid"] }
+uuid = { version = "*", features = ["serde", "v4"] }
+r2d2 = "*"
+r2d2_redis = "*"
+r2d2_postgres = "*"

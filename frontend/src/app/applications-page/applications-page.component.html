@@ -1,0 +1,9 @@
+<header class="page__header">
+  <h2 class="page__header__title">Applications</h2>
+  <div class="page__header__action">
+    <a class="button button--primary" [routerLink]="['create']">New Application</a>
+  </div>
+</header>
+<section class="page__content">
+  <applications-list [applications]="applications"></applications-list>
+</section>

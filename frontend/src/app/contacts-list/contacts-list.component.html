@@ -1,0 +1,19 @@
+<table>
+  <thead>
+    <tr>
+      <th class="text--left">Identity</th>
+      <th class="text--right"></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let contact of contacts">
+      <td class="text--left">
+        <span>{{ contact.identity }}</span>
+        <img *ngIf="contact.status" class="icon" src="/assets/checked.svg" />
+      </td>
+      <td class="text--right">
+        <button class="button button--danger">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

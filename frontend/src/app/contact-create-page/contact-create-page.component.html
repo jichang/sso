@@ -1,0 +1,10 @@
+<header class="table__header">
+  <h4 class="table__header__title">
+    <a [routerLink]="['..']"><img src="/assets/arrow-left.svg" /></a>
+    <span>New Contact</span>
+  </h4>
+</header>
+
+<div class="page page--contact-create">
+  <contact-form (result)="added()"></contact-form>
+</div>

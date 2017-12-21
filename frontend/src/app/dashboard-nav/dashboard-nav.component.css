@@ -1,0 +1,42 @@
+:host {
+  display: flex;
+  padding: 1rem 0 0 0;
+
+  align-items: center;
+}
+
+.site__nav {
+  flex: 1;
+  padding: 0 1rem;
+}
+
+.site__nav__link {
+  opacity: 0.5;
+}
+
+.site__nav__link--active {
+  opacity: 1;
+}
+
+.site__nav__link span {
+  vertical-align: middle;
+}
+
+.logo {
+  width: 1.5rem;
+  height: auto;
+}
+
+.menu {
+  margin: 0;
+  padding: 0;
+}
+
+.menu__item {
+  display: inline-block;
+  margin: 0.5rem;
+}
+
+.menu__item a {
+  text-decoration: none;
+}

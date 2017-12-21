@@ -1,0 +1,19 @@
+<header class="page__header">
+  <h2 class="page__header__title">
+    <span>Settings</span>
+  </h2>
+</header>
+<section class="page__content">
+  <div class="section">
+    <aside class="section__nav">
+      <ul>
+        <li><a class="aside__nav__link" [routerLink]="['profile']" routerLinkActive="aside__nav__link--active">Profile</a></li>
+        <li><a class="aside__nav__link" [routerLink]="['contacts']" routerLinkActive="aside__nav__link--active">Contacts</a></li>
+      </ul>
+    </aside>
+
+    <div class="section__details">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</section>
