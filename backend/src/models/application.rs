@@ -3,7 +3,7 @@ use chrono::{DateTime, Utc};
 use postgres::GenericConnection;
 use super::Error as ModelError;
 use url::Url;
-use hex::ToHex;
+use hex;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum ClientSecret {
@@ -96,8 +96,8 @@ pub fn create<T: GenericConnection>(
             user_id: row.get("user_id"),
             name: row.get("name"),
             website_uri: row.get("website_uri"),
-            client_id: client_id.to_hex(),
-            client_secret: create_secret(client_secret.to_hex()),
+            client_id: hex::encode(client_id),
+            client_secret: create_secret(hex::encode(client_secret)),
             callback_uri: row.get("callback_uri"),
             created_time: row.get("created_time"),
             updated_time: row.get("updated_time"),
@@ -141,8 +141,8 @@ pub fn select<T: GenericConnection>(
             user_id: row.get("user_id"),
             name: row.get("name"),
             website_uri: row.get("website_uri"),
-            client_id: client_id.to_hex(),
-            client_secret: create_secret(client_secret.to_hex()),
+            client_id: hex::encode(client_id),
+            client_secret: create_secret(hex::encode(client_secret)),
             callback_uri: row.get("callback_uri"),
             created_time: row.get("created_time"),
             updated_time: row.get("updated_time"),
@@ -192,8 +192,8 @@ pub fn select_one<T: GenericConnection>(
             user_id: row.get("user_id"),
             name: row.get("name"),
             website_uri: row.get("website_uri"),
-            client_id: client_id.to_hex(),
-            client_secret: create_secret(client_secret.to_hex()),
+            client_id: hex::encode(client_id),
+            client_secret: create_secret(hex::encode(client_secret)),
             callback_uri: row.get("callback_uri"),
             created_time: row.get("created_time"),
             updated_time: row.get("updated_time"),
@@ -229,8 +229,8 @@ pub fn remove<T: GenericConnection>(
             user_id: row.get("user_id"),
             name: row.get("name"),
             website_uri: row.get("website_uri"),
-            client_id: client_id.to_hex(),
-            client_secret: create_secret(client_secret.to_hex()),
+            client_id: hex::encode(client_id),
+            client_secret: create_secret(hex::encode(client_secret)),
             callback_uri: row.get("callback_uri"),
             created_time: row.get("created_time"),
             updated_time: row.get("updated_time"),

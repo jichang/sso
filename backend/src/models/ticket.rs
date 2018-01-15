@@ -1,6 +1,6 @@
 use postgres::GenericConnection;
 use super::Error as ModelError;
-use hex::ToHex;
+use hex;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Ticket {
@@ -41,8 +41,8 @@ pub fn create<T: GenericConnection>(
         Ok(Ticket {
             id: row.get("id"),
             open_id: row.get("open_id"),
-            access_token: access_token.to_hex(),
-            refresh_token: refresh_token.to_hex(),
+            access_token: hex::encode(access_token),
+            refresh_token: hex::encode(refresh_token),
         })
     }
 }
@@ -72,8 +72,8 @@ pub fn update<T: GenericConnection>(
         Ok(Ticket {
             id: row.get("id"),
             open_id: row.get("open_id"),
-            access_token: access_token.to_hex(),
-            refresh_token: refresh_token.to_hex(),
+            access_token: hex::encode(access_token),
+            refresh_token: hex::encode(refresh_token),
         })
     }
 }

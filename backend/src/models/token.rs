@@ -1,4 +1,4 @@
-use hex::ToHex;
+use hex;
 use rand::{Rng, StdRng};
 use std::fmt;
 use std::error::Error as StdError;
@@ -51,7 +51,7 @@ pub fn create() -> Result<String, TokenError> {
     let mut rng = StdRng::new()?;
     rng.fill_bytes(&mut token);
 
-    Ok(token.to_hex())
+    Ok(hex::encode(token))
 }
 
 pub fn store(redis_conn: &Connection, email_addr: &str, token: &str) -> Result<(), TokenError> {

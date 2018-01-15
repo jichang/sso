@@ -1,7 +1,8 @@
 use rocket::State;
 use rocket_contrib::Json;
 
-use hex::{FromHex, ToHex};
+use hex;
+use hex::{FromHex};
 use redis::Commands;
 use url::Url;
 
@@ -51,8 +52,6 @@ pub fn create_authorization(
 
         let callback_uri = Url::parse(&client_application.callback_uri)?;
         let redirect_uri = Url::parse(&params.redirect_uri)?;
-        println!("{}", callback_uri);
-        println!("{}", redirect_uri);
         if callback_uri.origin() != redirect_uri.origin() ||
             callback_uri.path() != redirect_uri.path()
         {
@@ -65,11 +64,11 @@ pub fn create_authorization(
         let redis_conn = cache.get_conn()?;
         let code = common::gen_rand_bytes(AUTH_CODE_SIZE)?;
         let expire = 5 * 60;
-        let key = format!("oauth:code:{}", code.to_hex());
+        let key = format!("oauth:code:{}", hex::encode(&code));
         let _: String = redis_conn.set_ex(&key, new_authorization.id, expire)?;
 
         let credientials = Credientials {
-            code: code.to_hex(),
+            code: hex::encode(&code),
             state: params.state.clone(),
         };
 

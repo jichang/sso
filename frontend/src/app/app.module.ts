@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Injectable } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { ServiceWorkerModule } from '@angular/service-worker';
 import { RequestOptions, RequestOptionsArgs, BaseRequestOptions } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
 
@@ -167,7 +168,8 @@ const routes: Routes = [
     BrowserModule,
     ReactiveFormsModule,
     HttpClientModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    ServiceWorkerModule,
   ],
   providers: [
     { provide: RequestOptions, useClass: TrackableHttpOptions },

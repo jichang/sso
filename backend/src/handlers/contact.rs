@@ -1,7 +1,7 @@
 use rocket::State;
 use rocket_contrib::Json;
 
-use hex::ToHex;
+use hex;
 use redis::Commands;
 
 use super::Error;
@@ -48,13 +48,13 @@ pub fn create_contact(
         let verify_token = common::gen_rand_bytes(VERIFY_TOKEN_SIZE)?;
         let expire = 5 * 60;
         let key = format!("token:verify:contact:{}", new_contact.id);
-        let _: String = redis_conn.set_ex(&key, verify_token.to_hex(), expire)?;
+        let _: String = redis_conn.set_ex(&key, hex::encode(&verify_token), expire)?;
 
         let _ = mailer::send_token(
             &config,
             new_contact.id,
             &new_contact.identity,
-            &verify_token.to_hex(),
+            &hex::encode(&verify_token),
         );
 
         Ok(Json(new_contact))
@@ -99,13 +99,13 @@ pub fn send_verify_token(
         let verify_token = common::gen_rand_bytes(VERIFY_TOKEN_SIZE)?;
         let expire = 5 * 60;
         let key = format!("token:verify:contact:{}", match_contact.id);
-        let _: String = redis_conn.set_ex(&key, verify_token.to_hex(), expire)?;
+        let _: String = redis_conn.set_ex(&key, hex::encode(&verify_token), expire)?;
 
         let _ = mailer::send_token(
             &config,
             match_contact.id,
             &match_contact.identity,
-            &verify_token.to_hex(),
+            &hex::encode(&verify_token),
         );
 
         Ok(Json(match_contact))

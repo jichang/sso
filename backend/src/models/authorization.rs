@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
 use postgres::GenericConnection;
 use super::Error as ModelError;
-use hex::ToHex;
+use hex;
 use super::application::{Application, Scope, ClientSecret};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -102,7 +102,7 @@ pub fn create<T: GenericConnection>(
                     user_id: row.get("client_app_user_id"),
                     name: row.get("client_app_name"),
                     website_uri: row.get("client_app_website_uri"),
-                    client_id: client_app_client_id.to_hex(),
+                    client_id: hex::encode(client_app_client_id),
                     client_secret: ClientSecret::plaintext("".to_owned()),
                     callback_uri: row.get("client_app_callback_uri"),
                     created_time: row.get("client_app_created_time"),
@@ -115,7 +115,7 @@ pub fn create<T: GenericConnection>(
                     user_id: row.get("server_app_user_id"),
                     name: row.get("server_app_name"),
                     website_uri: row.get("server_app_website_uri"),
-                    client_id: server_app_client_id.to_hex(),
+                    client_id: hex::encode(server_app_client_id),
                     client_secret: ClientSecret::plaintext("".to_owned()),
                     callback_uri: row.get("server_app_callback_uri"),
                     created_time: row.get("server_app_created_time"),
@@ -202,7 +202,7 @@ pub fn select<T: GenericConnection>(
                     user_id: row.get("client_app_user_id"),
                     name: row.get("client_app_name"),
                     website_uri: row.get("client_app_website_uri"),
-                    client_id: client_app_client_id.to_hex(),
+                    client_id: hex::encode(client_app_client_id),
                     client_secret: ClientSecret::plaintext("".to_owned()),
                     callback_uri: row.get("client_app_callback_uri"),
                     created_time: row.get("client_app_created_time"),
@@ -215,7 +215,7 @@ pub fn select<T: GenericConnection>(
                     user_id: row.get("server_app_user_id"),
                     name: row.get("server_app_name"),
                     website_uri: row.get("server_app_website_uri"),
-                    client_id: server_app_client_id.to_hex(),
+                    client_id: hex::encode(server_app_client_id),
                     client_secret: ClientSecret::plaintext("".to_owned()),
                     callback_uri: row.get("server_app_callback_uri"),
                     created_time: row.get("server_app_created_time"),
@@ -329,7 +329,7 @@ pub fn select_one<T: GenericConnection>(
                 user_id: row.get("client_app_user_id"),
                 name: row.get("client_app_name"),
                 website_uri: row.get("client_app_website_uri"),
-                client_id: client_app_client_id.to_hex(),
+                client_id: hex::encode(client_app_client_id),
                 client_secret: ClientSecret::plaintext("".to_owned()),
                 callback_uri: row.get("client_app_callback_uri"),
                 created_time: row.get("client_app_created_time"),
@@ -342,7 +342,7 @@ pub fn select_one<T: GenericConnection>(
                 user_id: row.get("server_app_user_id"),
                 name: row.get("server_app_name"),
                 website_uri: row.get("server_app_website_uri"),
-                client_id: server_app_client_id.to_hex(),
+                client_id: hex::encode(server_app_client_id),
                 client_secret: ClientSecret::plaintext("".to_owned()),
                 callback_uri: row.get("server_app_callback_uri"),
                 created_time: row.get("server_app_created_time"),
@@ -407,7 +407,7 @@ pub fn preview<T: GenericConnection>(
             user_id: row.get("client_app_user_id"),
             name: row.get("client_app_name"),
             website_uri: row.get("client_app_website_uri"),
-            client_id: client_app_client_id.to_hex(),
+            client_id: hex::encode(client_app_client_id),
             client_secret: ClientSecret::ciphertext("".to_owned()),
             callback_uri: row.get("client_app_callback_uri"),
             created_time: row.get("client_app_created_time"),
@@ -451,7 +451,7 @@ pub fn preview<T: GenericConnection>(
                 user_id: row.get("server_app_user_id"),
                 name: row.get("server_app_name"),
                 website_uri: row.get("server_app_website_uri"),
-                client_id: server_app_client_id.to_hex(),
+                client_id: hex::encode(server_app_client_id),
                 client_secret: ClientSecret::ciphertext("".to_owned()),
                 callback_uri: row.get("server_app_callback_uri"),
                 created_time: row.get("server_app_created_time"),

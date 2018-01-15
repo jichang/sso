@@ -11,13 +11,13 @@ use rocket::http::{Status as HttpStatus, ContentType};
 use rocket_contrib::{Template};
 use serde_json;
 
+use r2d2::{Error as R2d2Error};
 use redis::RedisError;
 use jwt::errors::Error as JwtError;
 use hex::FromHexError;
 use url::ParseError;
 use postgres::error::UNIQUE_VIOLATION;
 use super::models::Error as ModelError;
-use super::storage::Error as StorageError;
 
 pub mod user;
 pub mod role;
@@ -31,7 +31,7 @@ pub mod ticket;
 #[derive(Debug)]
 pub enum Error {
     IO(IoError),
-    Storage(StorageError),
+    Storage(R2d2Error),
     Redis(RedisError),
     Model(ModelError),
     Jwt(JwtError),
@@ -79,11 +79,12 @@ impl From<IoError> for Error {
     }
 }
 
-impl From<StorageError> for Error {
-    fn from(err: StorageError) -> Error {
+impl From<R2d2Error> for Error {
+    fn from(err: R2d2Error) -> Error {
         Error::Storage(err)
     }
 }
+
 impl From<RedisError> for Error {
     fn from(err: RedisError) -> Error {
         Error::Redis(err)
@@ -138,8 +139,8 @@ impl<'r> Responder<'r> for Error {
                 HttpStatus::InternalServerError
             }
             Error::Redis(ref _redis_err) => {
-                body.insert("errno", "50000001");
-                body.insert("errmsg", "internal server error");
+                body.insert("errno", "50000000");
+                body.insert("errmsg", "internal server storage error");
 
                 HttpStatus::InternalServerError
             }
