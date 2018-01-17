@@ -30,5 +30,8 @@
         <a class="text--link" [routerLink]="[application.id]">Details</a>
       </td>
     </tr>
+    <tr *ngIf="applications.length === 0">
+      <td class="text--center" colspan="6">No applications</td>
+    </tr>
   </tbody>
 </table>
