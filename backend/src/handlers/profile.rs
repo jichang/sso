@@ -11,7 +11,7 @@ use super::super::models::profile::{Gender, Profile};
 use super::super::storage::Database;
 
 #[get("/profiles/genders")]
-fn query_genders(db: State<Database>) -> Result<Json<Vec<Gender>>, Error> {
+fn select_genders(db: State<Database>) -> Result<Json<Vec<Gender>>, Error> {
     let conn = db.get_conn()?;
     let genders = profile::select_genders(&*conn)?;
 

@@ -7,7 +7,7 @@ use super::super::models::role::Role;
 use super::super::storage::Database;
 
 #[get("/roles")]
-fn query_roles(db: State<Database>) -> Result<Json<Vec<Role>>, Error> {
+fn select_roles(db: State<Database>) -> Result<Json<Vec<Role>>, Error> {
     let conn = db.get_conn()?;
     let roles = role::select(&*conn)?;
 

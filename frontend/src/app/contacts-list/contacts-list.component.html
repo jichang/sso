@@ -2,6 +2,7 @@
   <thead>
     <tr>
       <th class="text--left">Identity</th>
+      <th class="text--right">Status</th>
       <th class="text--right"></th>
     </tr>
   </thead>
@@ -12,8 +13,14 @@
         <img *ngIf="contact.status" class="icon" src="/assets/checked.svg" />
       </td>
       <td class="text--right">
+        <span>{{ contact.status }}</span>
+      </td>
+      <td class="text--right">
         <button class="button button--danger">Delete</button>
       </td>
+    </tr>
+    <tr *ngIf="contacts.length === 0">
+      <td class="text--center" colspan="3">No contacts</td>
     </tr>
   </tbody>
 </table>

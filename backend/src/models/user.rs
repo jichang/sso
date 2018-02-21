@@ -5,7 +5,7 @@ use super::Error as ModelError;
 use super::role::Role;
 use super::username::Username;
 use super::crypto;
-use super::crypto::{Plaintext};
+use super::crypto::Plaintext;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Account {
@@ -61,12 +61,7 @@ pub fn create<T: GenericConnection>(
         "#;
         let rows = trans.query(
             &stmt,
-            &[
-                &user_id,
-                &username,
-                &ciphertext.salt,
-                &ciphertext.hash,
-            ],
+            &[&user_id, &username, &ciphertext.salt, &ciphertext.hash],
         )?;
         if rows.len() != 1 {
             Err(ModelError::Unknown)

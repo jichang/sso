@@ -1,4 +1,4 @@
 <div class="page page--signup">
-  <signup-form (result)="created($event)"></signup-form>
+  <signup-form (success)="created($event)" (failure)="failed($event)"></signup-form>
   <a [routerLink]="['/signin']">Sign In</a>
 </div>

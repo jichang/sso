@@ -2,9 +2,11 @@ use chrono::{DateTime, Utc};
 use postgres::GenericConnection;
 use super::Error as ModelError;
 
-pub const GENDER_MALE_ID: i32 = 1;
-pub const GENDER_FEMALE_ID: i32 = 2;
-pub const GENDER_OTHERS_ID: i32 = 3;
+pub enum GenderId {
+    Male = 1,
+    Female = 2,
+    Others = 3,
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Gender {
@@ -24,15 +26,13 @@ pub fn select_genders<T: GenericConnection>(pg_conn: &T) -> Result<Vec<Gender>, 
     let rows = pg_conn.query(stmt, &[])?;
 
     let genders = rows.iter()
-        .map(|row| {
-            Gender {
-                id: row.get("id"),
-                name: row.get("name"),
-                created_time: row.get("created_time"),
-                updated_time: row.get("updated_time"),
-                removed_time: row.get("removed_time"),
-                status: row.get("status"),
-            }
+        .map(|row| Gender {
+            id: row.get("id"),
+            name: row.get("name"),
+            created_time: row.get("created_time"),
+            updated_time: row.get("updated_time"),
+            removed_time: row.get("removed_time"),
+            status: row.get("status"),
         })
         .collect::<Vec<Gender>>();
 
@@ -71,13 +71,7 @@ pub fn create<T: GenericConnection>(
 
     let rows = trans.query(
         &stmt,
-        &[
-            &user_id,
-            &gender_id,
-            &name,
-            &birthday,
-            &introduction,
-        ],
+        &[&user_id, &gender_id, &name, &birthday, &introduction],
     )?;
     if rows.len() != 1 {
         Err(ModelError::Unknown)
@@ -192,13 +186,7 @@ pub fn update<T: GenericConnection>(
 
     let rows = trans.query(
         &stmt,
-        &[
-            &user_id,
-            &gender_id,
-            &name,
-            &birthday,
-            &introduction,
-        ],
+        &[&user_id, &gender_id, &name, &birthday, &introduction],
     )?;
     if rows.len() != 1 {
         Err(ModelError::Unknown)
@@ -294,22 +282,25 @@ pub fn remove<T: GenericConnection>(pg_conn: &T, user_id: i64) -> Result<Profile
 
 #[cfg(test)]
 mod test {
-    use super::Gender;
+    use super::GenderId;
     use postgres::{Connection, TlsMode};
 
     #[test]
     pub fn test_genders_select() {
-        let conn = Connection::connect("postgres://feblr:feblr@localhost/feblr", TlsMode::None)
-            .unwrap();
+        let conn =
+            Connection::connect("postgres://feblr:feblr@localhost/feblr", TlsMode::None).unwrap();
         let genders = super::select_genders(&conn).unwrap();
 
         assert_eq!(genders.len(), 3);
 
-        genders.into_iter().map(|gender| match gender.id {
-            GENDER_MALE_ID => assert_eq!(gender.name, "male"),
-            GENDER_FEMALE_ID => assert_eq!(gender.name, "female"),
-            GENDER_OTHERS_ID => assert_eq!(gender.name, "others"),
-            _ => panic!("unexist gender"),
-        });
+        genders
+            .into_iter()
+            .map(|gender| match gender {
+                _ if gender.id == GenderId::Male as i32 => assert_eq!(gender.name, "male"),
+                _ if gender.id == GenderId::Female as i32 => assert_eq!(gender.name, "female"),
+                _ if gender.id == GenderId::Others as i32 => assert_eq!(gender.name, "others"),
+                _ => panic!("unexist gender"),
+            })
+            .collect::<()>();
     }
 }

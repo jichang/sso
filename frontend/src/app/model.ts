@@ -1,4 +1,4 @@
-import { Contact, ContactType } from './contact-model.service';
+import { Contact, ContactType } from "./contact-model.service";
 
 export enum GenderType {
   Male = 1,
@@ -15,7 +15,7 @@ export interface Gender {
 export interface Profile {
   name: string;
   gender: Gender;
-  birthday: number,
+  birthday: number;
   introduction: string;
   status: number;
 }
@@ -25,7 +25,7 @@ export interface Role {
 }
 
 export interface User {
-  id?: number,
+  id?: number;
   role: Role;
   username: string;
   password: string;
@@ -34,7 +34,7 @@ export interface User {
 }
 
 export let session = {
-  currUser: function () {
-    return JSON.parse(window.localStorage.getItem('currUser')) as User;
+  currUser: function() {
+    return JSON.parse(window.localStorage.getItem("currUser")) as User;
   }
-}
+};

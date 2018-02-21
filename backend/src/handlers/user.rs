@@ -6,7 +6,7 @@ use uuid::Uuid;
 
 use super::Error;
 use super::super::config::Config;
-use super::super::models::role;
+use super::super::models::role::RoleId;
 use super::super::models::user;
 use super::super::models::user::User;
 use super::super::storage::Database;
@@ -40,7 +40,7 @@ fn signup(
         union_id,
         &params.username,
         &params.password,
-        role::NORMAL_ROLE_ID,
+        RoleId::Normal as i32,
     )?;
     let url = String::from("/users/self");
 
@@ -81,4 +81,12 @@ fn signin(
     };
 
     Ok(Json(auth))
+}
+
+#[derive(Serialize, Deserialize)]
+struct SignoutResponse {}
+
+#[post("/signout")]
+fn signout() -> Result<Json<SignoutResponse>, Error> {
+    Ok(Json(SignoutResponse {}))
 }

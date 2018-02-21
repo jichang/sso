@@ -15,6 +15,7 @@ pub mod application;
 pub mod authorization;
 pub mod ticket;
 pub mod ratelimit;
+pub mod action;
 
 use self::username::Error as UsernameError;
 use self::crypto::Error as CryptoError;

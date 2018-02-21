@@ -3,7 +3,7 @@ use rand::{Rng, StdRng};
 use std::fmt;
 use std::error::Error as StdError;
 use std::io::Error as IoError;
-use redis::{Connection, RedisError, Commands};
+use redis::{Commands, Connection, RedisError};
 
 #[derive(Debug)]
 pub enum TokenError {
@@ -80,7 +80,6 @@ pub fn verify(redis_conn: &Connection, email_addr: &str, token: &str) -> Result<
     }
 }
 
-
 #[cfg(test)]
 mod test {
     use redis;
@@ -103,13 +102,11 @@ mod test {
         assert_eq!(res.is_err(), true);
 
         match res {
-            Err(err) => {
-                match (err) {
-                    TokenError::Create(_) => panic!(),
-                    TokenError::Redis(_) => panic!(),
-                    TokenError::Invalid => (),
-                }
-            }
+            Err(err) => match err {
+                TokenError::Create(_) => panic!(),
+                TokenError::Redis(_) => panic!(),
+                TokenError::Invalid => (),
+            },
             _ => panic!(),
         }
     }

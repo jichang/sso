@@ -11,6 +11,7 @@
 }
 
 .site__nav__link {
+  margin-left: 0.5rem;
   opacity: 0.5;
 }
 

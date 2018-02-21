@@ -2,8 +2,10 @@ use chrono::{DateTime, Utc};
 use postgres::GenericConnection;
 use super::Error as ModelError;
 
-pub const EMAIL_TYPE_ID: i64 = 1;
-pub const PHONE_TYPE_ID: i64 = 2;
+pub enum ContactTypeId {
+    Email = 1,
+    Phone = 2,
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ContactType {
@@ -23,15 +25,13 @@ pub fn select_types<T: GenericConnection>(pg_conn: &T) -> Result<Vec<ContactType
     let rows = pg_conn.query(stmt, &[])?;
 
     let contact_types = rows.iter()
-        .map(|row| {
-            ContactType {
-                id: row.get("id"),
-                name: row.get("name"),
-                created_time: row.get("created_time"),
-                updated_time: row.get("updated_time"),
-                removed_time: row.get("removed_time"),
-                status: row.get("status"),
-            }
+        .map(|row| ContactType {
+            id: row.get("id"),
+            name: row.get("name"),
+            created_time: row.get("created_time"),
+            updated_time: row.get("updated_time"),
+            removed_time: row.get("removed_time"),
+            status: row.get("status"),
         })
         .collect::<Vec<ContactType>>();
 
@@ -183,25 +183,23 @@ pub fn select<T: GenericConnection>(pg_conn: &T, user_id: i64) -> Result<Vec<Con
     let rows = pg_conn.query(stmt, &[&user_id])?;
 
     let contacts = rows.iter()
-        .map(|row| {
-            Contact {
-                id: row.get("contact_id"),
-                user_id: row.get("contact_user_id"),
-                typ: ContactType {
-                    id: row.get("type_id"),
-                    name: row.get("type_name"),
-                    created_time: row.get("type_created_time"),
-                    updated_time: row.get("type_updated_time"),
-                    removed_time: row.get("type_removed_time"),
-                    status: row.get("type_status"),
-                },
-                identity: row.get("contact_identity"),
-                created_time: row.get("contact_created_time"),
-                updated_time: row.get("contact_updated_time"),
-                verified_time: row.get("contact_verified_time"),
-                removed_time: row.get("contact_removed_time"),
-                status: row.get("contact_status"),
-            }
+        .map(|row| Contact {
+            id: row.get("contact_id"),
+            user_id: row.get("contact_user_id"),
+            typ: ContactType {
+                id: row.get("type_id"),
+                name: row.get("type_name"),
+                created_time: row.get("type_created_time"),
+                updated_time: row.get("type_updated_time"),
+                removed_time: row.get("type_removed_time"),
+                status: row.get("type_status"),
+            },
+            identity: row.get("contact_identity"),
+            created_time: row.get("contact_created_time"),
+            updated_time: row.get("contact_updated_time"),
+            verified_time: row.get("contact_verified_time"),
+            removed_time: row.get("contact_removed_time"),
+            status: row.get("contact_status"),
         })
         .collect::<Vec<Contact>>();
 
@@ -316,30 +314,31 @@ pub fn remove<T: GenericConnection>(
 #[cfg(test)]
 mod test {
     use postgres::{Connection, TlsMode};
+    use super::ContactTypeId;
 
     #[test]
     pub fn test_contact_types_select() {
-        let conn = Connection::connect("postgres://feblr:feblr@localhost/feblr", TlsMode::None)
-            .unwrap();
+        let conn =
+            Connection::connect("postgres://feblr:feblr@localhost/feblr", TlsMode::None).unwrap();
         let contact_types = super::select_types(&conn).unwrap();
 
         assert_eq!(contact_types.len(), 2);
 
-        contact_types.into_iter().map(
-            |contact_type| match contact_type
-                .id {
-                EMAIL_TYPE_ID => {
+        contact_types
+            .into_iter()
+            .map(|contact_type| match contact_type {
+                _ if contact_type.id == ContactTypeId::Email as i32 => {
                     assert_eq!(contact_type.name, "email");
                     assert_eq!(contact_type.status, 1);
                 }
-                PHONE_TYPE_ID => {
+                _ if contact_type.id == ContactTypeId::Phone as i32 => {
                     assert_eq!(contact_type.name, "phone");
                     assert_eq!(contact_type.status, 0);
                 }
                 _ => {
                     panic!("unknown contact type");
                 }
-            },
-        );
+            })
+            .collect::<()>();
     }
 }

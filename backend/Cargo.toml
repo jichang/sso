@@ -17,13 +17,13 @@ argon2rs = "*"
 chrono = { version = "*", features = ["serde"] }
 lettre = "*"
 dotenv = "*"
-rocket = { git="https://github.com/SergioBenitez/Rocket.git" }
-rocket_codegen = { git="https://github.com/SergioBenitez/Rocket.git" }
-rocket_contrib = { git="https://github.com/SergioBenitez/Rocket.git", features = ["json", "handlebars_templates"] }
-jsonwebtoken = { git="https://github.com/JacobChang/jsonwebtoken.git" }
+rocket = { git = "https://github.com/SergioBenitez/Rocket.git" }
+rocket_codegen = { git = "https://github.com/SergioBenitez/Rocket.git" }
+rocket_contrib = { git = "https://github.com/SergioBenitez/Rocket.git", features = ["json", "handlebars_templates"] }
+jsonwebtoken = { path = "../../../Community/jsonwebtoken" }
 redis = "*"
 postgres = { version = "*", features = ["with-chrono", "with-uuid"] }
-uuid = { version = "*", features = ["serde", "v4"] }
+uuid = { version = "0.5.0", features = ["serde", "v4"] }
 r2d2 = "*"
 r2d2_redis = "*"
 r2d2_postgres = "*"

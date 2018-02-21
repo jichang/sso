@@ -2,8 +2,10 @@ use chrono::{DateTime, Utc};
 use postgres::GenericConnection;
 use super::Error as ModelError;
 
-pub const ADMIN_ROLE_ID: i32 = 1;
-pub const NORMAL_ROLE_ID: i32 = 2;
+pub enum RoleId {
+    Admin = 1,
+    Normal = 2,
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Role {
@@ -23,15 +25,13 @@ pub fn select<T: GenericConnection>(pg_conn: &T) -> Result<Vec<Role>, ModelError
     let rows = pg_conn.query(stmt, &[])?;
 
     let roles = rows.iter()
-        .map(|row| {
-            Role {
-                id: row.get("id"),
-                name: row.get("name"),
-                created_time: row.get("created_time"),
-                updated_time: row.get("updated_time"),
-                removed_time: row.get("removed_time"),
-                status: row.get("status"),
-            }
+        .map(|row| Role {
+            id: row.get("id"),
+            name: row.get("name"),
+            created_time: row.get("created_time"),
+            updated_time: row.get("updated_time"),
+            removed_time: row.get("removed_time"),
+            status: row.get("status"),
         })
         .collect::<Vec<Role>>();
 
@@ -40,19 +40,23 @@ pub fn select<T: GenericConnection>(pg_conn: &T) -> Result<Vec<Role>, ModelError
 
 #[cfg(test)]
 mod test {
+    use super::RoleId;
     use postgres::{Connection, TlsMode};
 
     #[test]
     pub fn test_roles_select() {
-        let conn = Connection::connect("postgres://feblr:feblr@localhost/feblr", TlsMode::None)
-            .unwrap();
+        let conn =
+            Connection::connect("postgres://feblr:feblr@localhost/feblr", TlsMode::None).unwrap();
         let roles = super::select(&conn).unwrap();
         assert_eq!(roles.len(), 2);
 
-        roles.into_iter().map(|role| match role.id {
-            ADMIN_ROLE_ID => assert_eq!(role.name, "admin"),
-            NORMAL_ROLE_ID => assert_eq!(role.name, "normal"),
-            _ => panic!("unknown role"),
-        });
+        roles
+            .into_iter()
+            .map(|role| match &role {
+                _ if role.id == RoleId::Admin as i32 => assert_eq!(role.name, "admin"),
+                _ if role.id == RoleId::Normal as i32 => assert_eq!(role.name, "normal"),
+                _ => panic!("unknown role"),
+            })
+            .collect::<()>();
     }
 }

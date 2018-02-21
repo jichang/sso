@@ -11,11 +11,11 @@ use super::mailer;
 use super::super::common;
 use super::super::config::Config;
 use super::super::models::contact;
-use super::super::models::contact::{ContactType, Contact};
-use super::super::storage::{Database, Cache};
+use super::super::models::contact::{Contact, ContactType};
+use super::super::storage::{Cache, Database};
 
 #[get("/contacts/types")]
-fn query_types(db: State<Database>) -> Result<Json<Vec<ContactType>>, Error> {
+fn select_types(db: State<Database>) -> Result<Json<Vec<ContactType>>, Error> {
     let conn = db.get_conn()?;
     let types = contact::select_types(&*conn)?;
 
