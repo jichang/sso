@@ -11,6 +11,7 @@
 }
 
 .site__nav__link {
+  display: inline-block;
   margin-left: 0.5rem;
   opacity: 0.5;
 }
@@ -40,4 +41,20 @@
 
 .menu__item a {
   text-decoration: none;
+}
+
+.site__menu .site__nav__link {
+  padding: 0.5rem;
+  border: 1px solid currentColor;
+
+  width: 2rem;
+  height: 2rem;
+
+  border-radius: 50%;
+}
+
+.site__menu .site__nav__link img {
+  display: block;
+
+  width: 1rem;
 }
