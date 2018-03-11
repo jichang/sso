@@ -1,6 +1,7 @@
 #![feature(plugin, custom_derive)]
 #![feature(decl_macro)]
 #![plugin(rocket_codegen)]
+#![feature(custom_attribute)]
 
 extern crate argon2rs;
 extern crate chrono;

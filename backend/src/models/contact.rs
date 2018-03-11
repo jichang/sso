@@ -265,7 +265,8 @@ pub fn remove<T: GenericConnection>(
 ) -> Result<Contact, ModelError> {
     let trans = pg_conn.transaction()?;
     let stmt = r#"
-    DELETE sso.contacts
+    DELETE
+    FROM sso.contacts
     WHERE id = $1 AND user_id = $2
     RETURNING *
     "#;

@@ -6,6 +6,9 @@ use super::role::Role;
 use super::username::Username;
 use super::crypto;
 use super::crypto::Plaintext;
+use super::action::ActionId;
+use serde_json::{Number, Value};
+use serde_json::map::Map;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Account {
@@ -29,6 +32,19 @@ pub struct User {
     pub status: i32,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+pub enum UserSource {
+    Website = 1,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub enum AccountType {
+    Normal = 1,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct AccountVerify {}
+
 pub fn create<T: GenericConnection>(
     pg_conn: &T,
     union_id: Uuid,
@@ -47,64 +63,99 @@ pub fn create<T: GenericConnection>(
     VALUES ($1, $2)
     RETURNING *
     "#;
-    let rows = trans.query(&stmt, &[&role_id, &union_id])?;
-    if rows.len() != 1 {
+    let user_rows = trans.query(&stmt, &[&role_id, &union_id])?;
+    if user_rows.len() != 1 {
         Err(ModelError::Unknown)
     } else {
-        let user_row = rows.get(0);
+        let user_row = user_rows.get(0);
         let user_id: i64 = user_row.get("id");
 
+        let action_id = ActionId::UsersSignup as i32;
+        let action_source = UserSource::Website as i32;
+        let mut map = Map::new();
+        map.insert(
+            "source".to_string(),
+            Value::Number(Number::from(action_source)),
+        );
+        let action_details = Value::Object(map);
+
         let stmt = r#"
-        INSERT INTO sso.accounts(user_id, username, salt, hash)
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO sso.audits(user_id, action_id, action_details)
+        VALUES ($1, $2, $3)
         RETURNING *
         "#;
-        let rows = trans.query(
-            &stmt,
-            &[&user_id, &username, &ciphertext.salt, &ciphertext.hash],
-        )?;
+        let rows = trans.query(&stmt, &[&user_id, &action_id, &action_details])?;
         if rows.len() != 1 {
             Err(ModelError::Unknown)
         } else {
-            let account_row = rows.get(0);
-
             let stmt = r#"
-            SELECT *
-            FROM sso.roles
-            WHERE id = $1;
+            INSERT INTO sso.accounts(user_id, username, salt, hash)
+            VALUES ($1, $2, $3, $4)
+            RETURNING *
             "#;
-            let rows = trans.query(&stmt, &[&role_id])?;
-            if rows.len() != 1 {
+            let account_rows = trans.query(
+                &stmt,
+                &[&user_id, &username, &ciphertext.salt, &ciphertext.hash],
+            )?;
+            if account_rows.len() != 1 {
                 Err(ModelError::Unknown)
             } else {
-                let role_row = rows.get(0);
+                let action_id = ActionId::UsersAccountsCreate as i32;
+                let action_type = AccountType::Normal as i32;
+                let mut map = Map::new();
+                map.insert("type".to_string(), Value::Number(Number::from(action_type)));
+                let action_details = Value::Object(map);
 
-                trans.set_commit();
+                let stmt = r#"
+                INSERT INTO sso.audits(user_id, action_id, action_details)
+                VALUES ($1, $2, $3)
+                RETURNING *
+                "#;
+                let rows = trans.query(&stmt, &[&user_id, &action_id, &action_details])?;
+                if rows.len() != 1 {
+                    Err(ModelError::Unknown)
+                } else {
+                    let account_row = account_rows.get(0);
 
-                Ok(User {
-                    id: user_row.get("id"),
-                    union_id: user_row.get("union_id"),
-                    role: Role {
-                        id: role_row.get("id"),
-                        name: role_row.get("name"),
-                        created_time: role_row.get("created_time"),
-                        updated_time: role_row.get("updated_time"),
-                        removed_time: role_row.get("removed_time"),
-                        status: role_row.get("status"),
-                    },
-                    account: Account {
-                        id: account_row.get("id"),
-                        username: account_row.get("username"),
-                        created_time: account_row.get("created_time"),
-                        updated_time: account_row.get("updated_time"),
-                        removed_time: account_row.get("removed_time"),
-                        status: role_row.get("status"),
-                    },
-                    created_time: role_row.get("created_time"),
-                    updated_time: role_row.get("updated_time"),
-                    removed_time: role_row.get("removed_time"),
-                    status: user_row.get("status"),
-                })
+                    let stmt = r#"
+                    SELECT *
+                    FROM sso.roles
+                    WHERE id = $1;
+                    "#;
+                    let role_rows = trans.query(&stmt, &[&role_id])?;
+                    if rows.len() != 1 {
+                        Err(ModelError::Unknown)
+                    } else {
+                        let role_row = role_rows.get(0);
+
+                        trans.set_commit();
+
+                        Ok(User {
+                            id: user_row.get("id"),
+                            union_id: user_row.get("union_id"),
+                            role: Role {
+                                id: role_row.get("id"),
+                                name: role_row.get("name"),
+                                created_time: role_row.get("created_time"),
+                                updated_time: role_row.get("updated_time"),
+                                removed_time: role_row.get("removed_time"),
+                                status: role_row.get("status"),
+                            },
+                            account: Account {
+                                id: account_row.get("id"),
+                                username: account_row.get("username"),
+                                created_time: account_row.get("created_time"),
+                                updated_time: account_row.get("updated_time"),
+                                removed_time: account_row.get("removed_time"),
+                                status: role_row.get("status"),
+                            },
+                            created_time: role_row.get("created_time"),
+                            updated_time: role_row.get("updated_time"),
+                            removed_time: role_row.get("removed_time"),
+                            status: user_row.get("status"),
+                        })
+                    }
+                }
             }
         }
     }
@@ -121,6 +172,8 @@ pub fn auth<T: GenericConnection>(
     password: &str,
 ) -> Result<User, ModelError> {
     let plaintext = Plaintext::new(password)?;
+
+    let trans = pg_conn.transaction()?;
 
     let stmt = r#"
     SELECT users.id as user_id,
@@ -149,7 +202,7 @@ pub fn auth<T: GenericConnection>(
     WHERE username = $1;
     "#;
 
-    let rows = pg_conn.query(&stmt, &[&username])?;
+    let rows = trans.query(&stmt, &[&username])?;
     if rows.len() == 0 {
         Err(ModelError::NotFound)
     } else {
@@ -157,31 +210,39 @@ pub fn auth<T: GenericConnection>(
         let hash: Vec<u8> = row.get("account_hash");
         let salt: String = row.get("account_salt");
 
-        let _ = crypto::compare(&plaintext, salt, hash)?;
+        match crypto::compare(&plaintext, salt, hash) {
+            Ok(_) => {
+                trans.set_commit();
 
-        Ok(User {
-            id: row.get("user_id"),
-            union_id: row.get("user_union_id"),
-            role: Role {
-                id: row.get("role_id"),
-                name: row.get("role_name"),
-                created_time: row.get("role_created_time"),
-                updated_time: row.get("role_updated_time"),
-                removed_time: row.get("role_removed_time"),
-                status: row.get("role_status"),
-            },
-            account: Account {
-                id: row.get("account_id"),
-                username: row.get("account_username"),
-                created_time: row.get("account_created_time"),
-                updated_time: row.get("account_updated_time"),
-                removed_time: row.get("account_removed_time"),
-                status: row.get("account_status"),
-            },
-            created_time: row.get("user_created_time"),
-            updated_time: row.get("user_updated_time"),
-            removed_time: row.get("user_removed_time"),
-            status: row.get("user_status"),
-        })
+                Ok(User {
+                    id: row.get("user_id"),
+                    union_id: row.get("user_union_id"),
+                    role: Role {
+                        id: row.get("role_id"),
+                        name: row.get("role_name"),
+                        created_time: row.get("role_created_time"),
+                        updated_time: row.get("role_updated_time"),
+                        removed_time: row.get("role_removed_time"),
+                        status: row.get("role_status"),
+                    },
+                    account: Account {
+                        id: row.get("account_id"),
+                        username: row.get("account_username"),
+                        created_time: row.get("account_created_time"),
+                        updated_time: row.get("account_updated_time"),
+                        removed_time: row.get("account_removed_time"),
+                        status: row.get("account_status"),
+                    },
+                    created_time: row.get("user_created_time"),
+                    updated_time: row.get("user_updated_time"),
+                    removed_time: row.get("user_removed_time"),
+                    status: row.get("user_status"),
+                })
+            }
+            Err(err) => Err(ModelError::InvalidParam(
+                "password".to_string(),
+                Box::new(err),
+            )),
+        }
     }
 }

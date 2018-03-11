@@ -3,7 +3,8 @@ CREATE TABLE IF NOT EXISTS sso.audits
 (
   id bigserial NOT NULL,
   user_id bigint NOT NULL,
-  action_id bigint NOT NULL,
+  action_id integer NOT NULL,
+  action_details json NOT NULL,
   created_time timestamp with time zone NOT NULL DEFAULT now(),
   updated_time timestamp with time zone,
   removed_time timestamp with time zone,

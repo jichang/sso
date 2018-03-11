@@ -232,7 +232,8 @@ pub fn remove<T: GenericConnection>(pg_conn: &T, user_id: i64) -> Result<Profile
     let trans = pg_conn.transaction()?;
 
     let stmt = r#"
-    DELETE sso.profiles
+    DELETE
+    FROM sso.profiles
     WHERE user_id = $2
     RETURNING *
     "#;

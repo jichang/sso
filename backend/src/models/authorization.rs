@@ -252,7 +252,8 @@ pub fn remove<T: GenericConnection>(
     let trans = pg_conn.transaction()?;
     let authorization = select_one(&trans, authorization_id)?;
     let stmt = r#"
-    DELETE sso.authorizations
+    DELETE
+    FROM sso.authorizations
     WHERE id = $1 AND user_id = $2
     RETURNING *
     "#;

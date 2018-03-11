@@ -3,7 +3,7 @@ use std::error::Error as StdError;
 use lettre::{EmailAddress, SimpleSendableEmail};
 use lettre::smtp::error::Error as SmtpError;
 use lettre::smtp::SmtpTransport;
-use lettre::smtp::authentication::Credentials;
+use lettre::smtp::authentication::{Credentials, Mechanism};
 use lettre::smtp::ConnectionReuseParameters;
 use lettre::smtp::response::Response;
 use lettre::EmailTransport;
@@ -44,9 +44,7 @@ pub fn send_token(
 ) -> Result<Response, MailerError> {
     let body = format!(
         "verify link: {}?contact_id={}&token={}",
-        config.mailer.verify_link,
-        contact_id,
-        verify_token
+        config.mailer.verify_link, contact_id, verify_token
     );
 
     let email = SimpleSendableEmail::new(
@@ -63,6 +61,7 @@ pub fn send_token(
     let mut mailer = SmtpTransport::simple_builder(config.mailer.server.to_string())?
         .credentials(credentials)
         .smtp_utf8(true)
+        .authentication_mechanism(Mechanism::Plain)
         .connection_reuse(ConnectionReuseParameters::ReuseUnlimited)
         .build();
     let result = mailer.send(&email)?;

@@ -3,10 +3,10 @@ use postgres::GenericConnection;
 use super::Error as ModelError;
 
 pub enum ActionId {
-    UsersAccountsSignup = 1,
-    UsersAccountsSignin,
+    UsersSignup = 1,
+    UsersAccountsCreate,
+    UsersAccountsVerify,
     UsersContactsCreate,
-    UsersContactsUpdate,
     UsersContactsRemove,
     UsersApplicationsCreate,
     UsersApplicationsUpdate,
@@ -66,17 +66,17 @@ mod test {
         actions
             .into_iter()
             .map(|action| match &action {
-                _ if action.id == ActionId::UsersAccountsSignup as i32 => {
-                    assert_eq!(action.key, "users.accounts.signup")
+                _ if action.id == ActionId::UsersSignup as i32 => {
+                    assert_eq!(action.key, "users.signup")
                 }
-                _ if action.id == ActionId::UsersAccountsSignin as i32 => {
-                    assert_eq!(action.key, "users.accounts.signin")
+                _ if action.id == ActionId::UsersAccountsCreate as i32 => {
+                    assert_eq!(action.key, "users.accounts.create")
+                }
+                _ if action.id == ActionId::UsersAccountsVerify as i32 => {
+                    assert_eq!(action.key, "users.accounts.verify")
                 }
                 _ if action.id == ActionId::UsersContactsCreate as i32 => {
                     assert_eq!(action.key, "users.contacts.create")
-                }
-                _ if action.id == ActionId::UsersContactsUpdate as i32 => {
-                    assert_eq!(action.key, "users.contacts.update")
                 }
                 _ if action.id == ActionId::UsersContactsRemove as i32 => {
                     assert_eq!(action.key, "users.contacts.remove")

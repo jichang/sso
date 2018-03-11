@@ -1,12 +1,12 @@
 -- Your SQL goes here
 INSERT INTO sso.actions(key, name, description, status)
-    VALUES ('users.accounts.signup', 'Signup', 'user sign up', 1);
+    VALUES ('users.signup', 'Signup', 'user sign up', 1);
 INSERT INTO sso.actions(key, name, description, status)
-    VALUES ('users.accounts.signin', 'Signin', 'user sign in', 1);
+    VALUES ('users.accounts.create', 'create account', 'user create account', 1);
 INSERT INTO sso.actions(key, name, description, status)
-    VALUES ('users.contacts.create', 'create contact', 'user carete contact', 1);
+    VALUES ('users.accounts.verify', 'verify account', 'user verify account', 1);
 INSERT INTO sso.actions(key, name, description, status)
-    VALUES ('users.contacts.update', 'update contact', 'user update contact', 1);
+    VALUES ('users.contacts.create', 'create contact', 'user create contact', 1);
 INSERT INTO sso.actions(key, name, description, status)
     VALUES ('users.contacts.remove', 'remove contact', 'user remove contact', 1);
 INSERT INTO sso.actions(key, name, description, status)

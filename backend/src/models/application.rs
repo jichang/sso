@@ -211,7 +211,8 @@ pub fn remove<T: GenericConnection>(
     create_secret: fn(String) -> ClientSecret,
 ) -> Result<Application, ModelError> {
     let stmt = r#"
-    DELETE sso.applications
+    DELETE
+    FROM sso.applications
     WHERE id = $1 AND user_id = $2
     RETURNING *
     "#;
@@ -331,7 +332,8 @@ pub fn remove_scope<T: GenericConnection>(
     scope_id: i64,
 ) -> Result<Scope, ModelError> {
     let stmt = r#"
-    DELETE sso.scopes
+    DELETE
+    FROM sso.scopes
     WHERE id = $1 AND application_id = $2
     RETURNING *
     "#;

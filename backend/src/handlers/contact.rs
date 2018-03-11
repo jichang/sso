@@ -50,7 +50,7 @@ pub fn create_contact(
         let key = format!("token:verify:contact:{}", new_contact.id);
         let _: String = redis_conn.set_ex(&key, hex::encode(&verify_token), expire)?;
 
-        let _ = mailer::send_token(
+        let rs = mailer::send_token(
             &config,
             new_contact.id,
             &new_contact.identity,
