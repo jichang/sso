@@ -48,6 +48,7 @@ import { ContactCreatePageComponent } from './contact-create-page/contact-create
 import { ContactsListComponent } from './contacts-list/contacts-list.component';
 import { AuthorizationsPageComponent } from './authorizations-page/authorizations-page.component';
 import { AuthorizationsListComponent } from './authorizations-list/authorizations-list.component';
+import { ContactStatePipe } from './contact-state.pipe';
 
 @Injectable()
 export class TrackableHttpOptions extends BaseRequestOptions {
@@ -163,6 +164,7 @@ const routes: Routes = [
     ContactsListComponent,
     AuthorizationsPageComponent,
     AuthorizationsListComponent,
+    ContactStatePipe,
   ],
   imports: [
     BrowserModule,

@@ -13,10 +13,10 @@
         <img *ngIf="contact.status" class="icon" src="/assets/checked.svg" />
       </td>
       <td class="text--right">
-        <span>{{ contact.status }}</span>
+        <span>{{ contact.status | contactState }}</span>
       </td>
       <td class="text--right">
-        <button class="button button--danger">Delete</button>
+        <button class="button button--danger" (click)="remove(contact)">Delete</button>
       </td>
     </tr>
     <tr *ngIf="contacts.length === 0">

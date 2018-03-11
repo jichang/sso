@@ -5,5 +5,5 @@
       <a class="button button--primary" [routerLink]="['create']">New Contact</a>
     </div>
   </header>
-  <contacts-list [contacts]="contacts"></contacts-list>
+  <contacts-list [contacts]="contacts" (action)="handleAction($event)"></contacts-list>
 </div>
