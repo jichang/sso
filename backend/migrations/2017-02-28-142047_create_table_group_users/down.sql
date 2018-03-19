@@ -1,0 +1,1 @@
+DROP TABLE sso.group_users;
