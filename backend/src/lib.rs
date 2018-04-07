@@ -9,6 +9,7 @@ extern crate dotenv;
 extern crate hex;
 extern crate jsonwebtoken as jwt;
 extern crate lettre;
+extern crate lettre_email;
 extern crate md5;
 #[macro_use]
 extern crate postgres;
@@ -22,24 +23,25 @@ extern crate rocket_contrib;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
+extern crate mime;
 extern crate serde_json;
 extern crate toml;
 extern crate url;
 extern crate uuid;
 
-pub mod config;
 pub mod common;
-pub mod guards;
+pub mod config;
 pub mod fairings;
-pub mod storage;
-pub mod models;
+pub mod guards;
 pub mod handlers;
+pub mod models;
+pub mod storage;
 
+use r2d2_postgres::{PostgresConnectionManager, TlsMode};
+use r2d2_redis::RedisConnectionManager;
 use rocket::Rocket;
 use rocket::fairing::AdHoc;
 use rocket_contrib::Template;
-use r2d2_postgres::{PostgresConnectionManager, TlsMode};
-use r2d2_redis::RedisConnectionManager;
 use storage::{Cache, Database};
 
 pub fn create() -> Rocket {
