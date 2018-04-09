@@ -2,15 +2,15 @@ use super::Error as ModelError;
 use chrono::{DateTime, Utc};
 use postgres::GenericConnection;
 
-pub enum RoleId {
+pub enum GroupId {
     Admin = 1,
     Normal = 2,
     Guest = 3,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Role {
-    pub id: i32,
+pub struct Group {
+    pub id: i64,
     pub name: String,
     pub created_time: DateTime<Utc>,
     pub updated_time: Option<DateTime<Utc>>,
@@ -18,15 +18,15 @@ pub struct Role {
     pub status: i32,
 }
 
-pub fn select<T: GenericConnection>(pg_conn: &T) -> Result<Vec<Role>, ModelError> {
+pub fn select<T: GenericConnection>(pg_conn: &T) -> Result<Vec<Group>, ModelError> {
     let stmt = r#"
     SELECT id, name, created_time, updated_time, removed_time, status
-    FROM sso.roles
+    FROM sso.groups
     "#;
     let rows = pg_conn.query(stmt, &[])?;
 
-    let roles = rows.iter()
-        .map(|row| Role {
+    let groups = rows.iter()
+        .map(|row| Group {
             id: row.get("id"),
             name: row.get("name"),
             created_time: row.get("created_time"),
@@ -34,30 +34,30 @@ pub fn select<T: GenericConnection>(pg_conn: &T) -> Result<Vec<Role>, ModelError
             removed_time: row.get("removed_time"),
             status: row.get("status"),
         })
-        .collect::<Vec<Role>>();
+        .collect::<Vec<Group>>();
 
-    Ok(roles)
+    Ok(groups)
 }
 
 #[cfg(test)]
 mod test {
-    use super::RoleId;
+    use super::GroupId;
     use postgres::{Connection, TlsMode};
 
     #[test]
-    pub fn test_roles_select() {
+    pub fn test_groups_select() {
         let conn =
             Connection::connect("postgres://feblr:feblr@localhost/feblr", TlsMode::None).unwrap();
-        let roles = super::select(&conn).unwrap();
-        assert_eq!(roles.len(), 3);
+        let groups = super::select(&conn).unwrap();
+        assert_eq!(groups.len(), 3);
 
-        roles
+        groups
             .into_iter()
-            .map(|role| match &role {
-                _ if role.id == RoleId::Admin as i32 => assert_eq!(role.name, "admin"),
-                _ if role.id == RoleId::Normal as i32 => assert_eq!(role.name, "normal"),
-                _ if role.id == RoleId::Guest as i32 => assert_eq!(role.name, "guest"),
-                _ => panic!("unknown role"),
+            .map(|group| match &group {
+                _ if group.id == GroupId::Admin as i64 => assert_eq!(group.name, "admin"),
+                _ if group.id == GroupId::Normal as i64 => assert_eq!(group.name, "normal"),
+                _ if group.id == GroupId::Guest as i64 => assert_eq!(group.name, "guest"),
+                _ => panic!("unknown group"),
             })
             .collect::<()>();
     }

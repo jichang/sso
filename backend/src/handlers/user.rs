@@ -1,16 +1,16 @@
 use rocket::State;
-use rocket_contrib::Json;
-use rocket::response::status::Created;
 use rocket::http::{Cookie, Cookies};
+use rocket::response::status::Created;
+use rocket_contrib::Json;
 use uuid::Uuid;
 
-use super::Error;
 use super::super::config::Config;
-use super::super::models::role::RoleId;
+use super::super::guards::bearer;
+use super::super::models::group::GroupId;
 use super::super::models::user;
 use super::super::models::user::User;
 use super::super::storage::Database;
-use super::super::guards::bearer;
+use super::Error;
 
 pub const UNION_ID_LEN: usize = 32;
 
@@ -40,7 +40,7 @@ fn signup(
         union_id,
         &params.username,
         &params.password,
-        RoleId::Normal as i32,
+        GroupId::Normal as i64,
     )?;
     let url = String::from("/users/self");
 

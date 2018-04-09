@@ -9,13 +9,13 @@ pub mod username;
 pub mod token;
 pub mod contact;
 pub mod role;
+pub mod group;
 pub mod user;
 pub mod profile;
 pub mod application;
 pub mod authorization;
 pub mod ticket;
 pub mod ratelimit;
-pub mod action;
 
 use self::username::Error as UsernameError;
 use self::crypto::Error as CryptoError;

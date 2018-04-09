@@ -1,32 +1,33 @@
-use std::fmt;
+use std::collections::HashMap;
 use std::convert::From;
 use std::error::Error as StdError;
-use std::collections::HashMap;
-use std::io::{Error as IoError, Cursor};
+use std::fmt;
+use std::io::{Cursor, Error as IoError};
 use std::string::FromUtf8Error;
 
 use rocket::Request;
-use rocket::response::{Response, Responder};
-use rocket::http::{Status as HttpStatus, ContentType};
-use rocket_contrib::{Template};
+use rocket::http::{ContentType, Status as HttpStatus};
+use rocket::response::{Responder, Response};
+use rocket_contrib::Template;
 use serde_json;
 
-use r2d2::{Error as R2d2Error};
-use redis::RedisError;
-use jwt::errors::Error as JwtError;
-use hex::FromHexError;
-use url::ParseError;
-use postgres::error::UNIQUE_VIOLATION;
 use super::models::Error as ModelError;
+use hex::FromHexError;
+use jwt::errors::Error as JwtError;
+use postgres::error::UNIQUE_VIOLATION;
+use r2d2::Error as R2d2Error;
+use redis::RedisError;
+use url::ParseError;
 
-pub mod user;
-pub mod role;
-pub mod contact;
-pub mod profile;
-pub mod mailer;
 pub mod application;
 pub mod authorization;
+pub mod contact;
+pub mod group;
+pub mod mailer;
+pub mod profile;
+pub mod role;
 pub mod ticket;
+pub mod user;
 
 #[derive(Debug)]
 pub enum Error {
@@ -152,20 +153,18 @@ impl<'r> Responder<'r> for Error {
                         body.insert("errmsg", "internal server error");
                         HttpStatus::NotFound
                     }
-                    &ModelError::Database(ref pg_err) => {
-                        match pg_err.code() {
-                            Some(state) if *state == UNIQUE_VIOLATION => {
-                                body.insert("errno", "40900001");
-                                body.insert("errmsg", "internal server error");
-                                HttpStatus::Conflict
-                            }
-                            _ => {
-                                body.insert("errno", "50000002");
-                                body.insert("errmsg", "internal server error");
-                                HttpStatus::InternalServerError
-                            }
+                    &ModelError::Database(ref pg_err) => match pg_err.code() {
+                        Some(state) if *state == UNIQUE_VIOLATION => {
+                            body.insert("errno", "40900001");
+                            body.insert("errmsg", "internal server error");
+                            HttpStatus::Conflict
                         }
-                    }
+                        _ => {
+                            body.insert("errno", "50000002");
+                            body.insert("errmsg", "internal server error");
+                            HttpStatus::InternalServerError
+                        }
+                    },
                     _ => {
                         body.insert("errno", "50000002");
                         body.insert("errmsg", "internal server error");
