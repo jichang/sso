@@ -1,11 +1,10 @@
 #![feature(plugin, custom_derive)]
 #![feature(decl_macro)]
-#![plugin(rocket_codegen)]
 #![feature(custom_attribute)]
+#![plugin(rocket_codegen)]
 
 extern crate argon2rs;
 extern crate chrono;
-extern crate dotenv;
 extern crate hex;
 extern crate jsonwebtoken as jwt;
 extern crate lettre;
@@ -39,8 +38,8 @@ pub mod storage;
 
 use r2d2_postgres::{PostgresConnectionManager, TlsMode};
 use r2d2_redis::RedisConnectionManager;
-use rocket::Rocket;
 use rocket::fairing::AdHoc;
+use rocket::Rocket;
 use rocket_contrib::Template;
 use storage::{Cache, Database};
 

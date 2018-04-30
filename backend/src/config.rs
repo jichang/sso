@@ -1,7 +1,6 @@
-use std::io::prelude::*;
 use std::fs::File;
+use std::io::prelude::*;
 use toml;
-use std::env;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Server {
@@ -41,15 +40,14 @@ pub struct Config {
 }
 
 pub fn parse() -> Config {
-    let config_file_path = env::var("CONFIG_FILE_PATH")
-        .expect(" envrionment variable CONFIG_FILE_PATH must be set");
+    let config_file_path = "./src/config.toml";
 
     let mut file = File::open(config_file_path).expect("Can not open config file");
     let mut content = String::new();
-    file.read_to_string(&mut content).expect("Can not read config file");
+    file.read_to_string(&mut content)
+        .expect("Can not read config file");
 
-    let config: Config = toml::from_str(content.as_str())
-        .expect("Can not parse config file");
+    let config: Config = toml::from_str(content.as_str()).expect("Can not parse config file");
 
     config
 }

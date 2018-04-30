@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
-import { Response, RequestOptions } from '@angular/http';
-import { Observable, BehaviorSubject } from 'rxjs'
-import {session} from './model';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from "@angular/core";
+import { Response, RequestOptions } from "@angular/http";
+import { Observable, BehaviorSubject } from "rxjs";
+import { map } from "rxjs/operators";
+import { session } from "./model";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 export interface ClientSeret {
   Plaintext: string;
@@ -19,7 +20,7 @@ export interface Application {
 }
 
 export interface ApplicationStore {
-  applications: Application[]
+  applications: Application[];
 }
 
 @Injectable()
@@ -40,37 +41,37 @@ export class ApplicationModelService {
 
   select() {
     let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + window.localStorage.getItem('jwt')
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + window.localStorage.getItem("jwt")
     });
     let options = {
       headers: headers
     };
 
     let apiUri = "/api/v1/users/" + session.currUser().id + "/applications";
-    this.http.get(apiUri, options)
-      .subscribe((applications: Application[]) => {
-        this.store.applications = applications;
-        this.subject.next(applications);
-      });
+    this.http.get(apiUri, options).subscribe((applications: Application[]) => {
+      this.store.applications = applications;
+      this.subject.next(applications);
+    });
   }
 
   create(application: Application) {
     let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + window.localStorage.getItem('jwt')
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + window.localStorage.getItem("jwt")
     });
     let options = {
       headers: headers
     };
 
     let apiUri = "/api/v1/users/" + session.currUser().id + "/applications";
-    return this.http.post(apiUri, application, options)
-      .map((application: Application) => {
+    return this.http.post(apiUri, application, options).pipe(
+      map((application: Application) => {
         this.store.applications.push(application);
         this.subject.next(Object.assign({}, this.store).applications);
 
         return application;
-      });
+      })
+    );
   }
 }
