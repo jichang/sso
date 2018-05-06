@@ -62,12 +62,14 @@ export class ContactModelService {
     };
 
     let apiUri = "/api/v1/users/" + session.currUser().id + "/contacts";
-    return this.http.post(apiUri, contact, options).map((contact: Contact) => {
-      this.store.contacts.push(contact);
-      this.subject.next(Object.assign({}, this.store).contacts);
+    return this.http.post(apiUri, contact, options).pipe(
+      map((contact: Contact) => {
+        this.store.contacts.push(contact);
+        this.subject.next(Object.assign({}, this.store).contacts);
 
-      return contact;
-    });
+        return contact;
+      })
+    );
   }
 
   remove(contact: Contact) {
@@ -80,7 +82,7 @@ export class ContactModelService {
 
     let apiUri = `/api/v1/users/${session.currUser().id}/contacts/${
       contact.id
-    }`;
+      }`;
 
     return this.http.delete(apiUri, options).pipe(
       map((contact: Contact) => {

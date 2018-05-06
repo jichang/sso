@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs'
-import {session} from './model'
+import { session } from './model'
+import { map } from 'rxjs/operators';
 
 export interface Scope {
   id?: number;
@@ -57,12 +58,13 @@ export class ScopeModelService {
     };
 
     let apiUri = '/api/v1/users/' + session.currUser().id + '/applications/' + applicationId + '/scopes';
-    return this.http.post(apiUri, scope, options)
-      .map((scope: Scope) => {
+    return this.http.post(apiUri, scope, options).pipe(
+      map((scope: Scope) => {
         this.store.scopes.push(scope);
         this.subject.next(Object.assign({}, this.store).scopes);
 
         return scope;
-      });
+      })
+    );
   }
 }

@@ -4,6 +4,7 @@ import { Application } from './application-model.service';
 import { Scope } from './scope-model.service';
 import { session } from './model'
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 export interface Authorization {
   client_app?: Application;
@@ -58,12 +59,13 @@ export class AuthorizationModelService {
     };
 
     let apiUri = "/api/v1/users/" + session.currUser().id + "/authorizations";
-    return this.http.post(apiUri, authorization, options)
-      .map((authorization: Authorization) => {
+    return this.http.post(apiUri, authorization, options).pipe(
+      map((authorization: Authorization) => {
         this.store.authorizations.push(authorization);
         this.subject.next(Object.assign({}, this.store).authorizations);
 
         return authorization;
-      });
+      })
+    );
   }
 }

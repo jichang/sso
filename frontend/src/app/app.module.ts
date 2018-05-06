@@ -1,4 +1,4 @@
-import cuid = require('cuid');
+import * as cuid from 'cuid';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Injectable } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
