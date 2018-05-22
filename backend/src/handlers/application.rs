@@ -1,17 +1,17 @@
 use rocket::State;
 use rocket_contrib::Json;
 
-use hex::{FromHex};
+use hex::FromHex;
 
-use super::Error;
-use super::super::guards::bearer;
-use super::super::guards::bearer::AuthorizationBearer;
-use super::super::models::ratelimit::RateLimit;
 use super::super::common;
 use super::super::config::Config;
+use super::super::guards::bearer;
+use super::super::guards::bearer::AuthorizationBearer;
 use super::super::models::application;
-use super::super::models::application::{Application, Scope, ClientSecret};
-use super::super::storage::{Database};
+use super::super::models::application::{Application, Scope};
+use super::super::models::ratelimit::RateLimit;
+use super::super::storage::Database;
+use super::Error;
 
 const CLIENT_ID_LEN: usize = 64;
 const CLIENT_SECRET_LEN: usize = 128;
@@ -44,7 +44,6 @@ pub fn create_application(
             &client_id,
             &client_secret,
             &params.callback_uri,
-            ClientSecret::plaintext,
         )?;
 
         Ok(Json(new_application))
@@ -64,7 +63,7 @@ pub fn select_applications(
     let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
-        let applications = application::select(&*pg_conn, user_id, ClientSecret::plaintext)?;
+        let applications = application::select(&*pg_conn, user_id)?;
 
         Ok(Json(applications))
     } else {
@@ -83,15 +82,13 @@ pub fn remove_application(
     let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
-        let removed_application =
-            application::remove(&*pg_conn, user_id, application_id, ClientSecret::plaintext)?;
+        let removed_application = application::remove(&*pg_conn, user_id, application_id)?;
 
         Ok(Json(removed_application))
     } else {
         Err(Error::Privilege)
     }
 }
-
 
 #[derive(Serialize, Deserialize)]
 pub struct CreateScopeParams {
@@ -175,7 +172,7 @@ pub fn select_application(
 ) -> Result<Json<Application>, Error> {
     let client_id = Vec::<u8>::from_hex(params.client_id)?;
     let pg_conn = db.get_conn()?;
-    let match_app = application::select_one(&*pg_conn, &client_id, ClientSecret::ciphertext)?;
+    let match_app = application::select_one(&*pg_conn, &client_id)?;
 
     Ok(Json(match_app))
 }

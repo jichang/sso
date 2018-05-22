@@ -2,18 +2,24 @@
   <thead>
     <tr>
       <th class="text--left">Scope</th>
+      <th class="text--left">Description</th>
       <th class="text--left">Client App</th>
       <th class="text--left">Server App</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let authorization of authorizations">
-      <td class="text--left">{{ authorization.scope }}</td>
       <td class="text--left">
-        <a class="text--link" [href]="authorization.client_app.name" target="_blank">{{ authorization.client_app.name }}</a>
+        <p>{{ authorization.scope.name }}</p>
       </td>
       <td class="text--left">
-        <a class="text--link" [href]="authorization.server_app.name" target="_blank">{{ authorization.server_app.name }}</a>
+        <p>{{ authorization.scope.description }}</p>
+      </td>
+      <td class="text--left">
+        <a class="text--link" [href]="authorization.client_app.website_uri" target="_blank">{{ authorization.client_app.name }}</a>
+      </td>
+      <td class="text--left">
+        <a class="text--link" [href]="authorization.server_app.website_uri" target="_blank">{{ authorization.server_app.name }}</a>
       </td>
     </tr>
     <tr *ngIf="authorizations.length === 0">

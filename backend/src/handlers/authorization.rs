@@ -2,25 +2,27 @@ use rocket::State;
 use rocket_contrib::Json;
 
 use hex;
-use hex::{FromHex};
+use hex::FromHex;
 use redis::Commands;
 use url::Url;
+use uuid;
+use uuid::Uuid;
 
-use super::Error;
-use super::super::guards::bearer;
-use super::super::guards::bearer::AuthorizationBearer;
 use super::super::common;
 use super::super::config::Config;
+use super::super::guards::bearer;
+use super::super::guards::bearer::AuthorizationBearer;
 use super::super::models::application;
-use super::super::models::application::ClientSecret;
 use super::super::models::authorization;
 use super::super::models::authorization::{Authorization, AuthorizationPreview};
-use super::super::storage::{Database, Cache};
+use super::super::storage::{Cache, Database};
+use super::Error;
 
 const AUTH_CODE_SIZE: usize = 64;
 
 #[derive(Serialize, Deserialize)]
 pub struct CreateAuthorizationParams {
+    server_id: String,
     client_id: String,
     scope: String,
     redirect_uri: String,
@@ -46,20 +48,28 @@ pub fn create_authorization(
     let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
+        let name = user_id.to_string() + &params.client_id + &params.server_id;
+        let open_id = Uuid::new_v5(&uuid::NAMESPACE_DNS, &name);
+        let server_id = Vec::<u8>::from_hex(&params.server_id)?;
         let client_id = Vec::<u8>::from_hex(&params.client_id)?;
-        let client_application =
-            application::select_one(&*pg_conn, &client_id, ClientSecret::plaintext)?;
+        let client_application = application::select_one(&*pg_conn, &client_id)?;
 
         let callback_uri = Url::parse(&client_application.callback_uri)?;
         let redirect_uri = Url::parse(&params.redirect_uri)?;
-        if callback_uri.origin() != redirect_uri.origin() ||
-            callback_uri.path() != redirect_uri.path()
+        if callback_uri.origin() != redirect_uri.origin()
+            || callback_uri.path() != redirect_uri.path()
         {
             return Err(Error::Params);
         }
 
-        let new_authorization =
-            authorization::create(&*pg_conn, user_id, &client_id, &params.scope)?;
+        let new_authorization = authorization::create(
+            &*pg_conn,
+            user_id,
+            &open_id,
+            &server_id,
+            &client_id,
+            &params.scope,
+        )?;
 
         let redis_conn = cache.get_conn()?;
         let code = common::gen_rand_bytes(AUTH_CODE_SIZE)?;
@@ -117,6 +127,7 @@ pub fn remove_authorization(
 
 #[derive(Serialize, Deserialize, FromForm)]
 pub struct SelectAuthorizationParams {
+    server_id: String,
     client_id: String,
     scope: String,
 }
@@ -126,9 +137,11 @@ pub fn preview_authorization(
     db: State<Database>,
     params: SelectAuthorizationParams,
 ) -> Result<Json<AuthorizationPreview>, Error> {
+    let server_id = Vec::<u8>::from_hex(params.server_id)?;
     let client_id = Vec::<u8>::from_hex(params.client_id)?;
     let pg_conn = db.get_conn()?;
-    let match_authorization = authorization::preview(&*pg_conn, &client_id, &params.scope)?;
+    let match_authorization =
+        authorization::preview(&*pg_conn, &server_id, &client_id, &params.scope)?;
 
     Ok(Json(match_authorization))
 }

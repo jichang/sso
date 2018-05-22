@@ -1,39 +1,9 @@
-use std::convert::From;
-use chrono::{DateTime, Utc};
-use postgres::GenericConnection;
 use super::Error as ModelError;
-use url::Url;
+use chrono::{DateTime, Utc};
 use hex;
-
-#[derive(Debug, Serialize, Deserialize)]
-pub enum ClientSecret {
-    Plaintext(String),
-    Ciphertext(String),
-}
-
-impl ClientSecret {
-    pub fn plaintext(value: String) -> ClientSecret {
-        ClientSecret::Plaintext(value)
-    }
-
-    pub fn ciphertext(value: String) -> ClientSecret {
-        ClientSecret::Ciphertext(value)
-    }
-
-    pub fn value(&self) -> &str {
-        match self {
-            &ClientSecret::Plaintext(ref secret) => secret,
-            &ClientSecret::Ciphertext(ref secret) => secret,
-        }
-    }
-
-    pub fn is_ciphertext(secret: &Self) -> bool {
-        match secret {
-            &ClientSecret::Plaintext(_) => false,
-            &ClientSecret::Ciphertext(_) => true,
-        }
-    }
-}
+use postgres::GenericConnection;
+use std::convert::From;
+use url::Url;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Application {
@@ -42,8 +12,7 @@ pub struct Application {
     pub name: String,
     pub website_uri: String,
     pub client_id: String,
-    #[serde(skip_serializing_if = "ClientSecret::is_ciphertext")]
-    pub client_secret: ClientSecret,
+    pub client_secret: Option<String>,
     pub callback_uri: String,
     pub created_time: DateTime<Utc>,
     pub updated_time: Option<DateTime<Utc>>,
@@ -59,14 +28,11 @@ pub fn create<T: GenericConnection>(
     client_id: &Vec<u8>,
     client_secret: &Vec<u8>,
     callback_uri: &str,
-    create_secret: fn(String) -> ClientSecret,
 ) -> Result<Application, ModelError> {
-    let website_uri = Url::parse(website_uri).map_err(|err| {
-        ModelError::InvalidParam(String::from("website_uri"), Box::new(err))
-    })?;
-    let callback_uri = Url::parse(callback_uri).map_err(|err| {
-        ModelError::InvalidParam(String::from("callback_uri"), Box::new(err))
-    })?;
+    let website_uri = Url::parse(website_uri)
+        .map_err(|err| ModelError::InvalidParam(String::from("website_uri"), Box::new(err)))?;
+    let callback_uri = Url::parse(callback_uri)
+        .map_err(|err| ModelError::InvalidParam(String::from("callback_uri"), Box::new(err)))?;
 
     let stmt = r#"
     INSERT INTO sso.applications(user_id, name, website_uri, client_id, client_secret, callback_uri)
@@ -97,7 +63,7 @@ pub fn create<T: GenericConnection>(
             name: row.get("name"),
             website_uri: row.get("website_uri"),
             client_id: hex::encode(client_id),
-            client_secret: create_secret(hex::encode(client_secret)),
+            client_secret: Some(hex::encode(client_secret)),
             callback_uri: row.get("callback_uri"),
             created_time: row.get("created_time"),
             updated_time: row.get("updated_time"),
@@ -110,7 +76,6 @@ pub fn create<T: GenericConnection>(
 pub fn select<T: GenericConnection>(
     pg_conn: &T,
     user_id: i64,
-    create_secret: fn(String) -> ClientSecret,
 ) -> Result<Vec<Application>, ModelError> {
     let stmt = r#"
     SELECT id,
@@ -127,9 +92,9 @@ pub fn select<T: GenericConnection>(
     FROM sso.applications
     WHERE user_id = $1
     "#;
-    let rows = pg_conn.query(stmt, &[&user_id]).map_err(|err| {
-        ModelError::Database(err)
-    })?;
+    let rows = pg_conn
+        .query(stmt, &[&user_id])
+        .map_err(|err| ModelError::Database(err))?;
 
     let mut applications = vec![];
     for row in &rows {
@@ -142,7 +107,7 @@ pub fn select<T: GenericConnection>(
             name: row.get("name"),
             website_uri: row.get("website_uri"),
             client_id: hex::encode(client_id),
-            client_secret: create_secret(hex::encode(client_secret)),
+            client_secret: Some(hex::encode(client_secret)),
             callback_uri: row.get("callback_uri"),
             created_time: row.get("created_time"),
             updated_time: row.get("updated_time"),
@@ -159,7 +124,6 @@ pub fn select<T: GenericConnection>(
 pub fn select_one<T: GenericConnection>(
     pg_conn: &T,
     client_id: &Vec<u8>,
-    create_secret: fn(String) -> ClientSecret,
 ) -> Result<Application, ModelError> {
     let stmt = r#"
     SELECT id,
@@ -176,9 +140,9 @@ pub fn select_one<T: GenericConnection>(
     FROM sso.applications
     WHERE client_id = $1
     "#;
-    let rows = pg_conn.query(stmt, &[&client_id]).map_err(|err| {
-        ModelError::Database(err)
-    })?;
+    let rows = pg_conn
+        .query(stmt, &[&client_id])
+        .map_err(|err| ModelError::Database(err))?;
 
     if rows.len() != 1 {
         Err(ModelError::Unknown)
@@ -193,7 +157,7 @@ pub fn select_one<T: GenericConnection>(
             name: row.get("name"),
             website_uri: row.get("website_uri"),
             client_id: hex::encode(client_id),
-            client_secret: create_secret(hex::encode(client_secret)),
+            client_secret: Some(hex::encode(client_secret)),
             callback_uri: row.get("callback_uri"),
             created_time: row.get("created_time"),
             updated_time: row.get("updated_time"),
@@ -208,7 +172,6 @@ pub fn remove<T: GenericConnection>(
     pg_conn: &T,
     user_id: i64,
     application_id: i64,
-    create_secret: fn(String) -> ClientSecret,
 ) -> Result<Application, ModelError> {
     let stmt = r#"
     DELETE
@@ -231,7 +194,7 @@ pub fn remove<T: GenericConnection>(
             name: row.get("name"),
             website_uri: row.get("website_uri"),
             client_id: hex::encode(client_id),
-            client_secret: create_secret(hex::encode(client_secret)),
+            client_secret: Some(hex::encode(client_secret)),
             callback_uri: row.get("callback_uri"),
             created_time: row.get("created_time"),
             updated_time: row.get("updated_time"),
@@ -265,10 +228,7 @@ pub fn create_scope<T: GenericConnection>(
     RETURNING *
     "#;
 
-    let rows = pg_conn.query(
-        &stmt,
-        &[&application_id, &name, &description],
-    )?;
+    let rows = pg_conn.query(&stmt, &[&application_id, &name, &description])?;
     if rows.len() != 1 {
         Err(ModelError::Unknown)
     } else {
@@ -303,9 +263,9 @@ pub fn select_scopes<T: GenericConnection>(
     FROM sso.scopes
     WHERE application_id = $1
     "#;
-    let rows = pg_conn.query(stmt, &[&application_id]).map_err(|err| {
-        ModelError::Database(err)
-    })?;
+    let rows = pg_conn
+        .query(stmt, &[&application_id])
+        .map_err(|err| ModelError::Database(err))?;
 
     let mut scopes = vec![];
     for row in &rows {
