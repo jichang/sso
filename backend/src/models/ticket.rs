@@ -43,7 +43,7 @@ pub fn create<T: GenericConnection>(
 
 pub fn update<T: GenericConnection>(
     pg_conn: &T,
-    client_id: &str,
+    _client_id: &str,
     access_token: &Vec<u8>,
     refresh_token: &Vec<u8>,
 ) -> Result<Ticket, ModelError> {

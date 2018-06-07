@@ -1,9 +1,11 @@
 use hex;
-use rand::{Rng, StdRng};
-use std::fmt;
-use std::error::Error as StdError;
-use std::io::Error as IoError;
+use rand::FromEntropy;
+use rand::RngCore;
+use rand::StdRng;
 use redis::{Commands, Connection, RedisError};
+use std::error::Error as StdError;
+use std::fmt;
+use std::io::Error as IoError;
 
 #[derive(Debug)]
 pub enum TokenError {
@@ -48,7 +50,7 @@ const TOKEN_SIZE: usize = 32;
 
 pub fn create() -> Result<String, TokenError> {
     let mut token = [0u8; TOKEN_SIZE];
-    let mut rng = StdRng::new()?;
+    let mut rng = StdRng::from_entropy();
     rng.fill_bytes(&mut token);
 
     Ok(hex::encode(token))
@@ -82,8 +84,8 @@ pub fn verify(redis_conn: &Connection, email_addr: &str, token: &str) -> Result<
 
 #[cfg(test)]
 mod test {
-    use redis;
     use super::{create, store, verify, TokenError};
+    use redis;
 
     #[test]
     fn test_token_store_and_verify() {

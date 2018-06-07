@@ -1,7 +1,8 @@
 use argon2rs;
+use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
-use std::fmt;
 use std::error::Error as StdError;
+use std::fmt;
 use std::io::Error as IoError;
 
 const SALT_SIZE: usize = 32;
@@ -55,7 +56,9 @@ impl Plaintext {
             return Err(Error::MinLen(MIN_SIZE));
         }
 
-        Ok(Plaintext { value: value.to_string() })
+        Ok(Plaintext {
+            value: value.to_string(),
+        })
     }
 }
 
@@ -66,7 +69,10 @@ pub struct Ciphertext {
 }
 
 pub fn generate(plaintext: &Plaintext) -> Result<Ciphertext, Error> {
-    let salt: String = thread_rng().gen_ascii_chars().take(SALT_SIZE).collect();
+    let salt: String = thread_rng()
+        .sample_iter(&Alphanumeric)
+        .take(SALT_SIZE)
+        .collect();
     let hash = argon2rs::argon2i_simple(&plaintext.value, &salt);
 
     Ok(Ciphertext {
@@ -96,8 +102,8 @@ mod test {
     pub fn test_crypt() {
         let plaintext = Plaintext::new("foobar").unwrap();
         let ciphertext = generate(&plaintext).unwrap();
-        let new_ciphertext = compare(&plaintext, ciphertext.salt.clone(), ciphertext.hash.clone())
-            .unwrap();
+        let new_ciphertext =
+            compare(&plaintext, ciphertext.salt.clone(), ciphertext.hash.clone()).unwrap();
 
         assert_eq!(new_ciphertext.salt[..], ciphertext.salt[..]);
         assert_eq!(new_ciphertext.hash[..], ciphertext.hash[..]);
