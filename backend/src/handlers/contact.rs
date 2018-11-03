@@ -1,21 +1,21 @@
 use rocket::State;
-use rocket_contrib::Json;
+use rocket_contrib::json::Json;
 
 use hex;
 use redis::Commands;
 
-use super::Error;
+use super::super::common;
+use super::super::config_parser::Config;
 use super::super::guards::bearer;
 use super::super::guards::bearer::AuthorizationBearer;
-use super::mailer;
-use super::super::common;
-use super::super::config::Config;
 use super::super::models::contact;
 use super::super::models::contact::{Contact, ContactType};
 use super::super::storage::{Cache, Database};
+use super::mailer;
+use super::Error;
 
 #[get("/contacts/types")]
-fn select_types(db: State<Database>) -> Result<Json<Vec<ContactType>>, Error> {
+pub fn select_types(db: State<Database>) -> Result<Json<Vec<ContactType>>, Error> {
     let conn = db.get_conn()?;
     let types = contact::select_types(&*conn)?;
 

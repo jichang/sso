@@ -1,7 +1,6 @@
 #![feature(plugin, custom_derive)]
-#![feature(decl_macro)]
 #![feature(custom_attribute)]
-#![plugin(rocket_codegen)]
+#![feature(proc_macro_hygiene, decl_macro)]
 
 extern crate argon2rs;
 extern crate chrono;
@@ -17,6 +16,7 @@ extern crate r2d2_postgres;
 extern crate r2d2_redis;
 extern crate rand;
 extern crate redis;
+#[macro_use]
 extern crate rocket;
 extern crate rocket_contrib;
 extern crate serde;
@@ -29,7 +29,7 @@ extern crate url;
 extern crate uuid;
 
 pub mod common;
-pub mod config;
+pub mod config_parser;
 pub mod fairings;
 pub mod guards;
 pub mod handlers;
@@ -40,11 +40,11 @@ use r2d2_postgres::{PostgresConnectionManager, TlsMode};
 use r2d2_redis::RedisConnectionManager;
 use rocket::fairing::AdHoc;
 use rocket::Rocket;
-use rocket_contrib::Template;
+use rocket_contrib::templates::Template;
 use storage::{Cache, Database};
 
-pub fn create() -> Rocket {
-    let config = config::parse();
+pub fn create(configFile: &str) -> Rocket {
+    let config = config_parser::parse(configFile);
 
     let postgres_manager =
         PostgresConnectionManager::new(config.postgres.addr.as_str(), TlsMode::None)
@@ -56,7 +56,10 @@ pub fn create() -> Rocket {
     let cache = Cache::new(redis_manager).expect("failed to create cache");
 
     rocket::ignite()
-        .attach(AdHoc::on_response(fairings::ratelimit::on_response))
+        .attach(AdHoc::on_response(
+            "RateLimit",
+            fairings::ratelimit::on_response,
+        ))
         .attach(Template::fairing())
         .mount(
             "/api/v1/",
@@ -72,7 +75,7 @@ pub fn create() -> Rocket {
                 handlers::contact::verify_contact,
                 handlers::contact::remove_contact,
                 handlers::contact::send_verify_token,
-                handlers::profile::select_genders,
+                handlers::gender::select_genders,
                 handlers::profile::create_profile,
                 handlers::profile::select_profile,
                 handlers::profile::remove_profile,

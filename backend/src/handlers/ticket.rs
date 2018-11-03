@@ -1,5 +1,5 @@
 use rocket::State;
-use rocket_contrib::Json;
+use rocket_contrib::json::Json;
 
 use hex::FromHex;
 use redis::Commands;

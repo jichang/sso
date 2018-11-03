@@ -1,5 +1,6 @@
+use rocket::request::Form;
 use rocket::State;
-use rocket_contrib::Json;
+use rocket_contrib::json::Json;
 
 use hex;
 use hex::FromHex;
@@ -9,7 +10,7 @@ use uuid;
 use uuid::Uuid;
 
 use super::super::common;
-use super::super::config::Config;
+use super::super::config_parser::Config;
 use super::super::guards::bearer;
 use super::super::guards::bearer::AuthorizationBearer;
 use super::super::models::application;
@@ -132,13 +133,13 @@ pub struct SelectAuthorizationParams {
     scope: String,
 }
 
-#[get("/authorizations/preview?<params>")]
+#[get("/authorizations/preview?<params..>")]
 pub fn preview_authorization(
     db: State<Database>,
-    params: SelectAuthorizationParams,
+    params: Form<SelectAuthorizationParams>,
 ) -> Result<Json<AuthorizationPreview>, Error> {
-    let server_id = Vec::<u8>::from_hex(params.server_id)?;
-    let client_id = Vec::<u8>::from_hex(params.client_id)?;
+    let server_id = Vec::<u8>::from_hex(&params.server_id)?;
+    let client_id = Vec::<u8>::from_hex(&params.client_id)?;
     let pg_conn = db.get_conn()?;
     let match_authorization =
         authorization::preview(&*pg_conn, &server_id, &client_id, &params.scope)?;

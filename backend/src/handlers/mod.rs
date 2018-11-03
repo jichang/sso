@@ -5,10 +5,10 @@ use std::fmt;
 use std::io::{Cursor, Error as IoError};
 use std::string::FromUtf8Error;
 
-use rocket::Request;
 use rocket::http::{ContentType, Status as HttpStatus};
 use rocket::response::{Responder, Response};
-use rocket_contrib::Template;
+use rocket::Request;
+use rocket_contrib::templates::Template;
 use serde_json;
 
 use super::models::Error as ModelError;
@@ -22,6 +22,7 @@ use url::ParseError;
 pub mod application;
 pub mod authorization;
 pub mod contact;
+pub mod gender;
 pub mod group;
 pub mod mailer;
 pub mod profile;
@@ -225,7 +226,7 @@ pub struct TemplateContext {
 }
 
 #[get("/")]
-fn index() -> Template {
+pub fn index() -> Template {
     Template::render(
         "index",
         &TemplateContext {

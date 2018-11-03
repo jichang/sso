@@ -1,19 +1,19 @@
-use super::super::config::Config;
-use lettre::smtp::ConnectionReuseParameters;
-use lettre::smtp::SmtpTransport;
+use super::super::config_parser::Config;
 use lettre::smtp::authentication::{Credentials, Mechanism};
 use lettre::smtp::error::Error as SmtpError;
 use lettre::smtp::response::Response;
+use lettre::smtp::ConnectionReuseParameters;
+use lettre::smtp::SmtpTransport;
 use lettre::EmailTransport;
-use lettre_email::EmailBuilder;
 use lettre_email::error::Error as EmailError;
+use lettre_email::EmailBuilder;
 use std::error::Error as StdError;
 use std::fmt;
 
 #[derive(Debug)]
 pub enum MailerError {
     Smtp(SmtpError),
-    Mail(EmailError)
+    Mail(EmailError),
 }
 
 impl fmt::Display for MailerError {
@@ -78,6 +78,6 @@ pub fn send_token(
 
     match result {
         Ok(res) => Ok(res),
-        Err(err) => Err(MailerError::from(err))
+        Err(err) => Err(MailerError::from(err)),
     }
 }

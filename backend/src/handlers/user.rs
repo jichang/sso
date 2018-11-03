@@ -1,10 +1,10 @@
-use rocket::State;
 use rocket::http::{Cookie, Cookies};
 use rocket::response::status::Created;
-use rocket_contrib::Json;
+use rocket::State;
+use rocket_contrib::json::Json;
 use uuid::Uuid;
 
-use super::super::config::Config;
+use super::super::config_parser::Config;
 use super::super::guards::bearer;
 use super::super::models::group::GroupId;
 use super::super::models::user;
@@ -15,19 +15,19 @@ use super::Error;
 pub const UNION_ID_LEN: usize = 32;
 
 #[derive(Serialize, Deserialize)]
-struct Auth {
+pub struct Auth {
     user: User,
     jwt: String,
 }
 
 #[derive(Serialize, Deserialize)]
-struct SignupParams {
+pub struct SignupParams {
     username: String,
     password: String,
 }
 
 #[post("/signup", data = "<params>")]
-fn signup(
+pub fn signup(
     mut cookies: Cookies,
     config: State<Config>,
     db: State<Database>,
@@ -57,13 +57,13 @@ fn signup(
 }
 
 #[derive(Serialize, Deserialize)]
-struct SigninParams {
+pub struct SigninParams {
     username: String,
     password: String,
 }
 
 #[post("/signin", data = "<params>")]
-fn signin(
+pub fn signin(
     mut cookies: Cookies,
     config: State<Config>,
     db: State<Database>,
@@ -84,9 +84,9 @@ fn signin(
 }
 
 #[derive(Serialize, Deserialize)]
-struct SignoutResponse {}
+pub struct SignoutResponse {}
 
 #[post("/signout")]
-fn signout() -> Result<Json<SignoutResponse>, Error> {
+pub fn signout() -> Result<Json<SignoutResponse>, Error> {
     Ok(Json(SignoutResponse {}))
 }

@@ -1,10 +1,11 @@
+use rocket::request::Form;
 use rocket::State;
-use rocket_contrib::Json;
+use rocket_contrib::json::Json;
 
 use hex::FromHex;
 
 use super::super::common;
-use super::super::config::Config;
+use super::super::config_parser::Config;
 use super::super::guards::bearer;
 use super::super::guards::bearer::AuthorizationBearer;
 use super::super::models::application;
@@ -96,7 +97,10 @@ pub struct CreateScopeParams {
     description: String,
 }
 
-#[post("/users/<user_id>/applications/<application_id>/scopes", data = "<params>")]
+#[post(
+    "/users/<user_id>/applications/<application_id>/scopes",
+    data = "<params>"
+)]
 pub fn create_scope(
     config: State<Config>,
     db: State<Database>,
@@ -165,12 +169,12 @@ pub struct SelectAppParams {
     client_id: String,
 }
 
-#[get("/applications?<params>")]
+#[get("/applications?<params..>")]
 pub fn select_application(
     db: State<Database>,
-    params: SelectAppParams,
+    params: Form<SelectAppParams>,
 ) -> Result<Json<Application>, Error> {
-    let client_id = Vec::<u8>::from_hex(params.client_id)?;
+    let client_id = Vec::<u8>::from_hex(&params.client_id)?;
     let pg_conn = db.get_conn()?;
     let match_app = application::select_one(&*pg_conn, &client_id)?;
 

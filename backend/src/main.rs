@@ -1,5 +1,6 @@
 extern crate backend;
 
 fn main() {
-    backend::create().launch();
+    let config_file = "./src/config.toml";
+    backend::create(config_file).launch();
 }
