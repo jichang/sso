@@ -27,6 +27,7 @@ pub mod group;
 pub mod mailer;
 pub mod profile;
 pub mod role;
+pub mod summary;
 pub mod ticket;
 pub mod user;
 

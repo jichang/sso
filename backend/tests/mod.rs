@@ -1,9 +1,8 @@
 extern crate backend;
-extern crate dotenv;
 extern crate rocket;
 
-use rocket::local::Client;
 use rocket::http::Status;
+use rocket::local::Client;
 
 pub mod common;
 

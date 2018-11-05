@@ -43,8 +43,8 @@ use rocket::Rocket;
 use rocket_contrib::templates::Template;
 use storage::{Cache, Database};
 
-pub fn create(configFile: &str) -> Rocket {
-    let config = config_parser::parse(configFile);
+pub fn create(config_file: &str) -> Rocket {
+    let config = config_parser::parse(config_file);
 
     let postgres_manager =
         PostgresConnectionManager::new(config.postgres.addr.as_str(), TlsMode::None)
@@ -69,6 +69,7 @@ pub fn create(configFile: &str) -> Rocket {
                 handlers::user::signup,
                 handlers::user::signin,
                 handlers::user::signout,
+                handlers::summary::select_summary,
                 handlers::contact::select_types,
                 handlers::contact::create_contact,
                 handlers::contact::select_contacts,

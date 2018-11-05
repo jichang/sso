@@ -1,24 +1,25 @@
-use std::fmt;
 use std::convert::From;
 use std::error::Error as StdError;
+use std::fmt;
 use url::ParseError;
 
-pub mod crypto;
-pub mod email;
-pub mod username;
-pub mod token;
-pub mod contact;
-pub mod role;
-pub mod group;
-pub mod user;
-pub mod profile;
 pub mod application;
 pub mod authorization;
-pub mod ticket;
+pub mod contact;
+pub mod crypto;
+pub mod email;
+pub mod group;
+pub mod profile;
 pub mod ratelimit;
+pub mod role;
+pub mod summary;
+pub mod ticket;
+pub mod token;
+pub mod user;
+pub mod username;
 
-use self::username::Error as UsernameError;
 use self::crypto::Error as CryptoError;
+use self::username::Error as UsernameError;
 use postgres::error::Error as PgError;
 
 #[derive(Debug)]
