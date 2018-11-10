@@ -10,6 +10,7 @@ import {
   BaseRequestOptions
 } from "@angular/http";
 import { RouterModule, Routes } from "@angular/router";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 import { MaskPipe } from "./mask.pipe";
 
@@ -28,8 +29,6 @@ import { VerifyFormComponent } from "./verify-form/verify-form.component";
 import { VerifyPageComponent } from "./verify-page/verify-page.component";
 import { ContactFormComponent } from "./contact-form/contact-form.component";
 import { ContactsPageComponent } from "./contacts-page/contacts-page.component";
-import { DashboardPageComponent } from "./dashboard-page/dashboard-page.component";
-import { ProfilePageComponent } from "./profile-page/profile-page.component";
 import { ProfileFormComponent } from "./profile-form/profile-form.component";
 import { ApplicationFormComponent } from "./application-form/application-form.component";
 import { ApplicationsPageComponent } from "./applications-page/applications-page.component";
@@ -43,7 +42,6 @@ import { FormControlErrorsComponent } from "./form-control-errors/form-control-e
 import { FormControlErrorComponent } from "./form-control-error/form-control-error.component";
 import { CopyTextSpanComponent } from "./copy-text-span/copy-text-span.component";
 import { ApplicationCreatePageComponent } from "./application-create-page/application-create-page.component";
-import { DashboardNavComponent } from "./dashboard-nav/dashboard-nav.component";
 import { ApplicationBasicComponent } from "./application-basic/application-basic.component";
 import { ApplicationScopesComponent } from "./application-scopes/application-scopes.component";
 import { SettingsPageComponent } from "./settings-page/settings-page.component";
@@ -52,7 +50,8 @@ import { ContactsListComponent } from "./contacts-list/contacts-list.component";
 import { AuthorizationsPageComponent } from "./authorizations-page/authorizations-page.component";
 import { AuthorizationsListComponent } from "./authorizations-list/authorizations-list.component";
 import { ContactStatePipe } from "./contact-state.pipe";
-import { SummaryPanelComponent } from './summary-panel/summary-panel.component';
+import { SummaryPanelComponent } from "./summary-panel/summary-panel.component";
+import { FeblrMaterialModule } from "./materal.module";
 
 @Injectable()
 export class TrackableHttpOptions extends BaseRequestOptions {
@@ -72,76 +71,39 @@ const routes: Routes = [
   { path: "", component: HomePageComponent },
   { path: "signup", component: SignupPageComponent },
   { path: "signin", component: SigninPageComponent },
-  { path: "contacts", component: ContactCreatePageComponent },
-  { path: "verify", component: VerifyPageComponent },
   {
-    path: "dashboard",
-    component: DashboardPageComponent,
+    path: "applications",
+    component: ApplicationsPageComponent
+  },
+  {
+    path: "applications/create",
+    component: ApplicationCreatePageComponent
+  },
+  {
+    path: "applications/:id",
+    component: ApplicationPageComponent,
     children: [
       {
-        path: "",
-        redirectTo: "applications",
-        pathMatch: "full"
-      },
-      {
-        path: "applications",
-        component: ApplicationsPageComponent
-      },
-      {
-        path: "applications/create",
-        component: ApplicationCreatePageComponent
-      },
-      {
-        path: "applications/:id",
-        component: ApplicationPageComponent,
-        children: [
-          {
-            path: "",
-            redirectTo: "basic",
-            pathMatch: "full"
-          },
-          {
-            path: "basic",
-            component: ApplicationBasicComponent
-          },
-          {
-            path: "scopes",
-            component: ApplicationScopesComponent
-          },
-          {
-            path: "scopes/:id",
-            component: ScopeFormComponent
-          }
-        ]
-      },
-      {
-        path: "settings",
-        component: SettingsPageComponent,
-        children: [
-          {
-            path: "",
-            redirectTo: "profile",
-            pathMatch: "full"
-          },
-          {
-            path: "profile",
-            component: ProfilePageComponent
-          },
-          {
-            path: "contacts",
-            component: ContactsPageComponent
-          },
-          {
-            path: "contacts/create",
-            component: ContactCreatePageComponent
-          }
-        ]
-      },
-      {
-        path: "authorizations",
-        component: AuthorizationsPageComponent
+        path: "scopes/:id",
+        component: ScopeFormComponent
       }
     ]
+  },
+  {
+    path: "contacts",
+    component: ContactsPageComponent
+  },
+  {
+    path: "contacts/create",
+    component: ContactCreatePageComponent
+  },
+  {
+    path: "settings",
+    component: SettingsPageComponent
+  },
+  {
+    path: "authorizations",
+    component: AuthorizationsPageComponent
   },
   { path: "oauth", component: OauthPageComponent }
 ];
@@ -159,8 +121,6 @@ const routes: Routes = [
     VerifyPageComponent,
     ContactFormComponent,
     ContactsPageComponent,
-    DashboardPageComponent,
-    ProfilePageComponent,
     ProfileFormComponent,
     ApplicationFormComponent,
     ApplicationsPageComponent,
@@ -174,7 +134,6 @@ const routes: Routes = [
     FormControlErrorComponent,
     CopyTextSpanComponent,
     ApplicationCreatePageComponent,
-    DashboardNavComponent,
     ApplicationBasicComponent,
     ApplicationScopesComponent,
     SettingsPageComponent,
@@ -190,7 +149,9 @@ const routes: Routes = [
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule.forRoot(routes),
-    ServiceWorkerModule
+    ServiceWorkerModule,
+    BrowserAnimationsModule,
+    FeblrMaterialModule
   ],
   providers: [
     { provide: RequestOptions, useClass: TrackableHttpOptions },

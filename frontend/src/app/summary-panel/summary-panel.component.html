@@ -1,11 +1,59 @@
-<div>
-  <div>
-    <p>{{summary.applications.limit}} / {{summary.applications.used}}</p>
-  </div>
-  <div>
-    <p>{{summary.authrizations.limit}} / {{summary.authrizations.used}}</p>
-  </div>
-  <div>
-    <p>{{summary.contacts.limit}} / {{summary.contacts.used}}</p>
-  </div>
+<div class="summary-panel">
+  <mat-card>
+    <mat-card-content>
+      <div class="flex__box">
+        <div class="flex__item">
+          <h4>Contacts</h4>
+          <div>
+            <span>Total: {{summary.authorizations.total}}</span>
+            <span> / </span>
+            <span>Used: {{summary.authorizations.used}}</span>
+          </div>
+        </div>
+        <div>
+          <a [routerLink]="['contacts']"><span>Details</span>
+            <mat-icon>chevron_right</mat-icon>
+          </a>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-content>
+      <div class="flex__box">
+        <div class="flex__item">
+          <h4>Applications</h4>
+          <div>
+            <span>Total: {{summary.authorizations.total}}</span>
+            <span> / </span>
+            <span>Used: {{summary.authorizations.used}}</span>
+          </div>
+        </div>
+        <div>
+          <a [routerLink]="['applications']"><span>Details</span>
+            <mat-icon>chevron_right</mat-icon>
+          </a>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-content>
+      <div class="flex__box">
+        <div class="flex__item">
+          <h4>Authorizations</h4>
+          <div>
+            <span>Total: {{summary.authorizations.total}}</span>
+            <span> / </span>
+            <span>Used: {{summary.authorizations.used}}</span>
+          </div>
+        </div>
+        <div>
+          <a [routerLink]="['authorizations']"><span>Details</span>
+            <mat-icon>chevron_right</mat-icon>
+          </a>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

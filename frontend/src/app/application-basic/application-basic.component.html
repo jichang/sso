@@ -1,42 +1,40 @@
 <div>
-  <header class="table__header">
-    <h4 class="table__header__title">Basic</h4>
-  </header>
   <table *ngIf="application">
     <thead>
-      <tr>
-      </tr>
+      <tr></tr>
     </thead>
     <tbody>
       <tr>
-        <td class="text--left">Name</td>
-        <td class="text--left">{{ application.name }}</td>
+        <td>Name</td>
+        <td>{{ application.name }}</td>
       </tr>
       <tr>
-        <td class="text--left">Website</td>
-        <td class="text--left">
-          <a class="text--link" [href]="application.website_uri" target="_blank">{{ application.website_uri }}</a>
+        <td>Website</td>
+        <td>
+          <a [href]="application.website_uri" target="_blank">{{
+            application.website_uri
+          }}</a>
         </td>
       </tr>
       <tr>
-        <td class="text--left">Client Id</td>
-        <td class="text--left">
+        <td>Client Id</td>
+        <td>
           <copy-text-span [text]="application.client_id">
-            <span>{{application.client_id | mask: 4}}</span>
+            <span>{{ application.client_id | mask: 4 }}</span>
           </copy-text-span>
         </td>
       </tr>
       <tr>
-        <td class="text--left">Client Secret</td>
-        <td class="text--left">
+        <td>Client Secret</td>
+        <td>
           <copy-text-span [text]="application.client_secret.Plaintext">
-            <span>{{application.client_secret.Plaintext | mask: 4}}</span>
+            <span>{{ application.client_secret.Plaintext | mask: 4 }}</span>
           </copy-text-span>
         </td>
       </tr>
       <tr>
-        <td class="text--left">Redirect Uri</td>
-        <td class="text--left">{{ application.callback_uri }}</td>
+        <td>Redirect Uri</td>
+        <td>{{ application.callback_uri }}</td>
       </tr>
     </tbody>
   </table>

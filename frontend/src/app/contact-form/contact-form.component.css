@@ -1,0 +1,12 @@
+.form {
+  display: block;
+  margin: 0 auto;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-flat-button {
+  width: 100%;
+}

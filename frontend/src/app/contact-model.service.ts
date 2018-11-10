@@ -36,7 +36,7 @@ export class ContactModelService {
     return this.subject.asObservable();
   }
 
-  select() {
+  select(userId: number) {
     let headers = new HttpHeaders({
       "Content-Type": "application/json",
       Authorization: "Bearer " + window.localStorage.getItem("jwt")
@@ -45,7 +45,7 @@ export class ContactModelService {
       headers: headers
     };
 
-    let apiUri = "/api/v1/users/" + session.currUser().id + "/contacts";
+    let apiUri = `/api/v1/users/${userId}/contacts`;
     this.http.get(apiUri, options).subscribe((contacts: Contact[]) => {
       this.store.contacts = contacts;
       this.subject.next(contacts);
@@ -82,7 +82,7 @@ export class ContactModelService {
 
     let apiUri = `/api/v1/users/${session.currUser().id}/contacts/${
       contact.id
-      }`;
+    }`;
 
     return this.http.delete(apiUri, options).pipe(
       map((contact: Contact) => {

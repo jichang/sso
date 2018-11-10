@@ -1,9 +1,22 @@
-<header class="page__header">
-  <h2 class="page__header__title">Applications</h2>
-  <div class="page__header__action">
-    <a class="button button--primary" [routerLink]="['create']">New Application</a>
-  </div>
-</header>
-<section class="page__content">
-  <applications-list [applications]="applications"></applications-list>
-</section>
+<div class="page">
+  <header class="page__header">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <div class="flex__item">
+          <div class="tools">
+            <a [routerLink]="['']">
+              <mat-icon>chevron_left</mat-icon>
+              <span>Home</span>
+            </a>
+          </div>
+        </div>
+        <a [routerLink]="['create']" mat-flat-button color="primary">
+          添加应用程序<mat-icon>add</mat-icon>
+        </a>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </header>
+  <section class="page__body">
+    <applications-list [applications]="applications"></applications-list>
+  </section>
+</div>

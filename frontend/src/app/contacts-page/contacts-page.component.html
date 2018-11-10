@@ -1,9 +1,22 @@
-<div>
-  <header class="table__header">
-    <h4 class="table__header__title">Contacts</h4>
-    <div class="table__header__action">
-      <a class="button button--primary" [routerLink]="['create']">New Contact</a>
-    </div>
+<div class="page">
+  <header class="page__header">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <div class="flex__item">
+          <div class="tools">
+            <a [routerLink]="['']">
+              <mat-icon>chevron_left</mat-icon>
+              <span>Home</span>
+            </a>
+          </div>
+        </div>
+        <a [routerLink]="['create']" mat-flat-button color="primary">
+          添加联系方式<mat-icon>add</mat-icon>
+        </a>
+      </mat-toolbar-row>
+    </mat-toolbar>
   </header>
-  <contacts-list [contacts]="contacts" (action)="handleAction($event)"></contacts-list>
+  <section class="page__body">
+    <contacts-list [contacts]="contacts"></contacts-list>
+  </section>
 </div>

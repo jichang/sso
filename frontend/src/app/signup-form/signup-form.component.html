@@ -1,22 +1,11 @@
 <form class="form" [formGroup]="user" (ngSubmit)="signup(user)" novalidate>
-  <h4 class="form__title">Sign Up</h4>
-  <div class="form__field">
-    <label class="form__field__label" for="username">Username</label>
-    <input class="form__field__control" id="username" type="text" placeholder="Username" name="username" formControlName="username"
-    />
-    <form-control-errors for="username">
-      <form-control-error errKey="required" errMsg="username can not be empty"></form-control-error>
-    </form-control-errors>
-  </div>
-  <div class="form__field">
-    <label class="form__field__label" for="password">Password</label>
-    <input class="form__field__control" id="password" type="password" placeholder="Password" name="password" formControlName="password"
-    />
-    <form-control-errors for="password">
-      <form-control-error errKey="required" errMsg="password can not be empty"></form-control-error>
-    </form-control-errors>
-  </div>
-  <div class="form__submit">
-    <button class="button button--block button--primary" [disabled]="!user.valid">Sign Up</button>
+  <mat-form-field>
+    <input matInput id="username" type="text" placeholder="Username" name="username" formControlName="username" />
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput id="password" type="password" placeholder="Password" name="password" formControlName="password" />
+  </mat-form-field>
+  <div>
+    <button mat-flat-button color="primary" [disabled]="!user.valid">Sign Up</button>
   </div>
 </form>

@@ -1,8 +1,17 @@
-.icon {
-  display: inline-block;
+.mat-card {
+  margin: 1rem auto;
+}
 
-  width: 1rem;
-  height: 1rem;
+.flex__box {
+  align-items: center;
+  justify-content: center;
+}
 
+a span,
+a .mat-icon {
   vertical-align: middle;
+}
+
+h4 {
+  margin: 0 0 0.5rem 0;
 }

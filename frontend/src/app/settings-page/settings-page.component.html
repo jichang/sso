@@ -1,19 +1,26 @@
-<header class="page__header">
-  <h2 class="page__header__title">
-    <span>Settings</span>
-  </h2>
-</header>
-<section class="page__content">
-  <div class="section">
-    <aside class="section__nav">
-      <ul>
-        <li><a class="aside__nav__link" [routerLink]="['profile']" routerLinkActive="aside__nav__link--active">Profile</a></li>
-        <li><a class="aside__nav__link" [routerLink]="['contacts']" routerLinkActive="aside__nav__link--active">Contacts</a></li>
-      </ul>
-    </aside>
-
-    <div class="section__details">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
-</section>
+<div class="page">
+  <header class="page__header">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <div class="flex__item">
+          <div class="tools">
+            <a [routerLink]="['']">
+              <mat-icon>chevron_left</mat-icon>
+              <span>Home</span>
+            </a>
+          </div>
+        </div>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </header>
+  <section class="page__body">
+    <mat-accordion multi="true">
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>Profile</mat-panel-title>
+        </mat-expansion-panel-header>
+        <profile-form></profile-form>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </section>
+</div>

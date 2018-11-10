@@ -1,20 +1,35 @@
-<header class="page__header">
-  <h2 *ngIf="application" class="page__header__title">
-    <a [routerLink]="['..']"><img src="/assets/arrow-left.svg" /></a>
-    <span>{{ application.name }}</span>
-  </h2>
-</header>
-<section class="page__content">
-  <div class="section">
-    <aside class="section__nav">
-      <ul>
-        <li><a class="aside__nav__link" [routerLink]="['basic']" routerLinkActive="aside__nav__link--active">Basic</a></li>
-        <li><a class="aside__nav__link" [routerLink]="['scopes']" routerLinkActive="aside__nav__link--active">Scopes</a></li>
-      </ul>
-    </aside>
-
-    <div class="section__details">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
-</section>
+<div class="page">
+  <header class="page__header">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <div class="flex__item">
+          <div class="tools">
+            <a [routerLink]="['..']">
+              <mat-icon>chevron_left</mat-icon>
+              <span>Applications</span>
+            </a>
+          </div>
+        </div>
+        <a [routerLink]="['create']" mat-flat-button color="warn">
+          <mat-icon>delete</mat-icon>
+        </a>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </header>
+  <section class="page__body">
+    <mat-accordion multi="true">
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title>Basic</mat-panel-title>
+        </mat-expansion-panel-header>
+        <application-basic [application]="application"></application-basic>
+      </mat-expansion-panel>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>Scope</mat-panel-title>
+        </mat-expansion-panel-header>
+        <application-scopes></application-scopes>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </section>
+</div>

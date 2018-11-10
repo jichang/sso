@@ -1,0 +1,13 @@
+.page__content {
+  padding: 1rem 0;
+}
+
+h2 {
+  text-align: center;
+}
+
+.mat-card-content {
+  margin: 0 auto;
+
+  width: 20rem;
+}

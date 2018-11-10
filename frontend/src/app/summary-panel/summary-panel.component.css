@@ -1,0 +1,17 @@
+.mat-card {
+  margin: 1rem 0;
+}
+
+.flex__box {
+  align-items: center;
+  justify-content: center;
+}
+
+a span,
+a .mat-icon {
+  vertical-align: middle;
+}
+
+h4 {
+  margin: 0 0 1rem 0;
+}

@@ -1,4 +1,12 @@
-<div class="page page--signup">
-  <signin-form (result)="signed($event)"></signin-form>
-  <a [routerLink]="['/signup']">Sign Up</a>
+<div class="page">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Sign In</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <signin-form (result)="signined($event)"></signin-form>
+    </mat-card-content>
+  </mat-card>
+
+  <a mat-button [routerLink]="['/signup']">Sign Up</a>
 </div>

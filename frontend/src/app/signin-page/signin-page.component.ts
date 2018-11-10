@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import * as model from "../model";
-import { map } from "rxjs/operators";
 
 @Component({
   selector: "signin-page",
@@ -13,7 +12,7 @@ export class SigninPageComponent implements OnInit {
 
   ngOnInit() {}
 
-  signed({ jwt, user }: { jwt: string; user: model.User }) {
+  signined({ jwt, user }: { jwt: string; user: model.User }) {
     window.localStorage.setItem("jwt", jwt);
     window.localStorage.setItem("currUser", JSON.stringify(user));
 
@@ -22,7 +21,7 @@ export class SigninPageComponent implements OnInit {
       if (redirect) {
         this.router.navigate([redirect]);
       } else {
-        this.router.navigate(["dashboard"]);
+        this.router.navigate(["/"]);
       }
     });
   }

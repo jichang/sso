@@ -4,13 +4,13 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { session } from "./model";
 
 export interface SummaryQuota {
-  limit: number;
+  total: number;
   used: number;
 }
 
 export interface Summary {
   applications: SummaryQuota;
-  authrizations: SummaryQuota;
+  authorizations: SummaryQuota;
   contacts: SummaryQuota;
 }
 

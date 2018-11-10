@@ -3,3 +3,11 @@ form {
 
   width: 30rem;
 }
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-flat-button {
+  width: 100%;
+}

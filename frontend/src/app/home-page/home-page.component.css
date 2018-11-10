@@ -1,32 +1,10 @@
-.logo {
-  display: block;
-  margin: 2rem auto;
-
-  width: 256px;
-  height: auto;
+.button-group {
+  text-align: center;
 }
 
-.link--action {
-  display: inline-block;
-  margin: 0.5rem 1rem;
-  padding: 0.5rem 1rem;
-  border: 1px solid transparent;
+.button-group .mat-stroked-button,
+.button-group .mat-flat-button {
+  margin: 1rem;
 
-  text-decoration: none;
-}
-
-.link--primary {
-  border-color: black;
-
-  color: white;
-
-  background: black;
-}
-
-.link--outline {
-  border-color: currentColor;
-
-  color: black;
-
-  background: white;
+  vertical-align: middle;
 }

@@ -1,4 +1,12 @@
-<div class="page page--signup">
-  <signup-form (success)="created($event)" (failure)="failed($event)"></signup-form>
-  <a [routerLink]="['/signin']">Sign In</a>
+<div class="page">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Sign Up</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <signup-form (success)="created($event)" (failure)="failed($event)"></signup-form>
+    </mat-card-content>
+  </mat-card>
+
+  <a mat-button [routerLink]="['/signin']">Sign In</a>
 </div>

@@ -1,4 +1,4 @@
-import { Contact, ContactType } from "./contact-model.service";
+import { Contact } from "./contact-model.service";
 
 export enum GenderType {
   Male = 1,

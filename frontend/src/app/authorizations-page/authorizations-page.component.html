@@ -1,6 +1,21 @@
-<header class="page__header">
-  <h2 class="page__header__title">Authorizations</h2>
-</header>
-<section class="page__content">
-  <authorizations-list [authorizations]="authorizations"></authorizations-list>
-</section>
+<div class="page">
+  <header class="page__header">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <div class="flex__item">
+          <div class="tools">
+            <a [routerLink]="['']">
+              <mat-icon>chevron_left</mat-icon>
+              <span>Home</span>
+            </a>
+          </div>
+        </div>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </header>
+  <section class="page__body">
+    <authorizations-list
+      [authorizations]="authorizations"
+    ></authorizations-list>
+  </section>
+</div>

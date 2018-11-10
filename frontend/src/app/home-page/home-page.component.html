@@ -1,14 +1,33 @@
-<div class="page page--home">
-  <div class="page__content">
-    <section>
-      <img class="logo" src="/assets/logo.svg" />
-    </section>
-    <nav class="text--center">
-      <a class="link--action link--outline" [routerLink]="['signin']">Sign In</a>
-      <a class="link--action link--primary" [routerLink]="['signup']">Sign Up</a>
+<div class="page">
+  <div *ngIf="!summary">
+    <div>
+      <img class="site__logo" src="/assets/logo.svg" />
+    </div>
+    <nav class="button-group">
+      <a mat-stroked-button [routerLink]="['signin']">Sign In</a>
+      <a mat-flat-button color="primary" [routerLink]="['signup']">Sign Up</a>
     </nav>
   </div>
-  <div class="page__content" *ngIf="!!summary">
-    <summary-panel [summary]="summary"></summary-panel>
+  <div *ngIf="!!summary">
+    <header>
+      <mat-toolbar>
+        <mat-toolbar-row>
+          <div class="flex__item">
+            <div class="tools">
+              <mat-icon svgIcon="logo"></mat-icon>
+              <span>Feblr</span>
+            </div>
+          </div>
+          <div class="tools">
+            <a [routerLink]="['settings']">
+              <mat-icon>settings</mat-icon><span>Settings</span>
+            </a>
+          </div>
+        </mat-toolbar-row>
+      </mat-toolbar>
+    </header>
+    <section>
+      <summary-panel [summary]="summary"></summary-panel>
+    </section>
   </div>
 </div>

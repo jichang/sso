@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs'
-import { session } from './model'
-import { map } from 'rxjs/operators';
+import { Injectable } from "@angular/core";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Observable, BehaviorSubject } from "rxjs";
+import { session } from "./model";
+import { map } from "rxjs/operators";
 
 export interface Scope {
   id?: number;
@@ -12,7 +12,7 @@ export interface Scope {
 }
 
 export interface ScopeStore {
-  scopes: Scope[]
+  scopes: Scope[];
 }
 
 @Injectable()
@@ -31,33 +31,32 @@ export class ScopeModelService {
     return this.subject.asObservable();
   }
 
-  select(applicationId) {
+  select(userId: number, applicationId: number) {
     let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + window.localStorage.getItem('jwt')
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + window.localStorage.getItem("jwt")
     });
     let options = {
       headers: headers
     };
 
-    let apiUri = "/api/v1/users/" + session.currUser().id + "/applications/" + applicationId + "/scopes";
-    this.http.get(apiUri, options)
-      .subscribe((scopes: Scope[]) => {
-        this.store.scopes = scopes;
-        this.subject.next(scopes);
-      });
+    let apiUri = `/api/v1/users/${userId}/applications/${applicationId}/scopes`;
+    this.http.get(apiUri, options).subscribe((scopes: Scope[]) => {
+      this.store.scopes = scopes;
+      this.subject.next(scopes);
+    });
   }
 
-  create(applicationId, scope: Scope) {
+  create(userId: number, applicationId: number, scope: Scope) {
     let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + window.localStorage.getItem('jwt')
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + window.localStorage.getItem("jwt")
     });
     let options = {
       headers: headers
     };
 
-    let apiUri = '/api/v1/users/' + session.currUser().id + '/applications/' + applicationId + '/scopes';
+    let apiUri = `/api/v1/users/${userId}/applications/${applicationId}//scopes`;
     return this.http.post(apiUri, scope, options).pipe(
       map((scope: Scope) => {
         this.store.scopes.push(scope);

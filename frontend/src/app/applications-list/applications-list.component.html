@@ -1,25 +1,29 @@
-<table>
-  <thead>
-    <tr>
-      <th class="text--left">Name</th>
-      <th class="text--left">Website</th>
-      <th class="text--left">Redirect Uri</th>
-      <th class="text--right"></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let application of applications">
-      <td class="text--left">{{ application.name }}</td>
-      <td class="text--left">
-        <a class="text--link" [href]="application.website_uri" target="_blank">{{ application.website_uri }}</a>
-      </td>
-      <td class="text--left">{{ application.callback_uri }}</td>
-      <td class="text--right">
-        <a class="text--link" [routerLink]="[application.id]">Details</a>
-      </td>
-    </tr>
-    <tr *ngIf="applications.length === 0">
-      <td class="text--center" colspan="6">No applications</td>
-    </tr>
-  </tbody>
-</table>
+<div class="applications-list">
+  <mat-card *ngFor="let application of applications">
+    <mat-card-content>
+      <div class="flex__box">
+        <div class="flex__item">
+          <h4>{{application.name}}</h4>
+          <table>
+            <tbody>
+              <tr>
+                <td>Website URL</td>
+                <td>{{application.website_uri}}</td>
+              </tr>
+              <tr>
+                <td>Callback URL</td>
+                <td>{{application.callback_uri}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <a [routerLink]="[application.id]">
+            <span>Details</span>
+            <mat-icon>chevron_right</mat-icon>
+          </a>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

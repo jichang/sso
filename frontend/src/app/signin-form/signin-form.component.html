@@ -1,14 +1,11 @@
 <form class="form" [formGroup]="user" (ngSubmit)="signin(user)" novalidate>
-  <h4 class="form__title">Sign In</h4>
-  <div class="form__field">
-    <label class="form__field__label" for="username">Username</label>
-    <input type="text" id="username" class="form__field__control" placeholder="Username" name="username" formControlName="username"/>
-  </div>
-  <div class="form__field">
-    <label class="form__field__label" for="password">Password</label>
-    <input type="password" id="password" class="form__field__control" placeholder="Password" name="password" formControlName="password"/>
-  </div>
-  <div class="form__submit">
-    <button class="button button--block button--primary" [disabled]="!user.valid">Sign In</button>
+  <mat-form-field>
+    <input matInput type="text" id="username" placeholder="Username" name="username" formControlName="username" />
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput type="password" id="password" placeholder="Password" name="password" formControlName="password" />
+  </mat-form-field>
+  <div>
+    <button mat-flat-button color="primary" [disabled]="!user.valid">Sign In</button>
   </div>
 </form>

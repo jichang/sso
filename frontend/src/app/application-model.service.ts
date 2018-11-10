@@ -39,7 +39,7 @@ export class ApplicationModelService {
     return this.subject.asObservable();
   }
 
-  select() {
+  select(userId: number) {
     let headers = new HttpHeaders({
       "Content-Type": "application/json",
       Authorization: "Bearer " + window.localStorage.getItem("jwt")
@@ -48,7 +48,7 @@ export class ApplicationModelService {
       headers: headers
     };
 
-    let apiUri = "/api/v1/users/" + session.currUser().id + "/applications";
+    let apiUri = `/api/v1/users/${userId}/applications`;
     this.http.get(apiUri, options).subscribe((applications: Application[]) => {
       this.store.applications = applications;
       this.subject.next(applications);

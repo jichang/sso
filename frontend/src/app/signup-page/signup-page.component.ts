@@ -16,7 +16,7 @@ export class SignupPageComponent implements OnInit {
     window.localStorage.setItem("jwt", jwt);
     window.localStorage.setItem("currUser", JSON.stringify(user));
 
-    this.router.navigate(["dashboard"]);
+    this.router.navigate(["/"]);
   }
 
   failed(response: Response) {

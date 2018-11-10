@@ -1,9 +1,25 @@
-<header class="page__header">
-  <h2 class="page__header__title">
-    <a [routerLink]="['..']"><img src="/assets/arrow-left.svg" /></a>
-    <span>New Application</span>
-  </h2>
-</header>
-<section class="page__content">
-  <application-form></application-form>
-</section>
+<div class="page">
+  <header class="page__header">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <div class="flex__item">
+          <div class="tools">
+            <a [routerLink]="['..']">
+              <mat-icon>chevron_left</mat-icon>
+              <span>Applications</span>
+            </a>
+          </div>
+        </div>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </header>
+
+  <section class="page__content">
+    <mat-card>
+      <mat-card-content>
+        <h2>New Application</h2>
+        <application-form (result)="created()"></application-form>
+      </mat-card-content>
+    </mat-card>
+  </section>
+</div>

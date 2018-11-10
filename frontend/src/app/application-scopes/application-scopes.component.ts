@@ -1,23 +1,35 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Scope, ScopeModelService } from '../scope-model.service';
+import { Component, Input, OnInit } from "@angular/core";
+import { Router, ActivatedRoute } from "@angular/router";
+import { Scope, ScopeModelService } from "../scope-model.service";
+import { session } from "../model";
 
 @Component({
-  selector: 'application-scopes',
-  templateUrl: './application-scopes.component.html',
-  styleUrls: ['./application-scopes.component.css']
+  selector: "application-scopes",
+  templateUrl: "./application-scopes.component.html",
+  styleUrls: ["./application-scopes.component.css"]
 })
 export class ApplicationScopesComponent implements OnInit {
   scopes: Scope[] = [];
 
-  constructor(private route: ActivatedRoute, private scopeModel: ScopeModelService) { }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private scopeModel: ScopeModelService
+  ) {}
 
   ngOnInit() {
     this.scopeModel.scopes.subscribe(scopes => {
-        this.scopes = scopes;
-      });
+      this.scopes = scopes;
+    });
 
-    this.scopeModel.select(this.route.parent.snapshot.params['id']);
+    let currUser = session.currUser();
+    if (currUser) {
+      this.scopeModel.select(
+        currUser.id,
+        this.route.parent.snapshot.params["id"]
+      );
+    } else {
+      this.router.navigate(["login"]);
+    }
   }
-
 }

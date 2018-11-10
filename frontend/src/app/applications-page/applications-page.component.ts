@@ -1,23 +1,43 @@
-import { Component, OnInit } from '@angular/core';
-import { Application, ApplicationModelService } from '../application-model.service';
-import { session } from '../model';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Router } from "@angular/router";
+import {
+  Application,
+  ApplicationModelService
+} from "../application-model.service";
+import { session } from "../model";
+import { Subscription } from "rxjs";
 
 @Component({
-  selector: 'applications-page',
-  templateUrl: './applications-page.component.html',
-  styleUrls: ['./applications-page.component.css']
+  selector: "applications-page",
+  templateUrl: "./applications-page.component.html",
+  styleUrls: ["./applications-page.component.css"]
 })
-export class ApplicationsPageComponent implements OnInit {
+export class ApplicationsPageComponent implements OnInit, OnDestroy {
   applications: Application[] = [];
+  subscription: Subscription;
 
-  constructor(private applicationModel: ApplicationModelService) { }
+  constructor(
+    private router: Router,
+    private applicationModel: ApplicationModelService
+  ) {}
 
   ngOnInit() {
-    this.applicationModel.applications.subscribe(applications => {
+    this.subscription = this.applicationModel.applications.subscribe(
+      applications => {
         this.applications = applications;
-      });
+      }
+    );
 
-    this.applicationModel.select();
+    let currUser = session.currUser();
+    if (currUser) {
+      this.applicationModel.select(currUser.id);
+    } else {
+      this.router.navigate(["login"]);
+    }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   openCreateModal() {}

@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
 *,
 *::before,
 *::after {
@@ -15,9 +17,35 @@ body {
   background: #fff;
 }
 
-h2,
-h4 {
-  font-weight: normal;
+.page {
+  display: block;
+  margin: 0 auto;
+
+  width: 48rem;
+  max-width: 100%;
+}
+
+.page__header {
+}
+
+.page__body {
+}
+
+.section {
+}
+
+.section__header {
+}
+
+.section__body {
+}
+
+.site__logo {
+  display: block;
+  margin: 4rem auto;
+  padding: 1rem;
+
+  width: 8rem;
 }
 
 .flex__box {
@@ -28,280 +56,31 @@ h4 {
   flex: 1;
 }
 
-.loader {
-  color: white;
-  text-align: center;
+.tools span,
+.tools .mat-icon {
+  vertical-align: middle;
 }
 
-.form {
-  display: block;
-  margin: 0 auto;
-  padding: 0;
+.tools span {
+  margin-left: 0.5rem;
 }
 
-.form__title {
-  font-size: 1.5rem;
-  text-align: center;
+.button-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.form__field {
-  display: block;
-  margin: 1rem auto;
+.button-group-item {
+  display: flex;
 
-  width: 100%;
-}
-
-.form__field__label {
-  display: block;
-  margin-bottom: 4px;
   padding: 0 0.5rem;
-
-  color: #666;
-  font-size: 1rem;
-  text-align: left;
 }
 
-.form__field__control {
-  display: block;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-
-  width: 100%;
-
-  font-size: 1rem;
-  line-height: 1rem;
-
-  border-radius: 0;
-  outline-width: 1px;
-  outline-color: #666;
+.button-group-item:first-child {
+  padding-left: 0;
 }
 
-select.form__field__control {
-  height: 2rem;
-  -webkit-appearance: none;
-  border-radius: 0;
-}
-
-.form__field__control.ng-touched.ng-invalid {
-  border-left: 1px solid red;
-}
-
-.form__field__control.ng-touched.ng-valid {
-  border-left: 1px solid #01847f;
-}
-
-.form__submit {
-  display: block;
-  margin: 2rem auto;
-
-  width: 100%;
-
-  font-size: 1rem;
-}
-
-.button {
-  display: inline-block;
-  padding: 0.5rem;
-  border-width: 1px;
-  border-style: solid;
-
-  font-size: 1rem;
-
-  cursor: pointer;
-
-  vertical-align: middle;
-}
-
-.button--block {
-  width: 100%;
-}
-
-.button:focus {
-  outline-offset: -1px;
-  outline-width: 1px;
-  outline-color: black;
-}
-
-.button:disabled {
-  opacity: 0.75;
-}
-
-.button--primary {
-  border-color: #333;
-
-  color: white;
-
-  background: #333;
-}
-
-.button--danger {
-  border-color: currentColor;
-
-  color: #f44;
-
-  background: white;
-}
-
-.button--danger:hover {
-  color: white;
-
-  background: #f44;
-}
-
-a.button {
-  text-decoration: none;
-}
-
-.table__header {
-  display: flex;
-  margin: 0 0 1rem 0;
-
-  align-items: center;
-}
-
-.table__header__title {
-  flex: 1;
-  margin: 0;
-
-  font-weight: 300;
-}
-
-.table__header__title a, .table__header__title span {
-  display: inline-block;
-
-  vertical-align: middle;
-}
-
-.table__header__title a {
-  height: 1rem;
-}
-
-.table__header__title img {
-  margin-right: 1rem;
-
-  width: 1rem;
-  height: 1rem;
-}
-table {
-  border: 1px solid #e4e4e4;
-
-  border-collapse: collapse;
-
-  width: 100%;
-}
-
-thead, tbody {
-  width: 100%;
-}
-
-thead {
-  border-bottom: 1px solid #e4e4e4;
-}
-
-th, td {
-  padding: 1rem;
-
-  word-break: break-all;
-  word-wrap: break-word;
-}
-
-th {
-  color: #999;
-
-  font-weight: 300;
-}
-
-tbody tr:nth-child(odd) {
-  background: #f5f5f5;
-}
-
-p {
-  word-break: break-all;
-  word-wrap: break-word;
-}
-
-a {
-  color: black;
-}
-
-.text--link:hover {
-  opacity: 0.75;
-}
-
-ul {
-  padding: 0;
-
-  list-style: none;
-}
-
-.page__header {
-  display: flex;
-  margin: 2rem 0;
-
-  align-items: center;
-}
-
-.page__header__title {
-  flex: 1;
-  margin: 0;
-
-  font-weight: 300;
-}
-
-.page__header__title a, .page__header__title span {
-  display: inline-block;
-
-  vertical-align: middle;
-}
-
-.page__header__title img {
-  margin-right: 1rem;
-
-  width: 1rem;
-  height: 1rem;
-}
-
-.text--left {
-  text-align: left;
-}
-
-.text--center {
-  text-align: center;
-}
-
-.text--right {
-  text-align: right;
-}
-
-.section {
-  display: flex;
-
-  align-items: flex-start;
-}
-
-.section__nav ul {
-  margin: 0;
-  padding: 0;
-}
-
-.section__nav ul li {
-  margin-bottom: 0.5rem;
-}
-
-.aside__nav__link {
-  color: #999;
-  text-decoration: none;
-}
-
-.aside__nav__link:hover {
-  color: #666;
-}
-
-.aside__nav__link--active {
-  color: black;
-}
-
-.section__details {
-  flex: 1;
-  padding-left: 3rem;
+.button-group-item:last-child {
+  padding-right: 0;
 }

@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs'
-import { Application } from './application-model.service';
-import { Scope } from './scope-model.service';
-import { session } from './model'
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { Injectable } from "@angular/core";
+import { Observable, BehaviorSubject } from "rxjs";
+import { Application } from "./application-model.service";
+import { Scope } from "./scope-model.service";
+import { session } from "./model";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { map } from "rxjs/operators";
 
 export interface Authorization {
   client_app?: Application;
@@ -13,7 +13,7 @@ export interface Authorization {
 }
 
 export interface AuthorizationStore {
-  authorizations: Authorization[]
+  authorizations: Authorization[];
 }
 
 @Injectable()
@@ -32,17 +32,18 @@ export class AuthorizationModelService {
     return this.subject.asObservable();
   }
 
-  select() {
+  select(userId: number) {
     let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + window.localStorage.getItem('jwt')
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + window.localStorage.getItem("jwt")
     });
     let options = {
       headers: headers
     };
 
-    let apiUri = "/api/v1/users/" + session.currUser().id + "/authorizations";
-    this.http.get(apiUri, options)
+    let apiUri = `/api/v1/users/${userId}/authorizations`;
+    this.http
+      .get(apiUri, options)
       .subscribe((authorizations: Authorization[]) => {
         this.store.authorizations = authorizations;
         this.subject.next(authorizations);
@@ -51,8 +52,8 @@ export class AuthorizationModelService {
 
   create(authorization: Authorization) {
     let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + window.localStorage.getItem('jwt')
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + window.localStorage.getItem("jwt")
     });
     let options = {
       headers: headers

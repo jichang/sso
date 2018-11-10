@@ -1,24 +1,20 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Application, ApplicationModelService } from '../application-model.service';
-import { map } from 'rxjs/operators';
+import { Component, OnInit, Input } from "@angular/core";
+import { Router, ActivatedRoute } from "@angular/router";
+import {
+  Application,
+  ApplicationModelService
+} from "../application-model.service";
+import { map } from "rxjs/operators";
 
 @Component({
-  selector: 'application-basic',
-  templateUrl: './application-basic.component.html',
-  styleUrls: ['./application-basic.component.css']
+  selector: "application-basic",
+  templateUrl: "./application-basic.component.html",
+  styleUrls: ["./application-basic.component.css"]
 })
 export class ApplicationBasicComponent implements OnInit {
-  application: Application = null;
+  @Input() application: Application;
 
-  constructor(private route: ActivatedRoute, private applicationModel: ApplicationModelService) { }
+  constructor() {}
 
-  ngOnInit() {
-    this.applicationModel.applications.pipe(
-      map(applications => applications.find(application => application.id === parseInt(this.route.parent.snapshot.params['id'])))
-    ).subscribe(application => {
-      this.application = application;
-    });
-  }
-
+  ngOnInit() {}
 }

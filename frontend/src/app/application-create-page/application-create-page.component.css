@@ -1,5 +1,7 @@
 .page__content {
-  padding: 2rem 1rem;
+  padding: 1rem 0;
+}
 
-  border: 1px solid #e4e4e4;
+h2 {
+  text-align: center;
 }

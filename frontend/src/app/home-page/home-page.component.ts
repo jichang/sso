@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { SummaryModelService, Summary } from "../summary-model.service";
+import { session } from "../model";
 
 @Component({
   selector: "home-page",
@@ -14,9 +15,10 @@ export class HomePageComponent implements OnInit {
   ngOnInit() {
     this.summaryModelService.summary.subscribe(summary => {
       this.summary = summary;
-      console.log(this.summary);
     });
 
-    this.summaryModelService.select();
+    if (session && session.currUser()) {
+      this.summaryModelService.select();
+    }
   }
 }

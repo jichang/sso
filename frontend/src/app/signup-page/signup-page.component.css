@@ -2,7 +2,8 @@
   text-align: center;
 }
 
-a {
-  color: #999999;
-  font-size: 16px;
+.mat-card {
+  margin: 4rem auto 2rem auto;
+
+  width: 20rem;
 }
