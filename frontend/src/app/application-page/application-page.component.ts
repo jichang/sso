@@ -7,6 +7,8 @@ import {
 import { map } from "rxjs/operators";
 import { session } from "../model";
 import { Subscription } from "rxjs";
+import { MatDialogRef, MatDialog } from "@angular/material";
+import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: "application-page",
@@ -16,11 +18,13 @@ import { Subscription } from "rxjs";
 export class ApplicationPageComponent implements OnInit {
   application: Application = null;
   subscription: Subscription = null;
+  dialogRef: MatDialogRef<ConfirmDialogComponent>;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private applicationModel: ApplicationModelService
+    private applicationModel: ApplicationModelService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -43,5 +47,27 @@ export class ApplicationPageComponent implements OnInit {
     } else {
       this.router.navigate(["login"]);
     }
+  }
+
+  remove(application: Application) {
+    this.dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      height: "400px",
+      width: "600px",
+      data: {
+        title: "Delete Application?",
+        message: "delete application " + application.name
+      }
+    });
+    this.dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.applicationModel
+          .remove(application)
+          .subscribe((application: Application) => {
+            this.router.navigate([".."], {
+              relativeTo: this.route
+            });
+          });
+      }
+    });
   }
 }

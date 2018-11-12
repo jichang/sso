@@ -6,6 +6,9 @@ import {
 import { session } from "../model";
 import { Subscription } from "rxjs";
 import { Router } from "@angular/router";
+import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
+import { MatDialog, MatDialogRef } from "@angular/material";
+import { AuthorizationAction } from "../authorizations-list/authorizations-list.component";
 
 @Component({
   selector: "authorizations-page",
@@ -15,10 +18,12 @@ import { Router } from "@angular/router";
 export class AuthorizationsPageComponent implements OnInit, OnDestroy {
   authorizations: Authorization[] = [];
   subscription: Subscription;
+  dialogRef: MatDialogRef<ConfirmDialogComponent>;
 
   constructor(
     private router: Router,
-    private authorizationModel: AuthorizationModelService
+    private authorizationModel: AuthorizationModelService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -40,5 +45,29 @@ export class AuthorizationsPageComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  openCreateModal() {}
+  handleAction($event: AuthorizationAction) {
+    let { type, authorization } = $event;
+
+    switch (type) {
+      case "revoke":
+        this.dialogRef = this.dialog.open(ConfirmDialogComponent, {
+          height: "400px",
+          width: "600px",
+          data: {
+            title: "Delete Authorization?",
+            message: "delete contact " + authorization.server_app.name
+          }
+        });
+        this.dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            this.authorizationModel
+              .remove(authorization)
+              .subscribe((authorization: Authorization) => {
+                console.log(authorization);
+              });
+          }
+        });
+        break;
+    }
+  }
 }

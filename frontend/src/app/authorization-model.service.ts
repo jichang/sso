@@ -7,6 +7,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { map } from "rxjs/operators";
 
 export interface Authorization {
+  id: number;
   client_app?: Application;
   server_app?: Application;
   scope?: Scope;
@@ -63,6 +64,32 @@ export class AuthorizationModelService {
     return this.http.post(apiUri, authorization, options).pipe(
       map((authorization: Authorization) => {
         this.store.authorizations.push(authorization);
+        this.subject.next(Object.assign({}, this.store).authorizations);
+
+        return authorization;
+      })
+    );
+  }
+
+  remove(authorization: Authorization) {
+    let headers = new HttpHeaders({
+      Authorization: "Bearer " + window.localStorage.getItem("jwt")
+    });
+    let options = {
+      headers: headers
+    };
+
+    let apiUri = `/api/v1/users/${session.currUser().id}/authorizations/${
+      authorization.id
+    }`;
+
+    return this.http.delete(apiUri, options).pipe(
+      map((authorization: Authorization) => {
+        let index = this.store.authorizations.findIndex(
+          _authorization => _authorization.id === authorization.id
+        );
+        this.store.authorizations.splice(index, 1);
+
         this.subject.next(Object.assign({}, this.store).authorizations);
 
         return authorization;

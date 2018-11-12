@@ -52,6 +52,7 @@ import { AuthorizationsListComponent } from "./authorizations-list/authorization
 import { ContactStatePipe } from "./contact-state.pipe";
 import { SummaryPanelComponent } from "./summary-panel/summary-panel.component";
 import { FeblrMaterialModule } from "./materal.module";
+import { ConfirmDialogComponent } from "./confirm-dialog/confirm-dialog.component";
 
 @Injectable()
 export class TrackableHttpOptions extends BaseRequestOptions {
@@ -142,7 +143,8 @@ const routes: Routes = [
     AuthorizationsPageComponent,
     AuthorizationsListComponent,
     ContactStatePipe,
-    SummaryPanelComponent
+    SummaryPanelComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -153,6 +155,7 @@ const routes: Routes = [
     BrowserAnimationsModule,
     FeblrMaterialModule
   ],
+  entryComponents: [ConfirmDialogComponent],
   providers: [
     { provide: RequestOptions, useClass: TrackableHttpOptions },
     { provide: ApplicationModelService, useClass: ApplicationModelService },

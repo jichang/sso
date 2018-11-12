@@ -17,6 +17,9 @@
     </mat-toolbar>
   </header>
   <section class="page__body">
-    <contacts-list [contacts]="contacts"></contacts-list>
+    <contacts-list
+      [contacts]="contacts"
+      (action)="handleAction($event)"
+    ></contacts-list>
   </section>
 </div>

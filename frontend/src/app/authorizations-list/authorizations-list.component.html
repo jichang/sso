@@ -3,26 +3,32 @@
     <mat-card-content>
       <div class="flex__box">
         <div class="flex__item">
-          <h4>{{authorization.client_app.name}}</h4>
+          <h4>{{ authorization.client_app.name }}</h4>
           <table>
             <tbody>
               <tr>
                 <td>Server App</td>
-                <td>{{authorization.server_app.name}}</td>
+                <td>{{ authorization.server_app.name }}</td>
               </tr>
               <tr>
                 <td>Scope</td>
-                <td>{{authorization.scope.name}}</td>
+                <td>{{ authorization.scope.name }}</td>
               </tr>
               <tr>
                 <td>Description</td>
-                <td>{{authorization.scope.description}}</td>
+                <td>{{ authorization.scope.description }}</td>
               </tr>
             </tbody>
           </table>
         </div>
         <div>
-          <button mat-flat-button color="primary">Revoke</button>
+          <button
+            mat-flat-button
+            color="primary"
+            (click)="revoke(authorization)"
+          >
+            Revoke
+          </button>
         </div>
       </div>
     </mat-card-content>

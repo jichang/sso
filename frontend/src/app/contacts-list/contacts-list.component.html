@@ -3,11 +3,13 @@
     <mat-card-content>
       <div class="flex__box">
         <div class="flex__item">
-          <h4>{{contact.identity}}</h4>
-          <span>{{contact.status | contactState}}</span>
+          <h4>{{ contact.identity }}</h4>
+          <span>{{ contact.status | contactState }}</span>
         </div>
         <div>
-          <button mat-flat-button color="warn">Delete</button>
+          <button mat-flat-button color="warn" (click)="remove(contact)">
+            Delete
+          </button>
         </div>
       </div>
     </mat-card-content>

@@ -5,13 +5,13 @@
         <div class="flex__item">
           <h4>Contacts</h4>
           <div>
-            <span>Total: {{summary.authorizations.total}}</span>
-            <span> / </span>
-            <span>Used: {{summary.authorizations.used}}</span>
+            <span>Total: {{ summary.contacts.total }}</span> <span> / </span>
+            <span>Used: {{ summary.contacts.used }}</span>
           </div>
         </div>
         <div>
-          <a [routerLink]="['contacts']"><span>Details</span>
+          <a [routerLink]="['contacts']"
+            ><span>Details</span>
             <mat-icon>chevron_right</mat-icon>
           </a>
         </div>
@@ -24,13 +24,13 @@
         <div class="flex__item">
           <h4>Applications</h4>
           <div>
-            <span>Total: {{summary.authorizations.total}}</span>
-            <span> / </span>
-            <span>Used: {{summary.authorizations.used}}</span>
+            <span>Total: {{ summary.applications.total }}</span>
+            <span> / </span> <span>Used: {{ summary.applications.used }}</span>
           </div>
         </div>
         <div>
-          <a [routerLink]="['applications']"><span>Details</span>
+          <a [routerLink]="['applications']"
+            ><span>Details</span>
             <mat-icon>chevron_right</mat-icon>
           </a>
         </div>
@@ -43,13 +43,14 @@
         <div class="flex__item">
           <h4>Authorizations</h4>
           <div>
-            <span>Total: {{summary.authorizations.total}}</span>
+            <span>Total: {{ summary.authorizations.total }}</span>
             <span> / </span>
-            <span>Used: {{summary.authorizations.used}}</span>
+            <span>Used: {{ summary.authorizations.used }}</span>
           </div>
         </div>
         <div>
-          <a [routerLink]="['authorizations']"><span>Details</span>
+          <a [routerLink]="['authorizations']"
+            ><span>Details</span>
             <mat-icon>chevron_right</mat-icon>
           </a>
         </div>

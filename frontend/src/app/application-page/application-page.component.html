@@ -10,9 +10,9 @@
             </a>
           </div>
         </div>
-        <a [routerLink]="['create']" mat-flat-button color="warn">
+        <button mat-flat-button color="warn" (click)="remove(application)">
           <mat-icon>delete</mat-icon>
-        </a>
+        </button>
       </mat-toolbar-row>
     </mat-toolbar>
   </header>

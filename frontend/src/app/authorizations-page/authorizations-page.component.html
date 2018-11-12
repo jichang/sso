@@ -16,6 +16,7 @@
   <section class="page__body">
     <authorizations-list
       [authorizations]="authorizations"
+      (action)="handleAction($event)"
     ></authorizations-list>
   </section>
 </div>

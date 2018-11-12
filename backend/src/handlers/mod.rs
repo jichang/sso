@@ -147,33 +147,30 @@ impl<'r> Responder<'r> for Error {
 
                 HttpStatus::InternalServerError
             }
-            Error::Model(ref model_err) => {
-                print!("{:?}", model_err);
-                match model_err {
-                    &ModelError::NotFound => {
-                        body.insert("errno", "404000");
+            Error::Model(ref model_err) => match model_err {
+                &ModelError::NotFound => {
+                    body.insert("errno", "404000");
+                    body.insert("errmsg", "internal server error");
+                    HttpStatus::NotFound
+                }
+                &ModelError::Database(ref pg_err) => match pg_err.code() {
+                    Some(state) if *state == UNIQUE_VIOLATION => {
+                        body.insert("errno", "40900001");
                         body.insert("errmsg", "internal server error");
-                        HttpStatus::NotFound
+                        HttpStatus::Conflict
                     }
-                    &ModelError::Database(ref pg_err) => match pg_err.code() {
-                        Some(state) if *state == UNIQUE_VIOLATION => {
-                            body.insert("errno", "40900001");
-                            body.insert("errmsg", "internal server error");
-                            HttpStatus::Conflict
-                        }
-                        _ => {
-                            body.insert("errno", "50000002");
-                            body.insert("errmsg", "internal server error");
-                            HttpStatus::InternalServerError
-                        }
-                    },
                     _ => {
                         body.insert("errno", "50000002");
                         body.insert("errmsg", "internal server error");
                         HttpStatus::InternalServerError
                     }
+                },
+                _ => {
+                    body.insert("errno", "50000002");
+                    body.insert("errmsg", "internal server error");
+                    HttpStatus::InternalServerError
                 }
-            }
+            },
             Error::Jwt(ref _jwt_err) => {
                 body.insert("errno", "50000003");
                 body.insert("errmsg", "internal server error");

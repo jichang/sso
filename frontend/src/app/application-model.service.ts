@@ -74,4 +74,30 @@ export class ApplicationModelService {
       })
     );
   }
+
+  remove(applicatin: Application) {
+    let headers = new HttpHeaders({
+      Authorization: "Bearer " + window.localStorage.getItem("jwt")
+    });
+    let options = {
+      headers: headers
+    };
+
+    let apiUri = `/api/v1/users/${session.currUser().id}/applications/${
+      applicatin.id
+    }`;
+
+    return this.http.delete(apiUri, options).pipe(
+      map((application: Application) => {
+        let index = this.store.applications.findIndex(
+          _application => _application.id === application.id
+        );
+        this.store.applications.splice(index, 1);
+
+        this.subject.next(Object.assign({}, this.store).applications);
+
+        return application;
+      })
+    );
+  }
 }

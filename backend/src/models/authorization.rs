@@ -198,7 +198,8 @@ pub fn select<T: GenericConnection>(
     "#;
     let rows = pg_conn.query(stmt, &[&user_id])?;
 
-    let authorizations = rows.iter()
+    let authorizations = rows
+        .iter()
         .map(|row| {
             let client_app_client_id: Vec<u8> = row.get("client_app_client_id");
             let server_app_client_id: Vec<u8> = row.get("server_app_client_id");
@@ -261,6 +262,7 @@ pub fn remove<T: GenericConnection>(
 ) -> Result<Authorization, ModelError> {
     let trans = pg_conn.transaction()?;
     let authorization = select_one(&trans, authorization_id)?;
+    println!("{:?}", authorization);
     let stmt = r#"
     DELETE
     FROM sso.authorizations
@@ -268,7 +270,7 @@ pub fn remove<T: GenericConnection>(
     RETURNING *
     "#;
 
-    let rows = pg_conn.query(&stmt, &[&user_id, &authorization_id])?;
+    let rows = trans.query(&stmt, &[&authorization_id, &user_id])?;
     if rows.len() != 1 {
         Err(ModelError::Unknown)
     } else {

@@ -42,6 +42,7 @@ export class OauthPageComponent implements OnInit {
     };
 
     this.authorization = {
+      id: -1,
       client_app: null,
       server_app: null,
       scope: null
