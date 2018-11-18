@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS sso.contacts
   status integer NOT NULL DEFAULT 0,
   CONSTRAINT contacts_pkey PRIMARY KEY (id),
   CONSTRAINT contacts_identity_key UNIQUE (identity),
-  CONSTRAINT contacts_user_id_fkey FOREIGN KEY (user_id) REFERENCES sso.users (id) ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT contacts_user_id_fkey FOREIGN KEY (user_id) REFERENCES sso.users (id) ON UPDATE NO ACTION ON DELETE CASCADE,
   CONSTRAINT contacts_type_id_fkey FOREIGN KEY (type_id) REFERENCES sso.contact_types (id) ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 WITH (

@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS sso.applications
   CONSTRAINT applications_pkey PRIMARY KEY (id),
   CONSTRAINT applications_name_key UNIQUE (name),
   CONSTRAINT applications_client_id_key UNIQUE (client_id),
-  CONSTRAINT applications_user_id_fkey FOREIGN KEY (user_id) REFERENCES sso.users (id) ON UPDATE NO ACTION ON DELETE NO ACTION
+  CONSTRAINT applications_user_id_fkey FOREIGN KEY (user_id) REFERENCES sso.users (id) ON UPDATE NO ACTION ON DELETE CASCADE
 )
 WITH (
   OIDS=FALSE

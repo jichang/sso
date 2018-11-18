@@ -35,8 +35,7 @@ export class SummaryModelService {
 
   select() {
     let headers = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + window.localStorage.getItem("jwt")
+      "Content-Type": "application/json"
     });
     let options = {
       headers: headers

@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS sso.tickets
   status integer NOT NULL DEFAULT 0,
   CONSTRAINT tickets_pkey PRIMARY KEY (id),
   CONSTRAINT tickets_unique_key UNIQUE (authorization_id),
-  CONSTRAINT tickets_authorization_id_fkey FOREIGN KEY (authorization_id) REFERENCES sso.authorizations (id) ON UPDATE NO ACTION ON DELETE NO ACTION
+  CONSTRAINT tickets_authorization_id_fkey FOREIGN KEY (authorization_id) REFERENCES sso.authorizations (id) ON UPDATE NO ACTION ON DELETE CASCADE
 )
 WITH (
   OIDS=FALSE

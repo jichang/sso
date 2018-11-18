@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS sso.scopes
   status integer NOT NULL DEFAULT 0,
   CONSTRAINT scopes_pkey PRIMARY KEY (id),
   CONSTRAINT scopes_name_key UNIQUE (name),
-  CONSTRAINT scopes_application_id_fkey FOREIGN KEY (application_id) REFERENCES sso.applications (id) ON UPDATE NO ACTION ON DELETE NO ACTION
+  CONSTRAINT scopes_application_id_fkey FOREIGN KEY (application_id) REFERENCES sso.applications (id) ON UPDATE NO ACTION ON DELETE CASCADE
 )
 WITH (
   OIDS=FALSE

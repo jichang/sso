@@ -21,5 +21,9 @@
       [contacts]="contacts"
       (action)="handleAction($event)"
     ></contacts-list>
+    <div *ngIf="contacts.length === 0" class="placeholder--list">
+      <span>No Contacts</span>
+      <a mat-button [routerLink]="['create']" color="primary">添加联系方式</a>
+    </div>
   </section>
 </div>

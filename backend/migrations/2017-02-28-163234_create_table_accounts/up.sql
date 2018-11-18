@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS sso.accounts
   CONSTRAINT auth_pkey PRIMARY KEY (id),
   CONSTRAINT auth_user_id_key UNIQUE (user_id),
   CONSTRAINT auth_username_key UNIQUE (username),
-  CONSTRAINT auth_user_id_fkey FOREIGN KEY (user_id) REFERENCES sso.users (id) ON UPDATE NO ACTION ON DELETE NO ACTION
+  CONSTRAINT auth_user_id_fkey FOREIGN KEY (user_id) REFERENCES sso.users (id) ON UPDATE NO ACTION ON DELETE CASCADE
 )
 WITH (
   OIDS=FALSE

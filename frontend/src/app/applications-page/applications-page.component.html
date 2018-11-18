@@ -18,5 +18,9 @@
   </header>
   <section class="page__body">
     <applications-list [applications]="applications"></applications-list>
+    <div *ngIf="applications.length === 0" class="placeholder--list">
+      <span>No Applications</span>
+      <a mat-button [routerLink]="['create']" color="primary">添加应用程序</a>
+    </div>
   </section>
 </div>

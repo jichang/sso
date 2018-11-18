@@ -37,7 +37,7 @@ export class AuthorizationsPageComponent implements OnInit, OnDestroy {
     if (currUser) {
       this.authorizationModel.select(currUser.id);
     } else {
-      this.router.navigate(["login"]);
+      this.router.navigate(["signin"]);
     }
   }
 

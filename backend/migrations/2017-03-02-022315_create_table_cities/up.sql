@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS sso.cities
   status integer NOT NULL DEFAULT 0,
   CONSTRAINT cities_pkey PRIMARY KEY (id),
   CONSTRAINT cities_name_key UNIQUE (name),
-  CONSTRAINT cities_province_id_fkey FOREIGN KEY (province_id) REFERENCES sso.provinces (id) ON UPDATE NO ACTION ON DELETE NO ACTION
+  CONSTRAINT cities_province_id_fkey FOREIGN KEY (province_id) REFERENCES sso.provinces (id) ON UPDATE NO ACTION ON DELETE CASCADE
 )
 WITH (
   OIDS=FALSE

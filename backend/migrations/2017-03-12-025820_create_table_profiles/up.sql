@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS sso.profiles
   status integer NOT NULL DEFAULT 0,
   CONSTRAINT profiles_pkey PRIMARY KEY (id),
   CONSTRAINT profiles_user_id_key UNIQUE (user_id),
-  CONSTRAINT profiles_user_id_fkey FOREIGN KEY (user_id) REFERENCES sso.users (id) ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT profiles_user_id_fkey FOREIGN KEY (user_id) REFERENCES sso.users (id) ON UPDATE NO ACTION ON DELETE CASCADE,
   CONSTRAINT profiles_gender_id_fkey FOREIGN KEY (gender_id) REFERENCES sso.genders (id) ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT profiles_country_id_fkey FOREIGN KEY (country_id) REFERENCES sso.countries (id) ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT profiles_province_id_fkey FOREIGN KEY (province_id) REFERENCES sso.provinces (id) ON UPDATE NO ACTION ON DELETE NO ACTION,

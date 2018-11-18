@@ -35,8 +35,7 @@ export class AuthorizationModelService {
 
   select(userId: number) {
     let headers = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + window.localStorage.getItem("jwt")
+      "Content-Type": "application/json"
     });
     let options = {
       headers: headers
@@ -53,8 +52,7 @@ export class AuthorizationModelService {
 
   create(authorization: Authorization) {
     let headers = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + window.localStorage.getItem("jwt")
+      "Content-Type": "application/json"
     });
     let options = {
       headers: headers
@@ -72,18 +70,11 @@ export class AuthorizationModelService {
   }
 
   remove(authorization: Authorization) {
-    let headers = new HttpHeaders({
-      Authorization: "Bearer " + window.localStorage.getItem("jwt")
-    });
-    let options = {
-      headers: headers
-    };
-
     let apiUri = `/api/v1/users/${session.currUser().id}/authorizations/${
       authorization.id
     }`;
 
-    return this.http.delete(apiUri, options).pipe(
+    return this.http.delete(apiUri).pipe(
       map((authorization: Authorization) => {
         let index = this.store.authorizations.findIndex(
           _authorization => _authorization.id === authorization.id

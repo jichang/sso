@@ -18,5 +18,8 @@
       [authorizations]="authorizations"
       (action)="handleAction($event)"
     ></authorizations-list>
+    <div *ngIf="authorizations.length === 0" class="placeholder--list">
+      <span>No Authorizations</span>
+    </div>
   </section>
 </div>

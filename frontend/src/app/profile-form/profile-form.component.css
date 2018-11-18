@@ -3,6 +3,7 @@
   margin: 0 auto;
 }
 
-.mat-form-field {
+.mat-form-field,
+.mat-flat-button {
   width: 100%;
 }

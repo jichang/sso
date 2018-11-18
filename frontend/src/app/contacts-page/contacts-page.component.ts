@@ -32,7 +32,7 @@ export class ContactsPageComponent implements OnInit, OnDestroy {
     if (currUser) {
       this.contactModel.select(currUser.id);
     } else {
-      this.router.navigate(["login"]);
+      this.router.navigate(["signin"]);
     }
   }
 

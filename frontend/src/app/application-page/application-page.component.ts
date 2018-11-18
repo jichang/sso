@@ -1,29 +1,33 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import {
   Application,
   ApplicationModelService
 } from "../application-model.service";
 import { map } from "rxjs/operators";
-import { session } from "../model";
 import { Subscription } from "rxjs";
 import { MatDialogRef, MatDialog } from "@angular/material";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
+import { ScopeModelService, Scope } from "../scope-model.service";
+import { SessionService } from "../session.service";
 
 @Component({
   selector: "application-page",
   templateUrl: "./application-page.component.html",
   styleUrls: ["./application-page.component.css"]
 })
-export class ApplicationPageComponent implements OnInit {
+export class ApplicationPageComponent implements OnInit, OnDestroy {
   application: Application = null;
+  scopes: Scope[] = [];
   subscription: Subscription = null;
   dialogRef: MatDialogRef<ConfirmDialogComponent>;
 
   constructor(
+    private session: SessionService,
     private route: ActivatedRoute,
     private router: Router,
     private applicationModel: ApplicationModelService,
+    private scopeModel: ScopeModelService,
     public dialog: MatDialog
   ) {}
 
@@ -41,12 +45,22 @@ export class ApplicationPageComponent implements OnInit {
         this.application = application;
       });
 
-    let currUser = session.currUser();
-    if (currUser) {
+    this.scopeModel.scopes.subscribe(scopes => {
+      this.scopes = scopes;
+    });
+
+    let current = this.session.current();
+    if (current) {
+      const currUser = current.currUser;
       this.applicationModel.select(currUser.id);
+      this.scopeModel.select(currUser.id, this.route.snapshot.params["id"]);
     } else {
-      this.router.navigate(["login"]);
+      this.router.navigate(["signin"]);
     }
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   remove(application: Application) {

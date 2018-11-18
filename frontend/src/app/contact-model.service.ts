@@ -38,8 +38,7 @@ export class ContactModelService {
 
   select(userId: number) {
     let headers = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + window.localStorage.getItem("jwt")
+      "Content-Type": "application/json"
     });
     let options = {
       headers: headers
@@ -54,8 +53,7 @@ export class ContactModelService {
 
   create(contact: Contact) {
     let headers = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + window.localStorage.getItem("jwt")
+      "Content-Type": "application/json"
     });
     let options = {
       headers: headers
@@ -73,18 +71,11 @@ export class ContactModelService {
   }
 
   remove(contact: Contact) {
-    let headers = new HttpHeaders({
-      Authorization: "Bearer " + window.localStorage.getItem("jwt")
-    });
-    let options = {
-      headers: headers
-    };
-
     let apiUri = `/api/v1/users/${session.currUser().id}/contacts/${
       contact.id
     }`;
 
-    return this.http.delete(apiUri, options).pipe(
+    return this.http.delete(apiUri).pipe(
       map((contact: Contact) => {
         let index = this.store.contacts.findIndex(
           _contact => _contact.id === contact.id

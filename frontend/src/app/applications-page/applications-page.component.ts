@@ -32,7 +32,7 @@ export class ApplicationsPageComponent implements OnInit, OnDestroy {
     if (currUser) {
       this.applicationModel.select(currUser.id);
     } else {
-      this.router.navigate(["login"]);
+      this.router.navigate(["signin"]);
     }
   }
 

@@ -4,22 +4,19 @@
       <mat-toolbar-row>
         <div class="flex__item">
           <div class="tools">
-            <a [routerLink]="['..']">
+            <a [routerLink]="['/settings']">
               <mat-icon>chevron_left</mat-icon>
-              <span>Applications</span>
+              <span>Settings</span>
             </a>
           </div>
         </div>
       </mat-toolbar-row>
     </mat-toolbar>
   </header>
-
   <section class="page__body">
-    <mat-card>
-      <mat-card-content>
-        <h2>New Application</h2>
-        <application-form (result)="created()"></application-form>
-      </mat-card-content>
-    </mat-card>
+    <profile-form
+      (success)="onProfileUpdateSuccess($event)"
+      (failure)="onProfileUpdateFailure($event)"
+    ></profile-form>
   </section>
 </div>

@@ -9,8 +9,8 @@ CREATE TABLE IF NOT EXISTS sso.group_roles
   removed_time timestamp with time zone,
   status integer NOT NULL DEFAULT 0,
   CONSTRAINT group_roles_pkey PRIMARY KEY (group_id, role_id),
-  CONSTRAINT group_roles_group_id_fkey FOREIGN KEY (group_id) REFERENCES sso.groups (id) ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT group_roles_role_id_fkey FOREIGN KEY (role_id) REFERENCES sso.roles (id) ON UPDATE NO ACTION ON DELETE NO ACTION
+  CONSTRAINT group_roles_group_id_fkey FOREIGN KEY (group_id) REFERENCES sso.groups (id) ON UPDATE NO ACTION ON DELETE CASCADE,
+  CONSTRAINT group_roles_role_id_fkey FOREIGN KEY (role_id) REFERENCES sso.roles (id) ON UPDATE NO ACTION ON DELETE CASCADE
 )
 WITH (
   OIDS=FALSE

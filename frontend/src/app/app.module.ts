@@ -2,7 +2,7 @@ import * as cuid from "cuid";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule, Injectable } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { ServiceWorkerModule } from "@angular/service-worker";
 import {
   RequestOptions,
@@ -53,6 +53,8 @@ import { ContactStatePipe } from "./contact-state.pipe";
 import { SummaryPanelComponent } from "./summary-panel/summary-panel.component";
 import { FeblrMaterialModule } from "./materal.module";
 import { ConfirmDialogComponent } from "./confirm-dialog/confirm-dialog.component";
+import { TokenInterceptorService } from "./token-interceptor.service";
+import { ProfilePageComponent } from "./profile-page/profile-page.component";
 
 @Injectable()
 export class TrackableHttpOptions extends BaseRequestOptions {
@@ -103,6 +105,10 @@ const routes: Routes = [
     component: SettingsPageComponent
   },
   {
+    path: "profile",
+    component: ProfilePageComponent
+  },
+  {
     path: "authorizations",
     component: AuthorizationsPageComponent
   },
@@ -123,6 +129,7 @@ const routes: Routes = [
     ContactFormComponent,
     ContactsPageComponent,
     ProfileFormComponent,
+    ProfilePageComponent,
     ApplicationFormComponent,
     ApplicationsPageComponent,
     ApplicationsListComponent,
@@ -161,7 +168,12 @@ const routes: Routes = [
     { provide: ApplicationModelService, useClass: ApplicationModelService },
     { provide: ContactModelService, useClass: ContactModelService },
     { provide: ScopeModelService, useClass: ScopeModelService },
-    { provide: AuthorizationModelService, useClass: AuthorizationModelService }
+    { provide: AuthorizationModelService, useClass: AuthorizationModelService },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })

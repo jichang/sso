@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import * as model from "../model";
+import { MatSnackBar } from "@angular/material";
 
 @Component({
   selector: "signup-page",
@@ -8,7 +9,7 @@ import * as model from "../model";
   styleUrls: ["./signup-page.component.css"]
 })
 export class SignupPageComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private snackBar: MatSnackBar) {}
 
   ngOnInit() {}
 
@@ -22,6 +23,9 @@ export class SignupPageComponent implements OnInit {
   failed(response: Response) {
     switch (response.status) {
       case 409:
+        this.snackBar.open("User already exist", "Dismiss", {
+          duration: 3000
+        });
         break;
       default:
         break;

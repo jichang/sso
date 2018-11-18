@@ -29,6 +29,7 @@ pub mod profile;
 pub mod role;
 pub mod summary;
 pub mod ticket;
+pub mod token;
 pub mod user;
 
 #[derive(Debug)]
@@ -175,7 +176,7 @@ impl<'r> Responder<'r> for Error {
                 body.insert("errno", "50000003");
                 body.insert("errmsg", "internal server error");
 
-                HttpStatus::InternalServerError
+                HttpStatus::Unauthorized
             }
             Error::Parse(ref _parse_error) => {
                 body.insert("errno", "50000004");
@@ -199,7 +200,7 @@ impl<'r> Responder<'r> for Error {
                 body.insert("errno", "50000007");
                 body.insert("errmsg", "internal server error");
 
-                HttpStatus::InternalServerError
+                HttpStatus::Unauthorized
             }
         };
 

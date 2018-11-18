@@ -14,10 +14,10 @@ CREATE TABLE IF NOT EXISTS sso.authorizations
   status integer NOT NULL DEFAULT 0,
   CONSTRAINT authorizations_pkey PRIMARY KEY (id),
   CONSTRAINT authorizations_unique_key UNIQUE (user_id, server_id, client_id, scope_id),
-  CONSTRAINT authorizations_user_id_fkey FOREIGN KEY (user_id) REFERENCES sso.users (id) ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT authorizations_server_id_fkey FOREIGN KEY (server_id) REFERENCES sso.applications (id) ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT authorizations_client_id_fkey FOREIGN KEY (client_id) REFERENCES sso.applications (id) ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT authorizations_scope_id_fkey FOREIGN KEY (scope_id) REFERENCES sso.scopes (id) ON UPDATE NO ACTION ON DELETE NO ACTION
+  CONSTRAINT authorizations_user_id_fkey FOREIGN KEY (user_id) REFERENCES sso.users (id) ON UPDATE NO ACTION ON DELETE CASCADE,
+  CONSTRAINT authorizations_server_id_fkey FOREIGN KEY (server_id) REFERENCES sso.applications (id) ON UPDATE NO ACTION ON DELETE CASCADE,
+  CONSTRAINT authorizations_client_id_fkey FOREIGN KEY (client_id) REFERENCES sso.applications (id) ON UPDATE NO ACTION ON DELETE CASCADE,
+  CONSTRAINT authorizations_scope_id_fkey FOREIGN KEY (scope_id) REFERENCES sso.scopes (id) ON UPDATE NO ACTION ON DELETE CASCADE
 )
 WITH (
   OIDS=FALSE

@@ -14,13 +14,22 @@
     </mat-toolbar>
   </header>
   <section class="page__body">
-    <mat-accordion multi="true">
-      <mat-expansion-panel [expanded]="true">
-        <mat-expansion-panel-header>
-          <mat-panel-title>Profile</mat-panel-title>
-        </mat-expansion-panel-header>
-        <profile-form></profile-form>
-      </mat-expansion-panel>
-    </mat-accordion>
+    <mat-nav-list>
+      <mat-list-item>
+        <span matLine>Profile</span>
+        <a mat-icon-button [routerLink]="['/profile']">
+          <mat-icon>edit</mat-icon>
+        </a>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </mat-nav-list>
+    <button
+      class="signout-button"
+      mat-raised-button
+      color="warn"
+      (click)="signOut()"
+    >
+      Sign Out
+    </button>
   </section>
 </div>

@@ -4,7 +4,10 @@
       <mat-card-title>Sign In</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <signin-form (result)="signined($event)"></signin-form>
+      <signin-form
+        (success)="signined($event)"
+        (failure)="failure($event)"
+      ></signin-form>
     </mat-card-content>
   </mat-card>
 

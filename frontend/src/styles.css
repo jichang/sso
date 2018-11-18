@@ -23,12 +23,15 @@ body {
 
   width: 48rem;
   max-width: 100%;
+
+  background: #f9f9f9;
 }
 
 .page__header {
 }
 
 .page__body {
+  padding: 1rem;
 }
 
 .section {
@@ -83,4 +86,11 @@ body {
 
 .button-group-item:last-child {
   padding-right: 0;
+}
+
+.placeholder--list {
+  padding: 5rem;
+  text-align: center;
+
+  vertical-align: middle;
 }

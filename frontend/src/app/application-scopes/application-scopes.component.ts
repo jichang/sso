@@ -29,7 +29,7 @@ export class ApplicationScopesComponent implements OnInit {
         this.route.parent.snapshot.params["id"]
       );
     } else {
-      this.router.navigate(["login"]);
+      this.router.navigate(["signin"]);
     }
   }
 }

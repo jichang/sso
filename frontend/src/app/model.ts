@@ -36,5 +36,9 @@ export interface User {
 export let session = {
   currUser: function() {
     return JSON.parse(window.localStorage.getItem("currUser")) as User;
+  },
+  destory: function() {
+    window.localStorage.removeItem("currUser");
+    window.localStorage.removeItem("jwt");
   }
 };

@@ -33,8 +33,7 @@ export class ScopeModelService {
 
   select(userId: number, applicationId: number) {
     let headers = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + window.localStorage.getItem("jwt")
+      "Content-Type": "application/json"
     });
     let options = {
       headers: headers
@@ -49,8 +48,7 @@ export class ScopeModelService {
 
   create(userId: number, applicationId: number, scope: Scope) {
     let headers = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + window.localStorage.getItem("jwt")
+      "Content-Type": "application/json"
     });
     let options = {
       headers: headers

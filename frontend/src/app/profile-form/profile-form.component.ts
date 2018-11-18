@@ -1,11 +1,15 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, EventEmitter, Output } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
   FormControl,
   Validators
 } from "@angular/forms";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpErrorResponse
+} from "@angular/common/http";
 import { Router, ActivatedRoute } from "@angular/router";
 import { Profile, GenderType, Gender, session } from "../model";
 
@@ -17,6 +21,8 @@ import { Profile, GenderType, Gender, session } from "../model";
 export class ProfileFormComponent implements OnInit {
   profile: FormGroup;
   genders: Gender[];
+  @Output() success = new EventEmitter();
+  @Output() failure = new EventEmitter();
 
   constructor(private fb: FormBuilder, private http: HttpClient) {
     this.profile = fb.group({
@@ -42,8 +48,7 @@ export class ProfileFormComponent implements OnInit {
 
   queryProfile() {
     let headers = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + window.localStorage.getItem("jwt")
+      "Content-Type": "application/json"
     });
     let options = {
       headers: headers
@@ -67,8 +72,7 @@ export class ProfileFormComponent implements OnInit {
 
   update({ value, valid }: { value: any; valid: boolean }) {
     let headers = new HttpHeaders({
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + window.localStorage.getItem("jwt")
+      "Content-Type": "application/json"
     });
     let options = {
       headers: headers
@@ -82,8 +86,13 @@ export class ProfileFormComponent implements OnInit {
       birthday: new Date(value.birthday).toISOString(),
       introduction: value.introduction
     };
-    this.http.post(apiUri, params, options).subscribe((response: Response) => {
-      console.log(response);
-    });
+    this.http.post(apiUri, params, options).subscribe(
+      (response: Response) => {
+        this.success.emit(response);
+      },
+      (err: HttpErrorResponse) => {
+        this.failure.emit(err);
+      }
+    );
   }
 }
