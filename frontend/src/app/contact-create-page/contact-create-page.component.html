@@ -17,8 +17,33 @@
   <section class="page__body">
     <mat-card>
       <mat-card-content>
-        <h2>New Contact</h2>
-        <contact-form (result)="created()"></contact-form>
+        <mat-vertical-stepper #stepper>
+          <mat-step
+            label="New Contact"
+            [editable]="this.steps[0].editable"
+            [completed]="this.steps[0].completed"
+          >
+            <contact-form
+              (success)="created($event)"
+              (failure)="failure($event)"
+            ></contact-form>
+          </mat-step>
+          <mat-step
+            label="Verify Contact"
+            [editable]="this.steps[1].editable"
+            [completed]="this.steps[1].completed"
+          >
+            <div class="button-group">
+              <button mat-button matStepperNext>Skip</button>
+              <button mat-flat-button color="primary">Verify</button>
+            </div>
+          </mat-step>
+          <mat-step
+            label="Completed"
+            [editable]="this.steps[2].editable"
+            [completed]="this.steps[2].completed"
+          ></mat-step>
+        </mat-vertical-stepper>
       </mat-card-content>
     </mat-card>
   </section>

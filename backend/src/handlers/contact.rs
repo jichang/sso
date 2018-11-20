@@ -44,19 +44,6 @@ pub fn create_contact(
         let pg_conn = db.get_conn()?;
         let new_contact = contact::create(&*pg_conn, user_id, params.type_id, &params.identity)?;
 
-        let redis_conn = cache.get_conn()?;
-        let verify_token = common::gen_rand_bytes(VERIFY_TOKEN_SIZE)?;
-        let expire = 5 * 60;
-        let key = format!("token:verify:contact:{}", new_contact.id);
-        let _: String = redis_conn.set_ex(&key, hex::encode(&verify_token), expire)?;
-
-        let _rs = mailer::send_token(
-            &config,
-            new_contact.id,
-            &new_contact.identity,
-            &hex::encode(&verify_token),
-        );
-
         Ok(Json(new_contact))
     } else {
         Err(Error::Privilege)
