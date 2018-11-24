@@ -17,19 +17,28 @@
     </mat-toolbar>
   </header>
   <section class="page__body">
-    <mat-accordion multi="true">
-      <mat-expansion-panel [expanded]="true">
-        <mat-expansion-panel-header>
-          <mat-panel-title>Basic</mat-panel-title>
-        </mat-expansion-panel-header>
+    <mat-card>
+      <mat-card-content>
+        <div class="flex__box"><mat-card-title>Basic</mat-card-title></div>
+        <mat-divider></mat-divider>
         <application-basic [application]="application"></application-basic>
-      </mat-expansion-panel>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>Scope</mat-panel-title>
-        </mat-expansion-panel-header>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-content>
+        <div class="flex__box">
+          <mat-card-title class="flex__item">Scopes</mat-card-title>
+          <a mat-flat-button color="primary" [routerLink]="['scopes/create']">
+            <mat-icon>add</mat-icon>
+          </a>
+        </div>
+        <mat-divider></mat-divider>
         <scopes-list [scopes]="scopes"></scopes-list>
-      </mat-expansion-panel>
-    </mat-accordion>
+        <div *ngIf="scopes.length === 0" class="placeholder--list">
+          <span>No Scopes</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </section>
 </div>

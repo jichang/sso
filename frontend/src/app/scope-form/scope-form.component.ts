@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, Output, EventEmitter } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
@@ -8,6 +8,7 @@ import {
 import { Router, ActivatedRoute } from "@angular/router";
 import { Scope, ScopeModelService } from "../scope-model.service";
 import { session } from "../model";
+import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
   selector: "scope-form",
@@ -16,6 +17,8 @@ import { session } from "../model";
 })
 export class ScopeFormComponent implements OnInit {
   scope: FormGroup;
+  @Output() success = new EventEmitter();
+  @Output() failure = new EventEmitter();
 
   constructor(
     private fb: FormBuilder,
@@ -34,16 +37,17 @@ export class ScopeFormComponent implements OnInit {
   create({ value, valid }: { value: Scope; valid: boolean }) {
     let currUser = session.currUser();
     if (currUser) {
-      let applicationId = this.route.parent.snapshot.params["id"];
+      let applicationId = this.route.snapshot.params["id"];
       this.scopeModelService
         .create(currUser.id, applicationId, value)
-        .subscribe((response: any) => {
-          this.router.navigate([
-            "dashboard/applications",
-            applicationId,
-            "scopes"
-          ]);
-        });
+        .subscribe(
+          (response: any) => {
+            this.success.emit(response);
+          },
+          (err: HttpErrorResponse) => {
+            this.failure.emit(err);
+          }
+        );
     } else {
       this.router.navigate(["signin"]);
     }

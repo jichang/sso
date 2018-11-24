@@ -1,0 +1,23 @@
+<div class="page">
+  <header class="page__header">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <div class="flex__item">
+          <div class="tools">
+            <a [routerLink]="['../..']">
+              <mat-icon>chevron_left</mat-icon>
+              <span>Application</span>
+            </a>
+          </div>
+        </div>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </header>
+
+  <section class="page__body">
+    <scope-form
+      (success)="created($event)"
+      (failure)="failure($event)"
+    ></scope-form>
+  </section>
+</div>

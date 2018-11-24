@@ -55,6 +55,8 @@ import { FeblrMaterialModule } from "./materal.module";
 import { ConfirmDialogComponent } from "./confirm-dialog/confirm-dialog.component";
 import { TokenInterceptorService } from "./token-interceptor.service";
 import { ProfilePageComponent } from "./profile-page/profile-page.component";
+import { ScopeCreatePageComponent } from "./scope-create-page/scope-create-page.component";
+import { TokenModelService } from "./token-model.service";
 
 @Injectable()
 export class TrackableHttpOptions extends BaseRequestOptions {
@@ -84,13 +86,11 @@ const routes: Routes = [
   },
   {
     path: "applications/:id",
-    component: ApplicationPageComponent,
-    children: [
-      {
-        path: "scopes/:id",
-        component: ScopeFormComponent
-      }
-    ]
+    component: ApplicationPageComponent
+  },
+  {
+    path: "applications/:id/scopes/create",
+    component: ScopeCreatePageComponent
   },
   {
     path: "contacts",
@@ -151,7 +151,8 @@ const routes: Routes = [
     AuthorizationsListComponent,
     ContactStatePipe,
     SummaryPanelComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    ScopeCreatePageComponent
   ],
   imports: [
     BrowserModule,
@@ -168,6 +169,7 @@ const routes: Routes = [
     { provide: ApplicationModelService, useClass: ApplicationModelService },
     { provide: ContactModelService, useClass: ContactModelService },
     { provide: ScopeModelService, useClass: ScopeModelService },
+    { provide: TokenModelService, useClass: TokenModelService },
     { provide: AuthorizationModelService, useClass: AuthorizationModelService },
     {
       provide: HTTP_INTERCEPTORS,

@@ -1,3 +1,5 @@
+use rocket::request::Form;
+use rocket::response::status::Created;
 use rocket::State;
 use rocket_contrib::json::Json;
 
@@ -9,167 +11,94 @@ use super::super::config_parser::Config;
 use super::super::guards::bearer;
 use super::super::guards::bearer::AuthorizationBearer;
 use super::super::models::contact;
-use super::super::models::contact::{Contact, ContactType};
+use super::super::models::mailer;
 use super::super::storage::{Cache, Database};
-use super::mailer;
 use super::Error;
 
-#[get("/contacts/types")]
-pub fn select_types(db: State<Database>) -> Result<Json<Vec<ContactType>>, Error> {
-  let conn = db.get_conn()?;
-  let types = contact::select_types(&*conn)?;
-
-  Ok(Json(types))
-}
-
-const VERIFY_TOKEN_SIZE: usize = 64;
+const TOKEN_SIZE: usize = 64;
+const TOKEN_EXPIRE_DURATION: usize = 5 * 60;
 
 #[derive(Serialize, Deserialize)]
-pub struct CreateContactParams {
-  identity: String,
-  type_id: i32,
+pub struct CreateTokenParams {
+  target_id: i64,
+  target_type: String,
+  target_identity: String,
+  action: String,
 }
 
-#[post("/users/<user_id>/contacts", data = "<params>")]
-pub fn create_contact(
+#[post("/users/<user_id>/tokens", data = "<params>")]
+pub fn create_token(
   config: State<Config>,
   cache: State<Cache>,
-  db: State<Database>,
-  params: Json<CreateContactParams>,
   user_id: i64,
+  params: Json<CreateTokenParams>,
   bearer: AuthorizationBearer,
-) -> Result<Json<Contact>, Error> {
+) -> Result<Created<Json<()>>, Error> {
   let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
   if claims.uid == user_id {
-    let pg_conn = db.get_conn()?;
-    let new_contact = contact::create(&*pg_conn, user_id, params.type_id, &params.identity)?;
-
     let redis_conn = cache.get_conn()?;
-    let verify_token = common::gen_rand_bytes(VERIFY_TOKEN_SIZE)?;
-    let expire = 5 * 60;
-    let key = format!("token:verify:contact:{}", new_contact.id);
-    let _: String = redis_conn.set_ex(&key, hex::encode(&verify_token), expire)?;
-
-    let _rs = mailer::send_token(
-      &config,
-      new_contact.id,
-      &new_contact.identity,
-      &hex::encode(&verify_token),
+    let token = common::gen_rand_bytes(TOKEN_SIZE)?;
+    let key = format!(
+      "token:{}:{}:{}",
+      params.target_id, params.target_type, params.action
     );
-
-    Ok(Json(new_contact))
-  } else {
-    Err(Error::Privilege)
-  }
-}
-
-#[get("/users/<user_id>/contacts")]
-pub fn select_contacts(
-  config: State<Config>,
-  db: State<Database>,
-  user_id: i64,
-  bearer: AuthorizationBearer,
-) -> Result<Json<Vec<Contact>>, Error> {
-  let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
-  if claims.uid == user_id {
-    let pg_conn = db.get_conn()?;
-    let contacts = contact::select(&*pg_conn, user_id)?;
-
-    Ok(Json(contacts))
-  } else {
-    Err(Error::Privilege)
-  }
-}
-
-#[post("/users/<user_id>/contacts/<contact_id>/verifications")]
-pub fn send_verify_token(
-  config: State<Config>,
-  db: State<Database>,
-  cache: State<Cache>,
-  user_id: i64,
-  contact_id: i64,
-  bearer: AuthorizationBearer,
-) -> Result<Json<Contact>, Error> {
-  let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
-  if claims.uid == user_id {
-    let pg_conn = db.get_conn()?;
-    let match_contact = contact::select_one(&*pg_conn, user_id, contact_id)?;
-
-    let redis_conn = cache.get_conn()?;
-    let verify_token = common::gen_rand_bytes(VERIFY_TOKEN_SIZE)?;
-    let expire = 5 * 60;
-    let key = format!("token:verify:contact:{}", match_contact.id);
-    let _: String = redis_conn.set_ex(&key, hex::encode(&verify_token), expire)?;
+    let _: String = redis_conn.set_ex(&key, hex::encode(&token), TOKEN_EXPIRE_DURATION)?;
 
     let _ = mailer::send_token(
       &config,
-      match_contact.id,
-      &match_contact.identity,
-      &hex::encode(&verify_token),
-    );
+      params.target_id,
+      &params.target_identity,
+      &hex::encode(&token),
+    )?;
 
-    Ok(Json(match_contact))
+    let url = String::from("/tokens");
+    Ok(Created(url, Some(Json(()))))
   } else {
     Err(Error::Privilege)
   }
 }
 
-#[delete("/users/<user_id>/contacts/<contact_id>")]
-pub fn remove_contact(
-  config: State<Config>,
-  db: State<Database>,
-  user_id: i64,
-  contact_id: i64,
-  bearer: AuthorizationBearer,
-) -> Result<Json<Contact>, Error> {
-  let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
-  if claims.uid == user_id {
-    let pg_conn = db.get_conn()?;
-    let removed_contact = contact::remove(&*pg_conn, contact_id, user_id)?;
-
-    Ok(Json(removed_contact))
-  } else {
-    Err(Error::Privilege)
-  }
-}
-
-#[derive(Serialize, Deserialize)]
-pub struct UpdateContactParams {
+#[derive(FromForm)]
+pub struct DeleteTokenParams {
+  target_id: i64,
+  target_type: String,
+  action: String,
   token: String,
 }
 
-#[post("/users/<user_id>/contacts/<contact_id>", data = "<params>")]
-pub fn verify_contact(
+#[delete("/users/<user_id>/tokens?<params..>")]
+pub fn delete_token(
   config: State<Config>,
   db: State<Database>,
   cache: State<Cache>,
-  params: Json<UpdateContactParams>,
   user_id: i64,
-  contact_id: i64,
+  params: Form<DeleteTokenParams>,
   bearer: AuthorizationBearer,
-) -> Result<Json<Contact>, Error> {
+) -> Result<Json<()>, Error> {
   let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
   if claims.uid == user_id {
     let redis_conn = cache.get_conn()?;
-    let key = format!("token:verify:contact:{}", contact_id);
-    let saved_token: Option<String> = redis_conn.get(&key)?;
+    let key = format!(
+      "token:{}:{}:{}",
+      params.target_id, params.target_type, params.action
+    );
+    let token_result: Option<String> = redis_conn.get(&key)?;
 
-    match saved_token {
-      Some(saved_token) => {
-        if saved_token == params.token {
+    match token_result {
+      Some(token) => {
+        if token == params.token {
+          let pg_conn = db.get_conn()?;
+          let _ = contact::verify(&*pg_conn, user_id, params.target_id)?;
           let _: () = redis_conn.del(&key)?;
 
-          let conn = db.get_conn()?;
-          let new_contact = contact::verify(&*conn, user_id, contact_id)?;
-
-          Ok(Json(new_contact))
+          Ok(Json(()))
         } else {
-          Err(Error::Privilege)
+          Err(Error::Params)
         }
       }
-      None => Err(Error::Privilege),
+      None => Err(Error::Params),
     }
   } else {
-    Err(Error::Privilege)
+    Err(Error::Forbidden)
   }
 }

@@ -24,7 +24,6 @@ pub mod authorization;
 pub mod contact;
 pub mod gender;
 pub mod group;
-pub mod mailer;
 pub mod profile;
 pub mod role;
 pub mod summary;
@@ -43,6 +42,7 @@ pub enum Error {
     Utf8(FromUtf8Error),
     Params,
     Privilege,
+    Forbidden,
 }
 
 impl fmt::Display for Error {
@@ -56,6 +56,7 @@ impl fmt::Display for Error {
             Error::Parse(ref err) => err.fmt(f),
             Error::Utf8(ref err) => err.fmt(f),
             Error::Params => write!(f, "Params"),
+            Error::Forbidden => write!(f, "Forbidden"),
             Error::Privilege => write!(f, "Privilege"),
         }
     }
@@ -73,6 +74,7 @@ impl StdError for Error {
             Error::Utf8(ref err) => err.description(),
             Error::Params => "Params",
             Error::Privilege => "Privilege",
+            Error::Forbidden => "Forbidden",
         }
     }
 }
@@ -127,6 +129,8 @@ impl From<FromUtf8Error> for Error {
 
 impl<'r> Responder<'r> for Error {
     fn respond_to(self, _req: &Request) -> Result<Response<'r>, HttpStatus> {
+        println!("{}", self);
+
         let mut body = HashMap::new();
 
         let status = match self {
@@ -194,10 +198,16 @@ impl<'r> Responder<'r> for Error {
                 body.insert("errno", "50000006");
                 body.insert("errmsg", "internal server error");
 
-                HttpStatus::InternalServerError
+                HttpStatus::BadRequest
+            }
+            Error::Forbidden => {
+                body.insert("errno", "50000007");
+                body.insert("errmsg", "internal server error");
+
+                HttpStatus::Forbidden
             }
             Error::Privilege => {
-                body.insert("errno", "50000007");
+                body.insert("errno", "50000008");
                 body.insert("errmsg", "internal server error");
 
                 HttpStatus::Unauthorized

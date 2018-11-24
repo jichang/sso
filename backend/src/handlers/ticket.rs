@@ -3,6 +3,7 @@ use rocket_contrib::json::Json;
 
 use hex::FromHex;
 use redis::Commands;
+use rocket::response::status::Created;
 
 use super::super::common;
 use super::super::models::authorization;
@@ -26,7 +27,7 @@ pub fn create_ticket(
     db: State<Database>,
     cache: State<Cache>,
     params: Json<CreateTicketParams>,
-) -> Result<Json<Ticket>, Error> {
+) -> Result<Created<Json<Ticket>>, Error> {
     let redis_conn = cache.get_conn()?;
     let key = format!("oauth:code:{}", params.code);
     let code_value: Option<i64> = redis_conn.get(&key)?;
@@ -52,7 +53,8 @@ pub fn create_ticket(
                 &refresh_token,
             )?;
 
-            Ok(Json(new_ticket))
+            let url = String::from("/tickets");
+            Ok(Created(url, Some(Json(new_ticket))))
         }
         None => Err(Error::Privilege),
     }

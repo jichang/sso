@@ -1,4 +1,5 @@
 use super::super::config_parser::Config;
+use super::Error as ModelError;
 use lettre::smtp::authentication::{Credentials, Mechanism};
 use lettre::smtp::error::Error as SmtpError;
 use lettre::smtp::response::Response;
@@ -51,9 +52,9 @@ pub fn send_token(
     contact_id: i64,
     email_addr: &str,
     verify_token: &str,
-) -> Result<Response, MailerError> {
+) -> Result<Response, ModelError> {
     let body = format!(
-        "verify link: {}?contact_id={}&token={}",
+        "verify link: {}?target_id={}&target_type=email&token={}",
         config.mailer.verify_link, contact_id, verify_token
     );
     let email = EmailBuilder::new()
@@ -61,23 +62,22 @@ pub fn send_token(
         .from(config.mailer.username.to_string())
         .subject("Welcome to feblr")
         .text(body)
-        .build()?;
+        .build()
+        .map_err(MailerError::Mail)?;
 
     let credentials = Credentials::new(
         config.mailer.username.to_string(),
         config.mailer.password.to_string(),
     );
-    let mut mailer = SmtpTransport::simple_builder(&config.mailer.server)?
+    let mut mailer = SmtpTransport::simple_builder(&config.mailer.server)
+        .map_err(MailerError::Smtp)?
         .credentials(credentials)
         .smtp_utf8(true)
-        .authentication_mechanism(Mechanism::Plain)
+        .authentication_mechanism(Mechanism::Login)
         .connection_reuse(ConnectionReuseParameters::ReuseUnlimited)
         .build();
-    let result = mailer.send(&email);
+    let response = mailer.send(&email).map_err(MailerError::Smtp)?;
     mailer.close();
 
-    match result {
-        Ok(res) => Ok(res),
-        Err(err) => Err(MailerError::from(err)),
-    }
+    Ok(response)
 }

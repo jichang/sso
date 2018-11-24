@@ -1,23 +1,8 @@
-<table>
-  <thead>
-    <tr>
-      <th>Key</th>
-      <th>Name</th>
-      <th>Status</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngIf="scopes.length === 0">
-      <td colspan="4">No Scopes</td>
-    </tr>
-    <tr *ngFor="let scope of scopes">
-      <td>{{ scope.name }}</td>
-      <td>{{ scope.description }}</td>
-      <td>{{ scope.status }}</td>
-      <td>
-        <button>Delete</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<mat-list *ngFor="let scope of scopes">
+  <mat-list-item>
+    <p matLine>{{ scope.name }}</p>
+    <p matLine>{{ scope.description }}</p>
+    <p matLine>{{ scope.status }}</p>
+    <p matLine><button>Delete</button></p>
+  </mat-list-item>
+</mat-list>

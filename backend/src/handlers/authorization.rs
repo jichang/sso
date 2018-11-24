@@ -1,4 +1,5 @@
 use rocket::request::Form;
+use rocket::response::status::Created;
 use rocket::State;
 use rocket_contrib::json::Json;
 
@@ -45,7 +46,7 @@ pub fn create_authorization(
     user_id: i64,
     params: Json<CreateAuthorizationParams>,
     bearer: AuthorizationBearer,
-) -> Result<Json<Credientials>, Error> {
+) -> Result<Created<Json<Credientials>>, Error> {
     let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
@@ -83,7 +84,9 @@ pub fn create_authorization(
             state: params.state.clone(),
         };
 
-        Ok(Json(credientials))
+        let url = String::from("/authorizations");
+
+        Ok(Created(url, Some(Json(credientials))))
     } else {
         Err(Error::Privilege)
     }

@@ -9,6 +9,7 @@ use super::super::models::profile;
 use super::super::models::profile::Profile;
 use super::super::storage::Database;
 use super::Error;
+use rocket::response::status::Created;
 
 #[derive(Serialize, Deserialize)]
 pub struct CreateProfileParams {
@@ -25,7 +26,7 @@ pub fn create_profile(
     params: Json<CreateProfileParams>,
     user_id: i64,
     bearer: AuthorizationBearer,
-) -> Result<Json<Profile>, Error> {
+) -> Result<Created<Json<Profile>>, Error> {
     let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
@@ -38,7 +39,8 @@ pub fn create_profile(
             &params.introduction,
         )?;
 
-        Ok(Json(new_profile))
+        let url = String::from("/applications");
+        Ok(Created(url, Some(Json(new_profile))))
     } else {
         Err(Error::Privilege)
     }

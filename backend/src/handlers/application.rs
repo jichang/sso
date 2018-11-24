@@ -1,4 +1,5 @@
 use rocket::request::Form;
+use rocket::response::status::Created;
 use rocket::State;
 use rocket_contrib::json::Json;
 
@@ -10,7 +11,6 @@ use super::super::guards::bearer;
 use super::super::guards::bearer::AuthorizationBearer;
 use super::super::models::application;
 use super::super::models::application::{Application, Scope};
-use super::super::models::ratelimit::RateLimit;
 use super::super::storage::Database;
 use super::Error;
 
@@ -31,7 +31,7 @@ pub fn create_application(
     params: Json<CreateApplicationParams>,
     user_id: i64,
     bearer: AuthorizationBearer,
-) -> Result<Json<Application>, Error> {
+) -> Result<Created<Json<Application>>, Error> {
     let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let client_id = common::gen_rand_bytes(CLIENT_ID_LEN)?;
@@ -47,7 +47,9 @@ pub fn create_application(
             &params.callback_uri,
         )?;
 
-        Ok(Json(new_application))
+        let url = String::from("/applications");
+
+        Ok(Created(url, Some(Json(new_application))))
     } else {
         Err(Error::Privilege)
     }
@@ -59,9 +61,9 @@ pub fn select_applications(
     db: State<Database>,
     user_id: i64,
     bearer: AuthorizationBearer,
-    _rate_limit: RateLimit,
 ) -> Result<Json<Vec<Application>>, Error> {
     let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
+
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
         let applications = application::select(&*pg_conn, user_id)?;
@@ -108,7 +110,7 @@ pub fn create_scope(
     user_id: i64,
     application_id: i64,
     bearer: AuthorizationBearer,
-) -> Result<Json<Scope>, Error> {
+) -> Result<Created<Json<Scope>>, Error> {
     let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
@@ -119,7 +121,9 @@ pub fn create_scope(
             &params.description,
         )?;
 
-        Ok(Json(new_scope))
+        let url = String::from("/scopes");
+
+        Ok(Created(url, Some(Json(new_scope))))
     } else {
         Err(Error::Privilege)
     }

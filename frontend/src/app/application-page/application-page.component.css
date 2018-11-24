@@ -1,0 +1,17 @@
+.mat-card {
+  margin-bottom: 1rem;
+}
+
+.mat-card-title {
+  margin-bottom: 0;
+}
+
+h4 {
+  padding: 0;
+  margin: 0;
+}
+
+.flex__box {
+  padding-bottom: 16px;
+  align-items: center;
+}

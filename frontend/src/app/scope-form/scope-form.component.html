@@ -1,22 +1,27 @@
-<header>
-  <h4>
-    <a [routerLink]="['..']"><img src="/assets/arrow-left.svg" /></a>
-    <span>New Scope</span>
-  </h4>
-</header>
-
 <form [formGroup]="scope" (ngSubmit)="create(scope)" novalidate>
-  <div>
-    <label>Name</label>
-    <input type="text" placeholder="name" name="name" formControlName="name" />
-  </div>
-  <div>
-    <label>Description</label>
-    <input type="text" placeholder="description" name="description" formControlName="description" />
-  </div>
-
-  <div>
-    <a [routerLink]="['..']">Cancel</a>
-    <button [disabled]="!scope.valid">Create</button>
+  <mat-form-field>
+    <input
+      matInput
+      id="scopeName"
+      type="text"
+      placeholder="name"
+      name="name"
+      formControlName="name"
+    />
+  </mat-form-field>
+  <mat-form-field>
+    <textarea
+      matInput
+      id="scopeDescription"
+      type="text"
+      placeholder="description"
+      name="description"
+      formControlName="description"
+    ></textarea>
+  </mat-form-field>
+  <div class="button-group">
+    <div class="button-group-item">
+      <button mat-flat-button color="primary">Save</button>
+    </div>
   </div>
 </form>

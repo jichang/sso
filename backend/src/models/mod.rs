@@ -9,6 +9,7 @@ pub mod contact;
 pub mod crypto;
 pub mod email;
 pub mod group;
+pub mod mailer;
 pub mod profile;
 pub mod ratelimit;
 pub mod role;
@@ -19,6 +20,7 @@ pub mod user;
 pub mod username;
 
 use self::crypto::Error as CryptoError;
+use self::mailer::MailerError;
 use self::username::Error as UsernameError;
 use postgres::error::Error as PgError;
 
@@ -27,6 +29,7 @@ pub enum Error {
     Request(Box<StdError>),
     InvalidParam(String, Box<StdError>),
     Database(PgError),
+    Mailer(MailerError),
     NotFound,
     Unknown,
 }
@@ -37,6 +40,7 @@ impl fmt::Display for Error {
             Error::Request(ref err) => err.fmt(f),
             Error::InvalidParam(ref _field, ref err) => err.fmt(f),
             Error::Database(ref err) => err.fmt(f),
+            Error::Mailer(ref err) => err.fmt(f),
             Error::NotFound => write!(f, "Resource not found"),
             Error::Unknown => write!(f, "Unknown error"),
         }
@@ -49,6 +53,7 @@ impl StdError for Error {
             Error::Request(ref err) => err.description(),
             Error::InvalidParam(ref _field, ref err) => err.description(),
             Error::Database(ref err) => err.description(),
+            Error::Mailer(ref err) => err.description(),
             Error::NotFound => "Resource not found",
             Error::Unknown => "Unknown",
         }
@@ -76,5 +81,11 @@ impl From<ParseError> for Error {
 impl From<CryptoError> for Error {
     fn from(err: CryptoError) -> Error {
         Error::InvalidParam(String::from("password"), Box::new(err))
+    }
+}
+
+impl From<MailerError> for Error {
+    fn from(err: MailerError) -> Error {
+        Error::Mailer(err)
     }
 }
