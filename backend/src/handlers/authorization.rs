@@ -26,7 +26,7 @@ const AUTH_CODE_SIZE: usize = 64;
 pub struct CreateAuthorizationParams {
     server_id: String,
     client_id: String,
-    scope: String,
+    scope_name: String,
     redirect_uri: String,
     response_type: String,
     state: String,
@@ -70,7 +70,7 @@ pub fn create_authorization(
             &open_id,
             &server_id,
             &client_id,
-            &params.scope,
+            &params.scope_name,
         )?;
 
         let redis_conn = cache.get_conn()?;
@@ -133,7 +133,7 @@ pub fn remove_authorization(
 pub struct SelectAuthorizationParams {
     server_id: String,
     client_id: String,
-    scope: String,
+    scope_name: String,
 }
 
 #[get("/authorizations/preview?<params..>")]
@@ -145,7 +145,7 @@ pub fn preview_authorization(
     let client_id = Vec::<u8>::from_hex(&params.client_id)?;
     let pg_conn = db.get_conn()?;
     let match_authorization =
-        authorization::preview(&*pg_conn, &server_id, &client_id, &params.scope)?;
+        authorization::preview(&*pg_conn, &server_id, &client_id, &params.scope_name)?;
 
     Ok(Json(match_authorization))
 }

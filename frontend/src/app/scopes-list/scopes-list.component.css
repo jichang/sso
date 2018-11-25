@@ -10,3 +10,7 @@ th:nth-child(2),
 td:nth-child(2) {
   width: 100%;
 }
+
+td.mat-cell:last-child {
+  padding: 0;
+}

@@ -414,11 +414,12 @@ pub struct AuthorizationPreview {
     pub server_app: Application,
     pub scope: Scope,
 }
+
 pub fn preview<T: GenericConnection>(
     pg_conn: &T,
     server_id: &Vec<u8>,
     client_id: &Vec<u8>,
-    scope: &str,
+    scope_name: &str,
 ) -> Result<AuthorizationPreview, ModelError> {
     let trans = pg_conn.transaction()?;
     let stmt = r#"
@@ -438,6 +439,7 @@ pub fn preview<T: GenericConnection>(
 
     let rows = trans.query(&stmt, &[&client_id])?;
     if rows.len() != 1 {
+        println!("no client app found");
         Err(ModelError::Unknown)
     } else {
         let row = rows.get(0);
@@ -481,8 +483,9 @@ pub fn preview<T: GenericConnection>(
         WHERE scopes.name = $1 AND server_apps.client_id = $2
         "#;
 
-        let rows = trans.query(&stmt, &[&scope, &server_id])?;
+        let rows = trans.query(&stmt, &[&scope_name, &server_id])?;
         if rows.len() != 1 {
+            println!("no server app found");
             Err(ModelError::Unknown)
         } else {
             let row = rows.get(0);

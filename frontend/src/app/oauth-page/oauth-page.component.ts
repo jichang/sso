@@ -14,7 +14,7 @@ interface OauthParams {
   client_id: string;
   redirect_uri: string;
   response_type: string;
-  scope: string;
+  scope_name: string;
   state: string;
 }
 
@@ -37,7 +37,7 @@ export class OauthPageComponent implements OnInit {
       client_id: this.route.snapshot.queryParams["client_id"],
       redirect_uri: this.route.snapshot.queryParams["redirect_uri"],
       response_type: this.route.snapshot.queryParams["response_type"],
-      scope: this.route.snapshot.queryParams["scope"],
+      scope_name: this.route.snapshot.queryParams["scope_name"],
       state: this.route.snapshot.queryParams["state"]
     };
 
@@ -49,11 +49,11 @@ export class OauthPageComponent implements OnInit {
     };
   }
 
-  queryApplication() {
+  queryAuthorization() {
     let params = new HttpParams()
       .set("server_id", this.params.server_id)
       .set("client_id", this.params.client_id)
-      .set("scope", this.params.scope);
+      .set("scope_name", this.params.scope_name);
 
     let headers = new HttpHeaders({
       "Content-Type": "application/json",
@@ -64,7 +64,6 @@ export class OauthPageComponent implements OnInit {
       params: params
     };
 
-    let user = session.currUser();
     let apiUri = "/api/v1/authorizations/preview";
 
     this.http.get(apiUri, options).subscribe((response: Authorization) => {
@@ -73,7 +72,7 @@ export class OauthPageComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.queryApplication();
+    this.queryAuthorization();
   }
 
   authorize() {
