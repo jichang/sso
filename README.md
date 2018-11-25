@@ -4,10 +4,7 @@ written with Rust(nightly)
 
 # frontend
 
-written with Angular 2(TypeScript)
-
-
-
+written with Angular 7
 
 Thanks for all the contributors to those open sources projects
 
