@@ -1,16 +1,22 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Scope } from '../scope-model.service';
+import { Component, Input, OnInit, Output, EventEmitter } from "@angular/core";
+import { Scope } from "../scope-model.service";
 
 @Component({
-  selector: 'scopes-list',
-  templateUrl: './scopes-list.component.html',
-  styleUrls: ['./scopes-list.component.css']
+  selector: "scopes-list",
+  templateUrl: "./scopes-list.component.html",
+  styleUrls: ["./scopes-list.component.css"]
 })
 export class ScopesListComponent implements OnInit {
+  columns: string[] = ["name", "description", "status", "action"];
+
   @Input() scopes: Scope[];
-  constructor() { }
+  @Output() remove = new EventEmitter();
 
-  ngOnInit() {
+  constructor() {}
+
+  ngOnInit() {}
+
+  removeScope(scope: Scope) {
+    this.remove.emit(scope);
   }
-
 }

@@ -64,4 +64,27 @@ export class ScopeModelService {
       })
     );
   }
+
+  remove(userId: number, applicationId: number, scope: Scope) {
+    let headers = new HttpHeaders({
+      "Content-Type": "application/json"
+    });
+    let options = {
+      headers: headers
+    };
+
+    let apiUri = `/api/v1/users/${userId}/applications/${applicationId}//scopes/${
+      scope.id
+    }`;
+    return this.http.delete(apiUri).pipe(
+      map((scope: Scope) => {
+        this.store.scopes = this.store.scopes.filter(
+          _scope => _scope.id !== scope.id
+        );
+        this.subject.next(Object.assign({}, this.store).scopes);
+
+        return scope;
+      })
+    );
+  }
 }

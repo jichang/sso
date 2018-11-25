@@ -6,7 +6,7 @@ import {
 } from "../application-model.service";
 import { map } from "rxjs/operators";
 import { Subscription } from "rxjs";
-import { MatDialogRef, MatDialog } from "@angular/material";
+import { MatDialogRef, MatDialog, MatSnackBar } from "@angular/material";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 import { ScopeModelService, Scope } from "../scope-model.service";
 import { SessionService } from "../session.service";
@@ -28,7 +28,8 @@ export class ApplicationPageComponent implements OnInit, OnDestroy {
     private router: Router,
     private applicationModel: ApplicationModelService,
     private scopeModel: ScopeModelService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -83,5 +84,18 @@ export class ApplicationPageComponent implements OnInit, OnDestroy {
           });
       }
     });
+  }
+
+  removeScope(scope: Scope) {
+    let current = this.session.current();
+    if (current) {
+      this.scopeModel
+        .remove(current.currUser.id, this.application.id, scope)
+        .subscribe(() => {
+          this.snackBar.open("Scope deleted", "Dismiss", {
+            duration: 3000
+          });
+        });
+    }
   }
 }

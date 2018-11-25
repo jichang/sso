@@ -34,7 +34,10 @@
           </a>
         </div>
         <mat-divider></mat-divider>
-        <scopes-list [scopes]="scopes"></scopes-list>
+        <scopes-list
+          [scopes]="scopes"
+          (remove)="removeScope($event)"
+        ></scopes-list>
         <div *ngIf="scopes.length === 0" class="placeholder--list">
           <span>No Scopes</span>
         </div>
