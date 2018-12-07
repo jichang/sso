@@ -1,7 +1,7 @@
 use hex;
+use rand::prelude::StdRng;
 use rand::FromEntropy;
 use rand::RngCore;
-use rand::StdRng;
 use redis::{Commands, Connection, RedisError};
 use std::error::Error as StdError;
 use std::fmt;

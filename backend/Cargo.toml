@@ -18,10 +18,10 @@ chrono = { version = "*", features = ["serde"] }
 mime = "*"
 lettre_email = "*"
 lettre = "*"
-rocket = { git = "https://github.com/SergioBenitez/Rocket.git" }
-rocket_codegen = { git = "https://github.com/SergioBenitez/Rocket.git" }
-rocket_contrib = { git = "https://github.com/SergioBenitez/Rocket.git", features = ["json", "handlebars_templates"] }
-jsonwebtoken = { git = "https://github.com/JacobChang/jsonwebtoken.git", branch="next" }
+rocket = "*"
+rocket_codegen = "*"
+rocket_contrib = { version="*", features = ["json", "handlebars_templates"] }
+jsonwebtoken = { version="*" }
 redis = "*"
 postgres = { version = "*", features = ["with-chrono", "with-uuid", "with-serde_json"] }
 uuid = { version = "0.5", features = ["serde", "v4", "v5"] }
