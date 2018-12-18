@@ -25,7 +25,8 @@ pub fn select<T: GenericConnection>(pg_conn: &T) -> Result<Vec<Group>, ModelErro
     "#;
     let rows = pg_conn.query(stmt, &[])?;
 
-    let groups = rows.iter()
+    let groups = rows
+        .iter()
         .map(|row| Group {
             id: row.get("id"),
             name: row.get("name"),
@@ -51,14 +52,11 @@ mod test {
         let groups = super::select(&conn).unwrap();
         assert_eq!(groups.len(), 3);
 
-        groups
-            .into_iter()
-            .map(|group| match &group {
-                _ if group.id == GroupId::Admin as i64 => assert_eq!(group.name, "admin"),
-                _ if group.id == GroupId::Normal as i64 => assert_eq!(group.name, "normal"),
-                _ if group.id == GroupId::Guest as i64 => assert_eq!(group.name, "guest"),
-                _ => panic!("unknown group"),
-            })
-            .collect::<()>();
+        groups.into_iter().for_each(|group| match &group {
+            _ if group.id == GroupId::Admin as i64 => assert_eq!(group.name, "admin"),
+            _ if group.id == GroupId::Normal as i64 => assert_eq!(group.name, "normal"),
+            _ if group.id == GroupId::Guest as i64 => assert_eq!(group.name, "guest"),
+            _ => panic!("unknown group"),
+        });
     }
 }

@@ -1,6 +1,6 @@
+use super::Error as ModelError;
 use chrono::{DateTime, Utc};
 use postgres::GenericConnection;
-use super::Error as ModelError;
 
 pub enum GenderId {
     Male = 1,
@@ -25,7 +25,8 @@ pub fn select_genders<T: GenericConnection>(pg_conn: &T) -> Result<Vec<Gender>, 
     "#;
     let rows = pg_conn.query(stmt, &[])?;
 
-    let genders = rows.iter()
+    let genders = rows
+        .iter()
         .map(|row| Gender {
             id: row.get("id"),
             name: row.get("name"),
@@ -294,14 +295,11 @@ mod test {
 
         assert_eq!(genders.len(), 3);
 
-        genders
-            .into_iter()
-            .map(|gender| match gender {
-                _ if gender.id == GenderId::Male as i32 => assert_eq!(gender.name, "male"),
-                _ if gender.id == GenderId::Female as i32 => assert_eq!(gender.name, "female"),
-                _ if gender.id == GenderId::Others as i32 => assert_eq!(gender.name, "others"),
-                _ => panic!("unexist gender"),
-            })
-            .collect::<()>();
+        genders.into_iter().for_each(|gender| match gender {
+            _ if gender.id == GenderId::Male as i32 => assert_eq!(gender.name, "male"),
+            _ if gender.id == GenderId::Female as i32 => assert_eq!(gender.name, "female"),
+            _ if gender.id == GenderId::Others as i32 => assert_eq!(gender.name, "others"),
+            _ => panic!("unexist gender"),
+        });
     }
 }

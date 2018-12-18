@@ -1,6 +1,6 @@
+use super::Error as ModelError;
 use chrono::{DateTime, Utc};
 use postgres::GenericConnection;
-use super::Error as ModelError;
 
 pub enum ContactTypeId {
     Email = 1,
@@ -24,7 +24,8 @@ pub fn select_types<T: GenericConnection>(pg_conn: &T) -> Result<Vec<ContactType
     "#;
     let rows = pg_conn.query(stmt, &[])?;
 
-    let contact_types = rows.iter()
+    let contact_types = rows
+        .iter()
         .map(|row| ContactType {
             id: row.get("id"),
             name: row.get("name"),
@@ -182,7 +183,8 @@ pub fn select<T: GenericConnection>(pg_conn: &T, user_id: i64) -> Result<Vec<Con
     "#;
     let rows = pg_conn.query(stmt, &[&user_id])?;
 
-    let contacts = rows.iter()
+    let contacts = rows
+        .iter()
         .map(|row| Contact {
             id: row.get("contact_id"),
             user_id: row.get("contact_user_id"),
@@ -314,8 +316,8 @@ pub fn remove<T: GenericConnection>(
 
 #[cfg(test)]
 mod test {
-    use postgres::{Connection, TlsMode};
     use super::ContactTypeId;
+    use postgres::{Connection, TlsMode};
 
     #[test]
     pub fn test_contact_types_select() {
@@ -327,7 +329,7 @@ mod test {
 
         contact_types
             .into_iter()
-            .map(|contact_type| match contact_type {
+            .for_each(|contact_type| match contact_type {
                 _ if contact_type.id == ContactTypeId::Email as i32 => {
                     assert_eq!(contact_type.name, "email");
                     assert_eq!(contact_type.status, 1);
@@ -339,7 +341,6 @@ mod test {
                 _ => {
                     panic!("unknown contact type");
                 }
-            })
-            .collect::<()>();
+            });
     }
 }

@@ -1,4 +1,3 @@
-#![feature(plugin, custom_derive)]
 #![feature(custom_attribute)]
 #![feature(proc_macro_hygiene, decl_macro)]
 

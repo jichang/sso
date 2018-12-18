@@ -25,7 +25,8 @@ pub fn select<T: GenericConnection>(pg_conn: &T) -> Result<Vec<Role>, ModelError
     "#;
     let rows = pg_conn.query(stmt, &[])?;
 
-    let roles = rows.iter()
+    let roles = rows
+        .iter()
         .map(|row| Role {
             id: row.get("id"),
             name: row.get("name"),
@@ -51,14 +52,11 @@ mod test {
         let roles = super::select(&conn).unwrap();
         assert_eq!(roles.len(), 3);
 
-        roles
-            .into_iter()
-            .map(|role| match &role {
-                _ if role.id == RoleId::Admin as i32 => assert_eq!(role.name, "admin"),
-                _ if role.id == RoleId::Normal as i32 => assert_eq!(role.name, "normal"),
-                _ if role.id == RoleId::Guest as i32 => assert_eq!(role.name, "guest"),
-                _ => panic!("unknown role"),
-            })
-            .collect::<()>();
+        roles.into_iter().for_each(|role| match &role {
+            _ if role.id == RoleId::Admin as i32 => assert_eq!(role.name, "admin"),
+            _ if role.id == RoleId::Normal as i32 => assert_eq!(role.name, "normal"),
+            _ if role.id == RoleId::Guest as i32 => assert_eq!(role.name, "guest"),
+            _ => panic!("unknown role"),
+        });
     }
 }
