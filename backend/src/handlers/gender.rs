@@ -8,8 +8,8 @@ use super::Error;
 
 #[get("/genders")]
 pub fn select_genders(db: State<Database>) -> Result<Json<Vec<Gender>>, Error> {
-  let conn = db.get_conn()?;
-  let genders = profile::select_genders(&*conn)?;
+    let conn = db.get_conn()?;
+    let genders = profile::select_genders(&*conn)?;
 
-  Ok(Json(genders))
+    Ok(Json(genders))
 }

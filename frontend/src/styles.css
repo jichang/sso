@@ -14,7 +14,7 @@ body {
 
   font-size: 20px;
 
-  background: #fff;
+  background: #f9f9f9;
 }
 
 .page {
@@ -23,8 +23,6 @@ body {
 
   width: 48rem;
   max-width: 100%;
-
-  background: #f9f9f9;
 }
 
 .page__header {

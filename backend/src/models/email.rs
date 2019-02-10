@@ -1,5 +1,5 @@
-use std::fmt;
 use std::error::Error as StdError;
+use std::fmt;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum EmailError {
@@ -55,7 +55,9 @@ impl Email {
             return Err(EmailError::MissDomain);
         }
 
-        Ok(Email { addr: addr.to_string() })
+        Ok(Email {
+            addr: addr.to_string(),
+        })
     }
 }
 

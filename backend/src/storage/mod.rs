@@ -1,4 +1,4 @@
-use r2d2::{Error, Pool, PooledConnection, ManageConnection};
+use r2d2::{Error, ManageConnection, Pool, PooledConnection};
 use r2d2_postgres::PostgresConnectionManager;
 use r2d2_redis::RedisConnectionManager;
 

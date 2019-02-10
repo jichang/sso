@@ -1,8 +1,8 @@
-use super::Error as ModelError;
 use super::crypto;
 use super::crypto::Plaintext;
 use super::role::Role;
 use super::username::Username;
+use super::Error as ModelError;
 use chrono::{DateTime, Utc};
 use postgres::GenericConnection;
 use uuid::Uuid;

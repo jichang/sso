@@ -17,7 +17,7 @@ export class ScopeCreatePageComponent implements OnInit {
 
   ngOnInit() {}
 
-  created() {
+  created(evt) {
     this.router.navigate(["../.."], { relativeTo: this.route });
   }
 

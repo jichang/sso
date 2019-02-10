@@ -38,5 +38,17 @@ export class SigninPageComponent implements OnInit {
         duration: 3000
       });
     }
+
+    if (err.status === 400) {
+      this.snackbar.open("invalid parameter", "Dismiss", {
+        duration: 3000
+      });
+    }
+
+    if (err.status === 403) {
+      this.snackbar.open("action is forbidden", "Dismiss", {
+        duration: 3000
+      });
+    }
   }
 }

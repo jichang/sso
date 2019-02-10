@@ -1,7 +1,7 @@
+use postgres::types::{FromSql, IsNull, ToSql, Type, VARCHAR};
+use std::error::Error as StdError;
 use std::fmt;
 use std::str;
-use std::error::Error as StdError;
-use postgres::types::{IsNull, Type, ToSql, FromSql, VARCHAR};
 
 const MIN_LEN: usize = 5;
 
@@ -35,7 +35,9 @@ impl Username {
             return Err(Error::MinLen(MIN_LEN));
         }
 
-        Ok(Username { value: username.to_string() })
+        Ok(Username {
+            value: username.to_string(),
+        })
     }
 }
 
@@ -43,7 +45,9 @@ impl FromSql for Username {
     fn from_sql(_: &Type, raw: &[u8]) -> Result<Self, Box<StdError + Sync + Send>> {
         let username = str::from_utf8(raw)?;
 
-        Ok(Username { value: username.to_owned() })
+        Ok(Username {
+            value: username.to_owned(),
+        })
     }
 
     accepts!(VARCHAR);

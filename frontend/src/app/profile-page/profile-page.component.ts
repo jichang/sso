@@ -11,11 +11,11 @@ export class ProfilePageComponent implements OnInit {
 
   ngOnInit() {}
 
-  onProfileUpdateSuccess() {
+  onProfileUpdateSuccess(evt) {
     this.snackBar.open("Profile update success");
   }
 
-  onProfileUpdateFailure() {
+  onProfileUpdateFailure(evt) {
     this.snackBar.open("Profile update failure");
   }
 }

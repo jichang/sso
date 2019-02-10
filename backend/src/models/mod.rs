@@ -1,9 +1,11 @@
+use serde_json::Error as JsonError;
 use std::convert::From;
 use std::error::Error as StdError;
 use std::fmt;
 use url::ParseError;
 
 pub mod application;
+pub mod audit;
 pub mod authorization;
 pub mod contact;
 pub mod crypto;
@@ -30,6 +32,7 @@ pub enum Error {
     InvalidParam(String, Box<StdError>),
     Database(PgError),
     Mailer(MailerError),
+    Forbidden,
     NotFound,
     Unknown,
 }
@@ -41,6 +44,7 @@ impl fmt::Display for Error {
             Error::InvalidParam(ref _field, ref err) => err.fmt(f),
             Error::Database(ref err) => err.fmt(f),
             Error::Mailer(ref err) => err.fmt(f),
+            Error::Forbidden => write!(f, "forbidden action"),
             Error::NotFound => write!(f, "Resource not found"),
             Error::Unknown => write!(f, "Unknown error"),
         }
@@ -54,9 +58,16 @@ impl StdError for Error {
             Error::InvalidParam(ref _field, ref err) => err.description(),
             Error::Database(ref err) => err.description(),
             Error::Mailer(ref err) => err.description(),
+            Error::Forbidden => "Forbidden action",
             Error::NotFound => "Resource not found",
             Error::Unknown => "Unknown",
         }
+    }
+}
+
+impl From<JsonError> for Error {
+    fn from(err: JsonError) -> Error {
+        Error::Unknown
     }
 }
 

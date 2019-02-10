@@ -1,3 +1,4 @@
+use chrono::{Duration, Utc};
 use rocket::http::{Cookie, Cookies};
 use rocket::response::status::Created;
 use rocket::State;
@@ -6,6 +7,9 @@ use uuid::Uuid;
 
 use super::super::config_parser::Config;
 use super::super::guards::bearer;
+use super::super::guards::client_addr::ClientAddr;
+use super::super::models::audit;
+use super::super::models::audit::{Signin, SigninActivity, SigninActivityDetails};
 use super::super::models::group::GroupId;
 use super::super::models::user;
 use super::super::models::user::User;
@@ -31,6 +35,7 @@ pub fn signup(
     mut cookies: Cookies,
     config: State<Config>,
     db: State<Database>,
+    client_addr: ClientAddr,
     params: Json<SignupParams>,
 ) -> Result<Created<Json<Auth>>, Error> {
     let conn = db.get_conn()?;
@@ -67,20 +72,56 @@ pub fn signin(
     mut cookies: Cookies,
     config: State<Config>,
     db: State<Database>,
+    client_addr: ClientAddr,
     params: Json<SigninParams>,
 ) -> Result<Json<Auth>, Error> {
     let conn = db.get_conn()?;
-    let auth_user = user::auth(&*conn, &params.username, &params.password)?;
-    let jwt = bearer::encode(&config.jwt.secret, &auth_user)?;
 
-    cookies.add_private(Cookie::new("identity", auth_user.id.to_string()));
+    let happened_time = Utc::now() - Duration::hours(1);
+    let activities: Vec<SigninActivity> =
+        audit::select(&*conn, &params.username, Signin, happened_time)?;
+    let mut failed_signin_activities: Vec<SigninActivity> = vec![];
+    for activity in activities {
+        if !activity.details.is_succeed {
+            failed_signin_activities.push(activity);
+        }
+    }
+    if failed_signin_activities.len() >= 3 {
+        Err(Error::Forbidden)
+    } else {
+        match user::auth(&*conn, &params.username, &params.password) {
+            Ok(auth_user) => {
+                let jwt = bearer::encode(&config.jwt.secret, &auth_user)?;
+                let activity = SigninActivity {
+                    client_addr: client_addr.0,
+                    happened_time: Utc::now(),
+                    activity_type: Signin,
+                    details: SigninActivityDetails { is_succeed: true },
+                };
+                audit::create(&*conn, &params.username, activity)?;
 
-    let auth = Auth {
-        user: auth_user,
-        jwt: jwt,
-    };
+                cookies.add_private(Cookie::new("identity", auth_user.id.to_string()));
 
-    Ok(Json(auth))
+                let auth = Auth {
+                    user: auth_user,
+                    jwt: jwt,
+                };
+
+                Ok(Json(auth))
+            },
+            Err(model_err) => {
+                let activity = SigninActivity {
+                    client_addr: client_addr.0,
+                    happened_time: Utc::now(),
+                    activity_type: Signin,
+                    details: SigninActivityDetails { is_succeed: false },
+                };
+                audit::create(&*conn, &params.username, activity)?;
+
+                Err(Error::Model(model_err))
+            }
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize)]

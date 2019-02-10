@@ -24,7 +24,9 @@ export class TokenInterceptorService implements HttpInterceptor {
       });
     }
 
-    return next.handle(request).pipe(tap(() => {}, this.handleError));
+    return next
+      .handle(request)
+      .pipe(tap(() => {}, err => this.handleError(err)));
   }
 
   handleError(err: HttpErrorResponse) {

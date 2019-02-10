@@ -1,15 +1,20 @@
+use chrono::prelude::*;
 use jwt;
-use jwt::{Header, Validation};
 use jwt::errors::Error as JwtError;
+use jwt::{Header, Validation};
 
-use rocket::Outcome;
 use rocket::http::Status;
-use rocket::request::{self, Request, FromRequest};
+use rocket::request::{self, FromRequest, Request};
+use rocket::Outcome;
 
 use super::super::models::user::User;
 
+const CLAIMS_EXPIRE: i64 = 60 * 60 * 24;
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Claims {
+    iss: String,
+    exp: i64,
     pub uid: i64,
     pub role: i32,
     pub status: i32,
@@ -17,6 +22,8 @@ pub struct Claims {
 
 pub fn encode(secret: &str, user: &User) -> Result<String, JwtError> {
     let claims = Claims {
+        iss: "sso.feblr.org".to_string(),
+        exp: Utc::now().timestamp() + CLAIMS_EXPIRE,
         uid: user.id,
         role: user.role.id,
         status: user.status,

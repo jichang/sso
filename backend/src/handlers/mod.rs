@@ -170,6 +170,12 @@ impl<'r> Responder<'r> for Error {
                         HttpStatus::InternalServerError
                     }
                 },
+                &ModelError::InvalidParam(ref field, ref _err) => {
+                    body.insert("errno", "40000000");
+                    body.insert("errmsg", "invalid params");
+                    body.insert("field", "password");
+                    HttpStatus::BadRequest
+                }
                 _ => {
                     body.insert("errno", "50000002");
                     body.insert("errmsg", "internal server error");
@@ -201,8 +207,8 @@ impl<'r> Responder<'r> for Error {
                 HttpStatus::BadRequest
             }
             Error::Forbidden => {
-                body.insert("errno", "50000007");
-                body.insert("errmsg", "internal server error");
+                body.insert("errno", "40300001");
+                body.insert("errmsg", "action is forbidden");
 
                 HttpStatus::Forbidden
             }
