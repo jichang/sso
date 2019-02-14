@@ -8,7 +8,7 @@ use hex::FromHex;
 use super::super::common;
 use super::super::config_parser::Config;
 use super::super::guards::bearer;
-use super::super::guards::bearer::AuthorizationBearer;
+use super::super::guards::bearer::Claims;
 use super::super::models::application;
 use super::super::models::application::{Application, Scope};
 use super::super::storage::Database;
@@ -30,9 +30,8 @@ pub fn create_application(
     db: State<Database>,
     params: Json<CreateApplicationParams>,
     user_id: i64,
-    bearer: AuthorizationBearer,
+    claims: Claims,
 ) -> Result<Created<Json<Application>>, Error> {
-    let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let client_id = common::gen_rand_bytes(CLIENT_ID_LEN)?;
         let client_secret = common::gen_rand_bytes(CLIENT_SECRET_LEN)?;
@@ -60,10 +59,8 @@ pub fn select_applications(
     config: State<Config>,
     db: State<Database>,
     user_id: i64,
-    bearer: AuthorizationBearer,
+    claims: Claims,
 ) -> Result<Json<Vec<Application>>, Error> {
-    let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
-
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
         let applications = application::select(&*pg_conn, user_id)?;
@@ -80,9 +77,8 @@ pub fn remove_application(
     db: State<Database>,
     user_id: i64,
     application_id: i64,
-    bearer: AuthorizationBearer,
+    claims: Claims,
 ) -> Result<Json<Application>, Error> {
-    let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
         let removed_application = application::remove(&*pg_conn, user_id, application_id)?;
@@ -109,9 +105,8 @@ pub fn create_scope(
     params: Json<CreateScopeParams>,
     user_id: i64,
     application_id: i64,
-    bearer: AuthorizationBearer,
+    claims: Claims,
 ) -> Result<Created<Json<Scope>>, Error> {
-    let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
         let new_scope = application::create_scope(
@@ -135,9 +130,8 @@ pub fn select_scopes(
     db: State<Database>,
     user_id: i64,
     application_id: i64,
-    bearer: AuthorizationBearer,
+    claims: Claims,
 ) -> Result<Json<Vec<Scope>>, Error> {
-    let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
         let scopes = application::select_scopes(&*pg_conn, application_id)?;
@@ -155,9 +149,8 @@ pub fn remove_scope(
     user_id: i64,
     application_id: i64,
     scope_id: i64,
-    bearer: AuthorizationBearer,
+    claims: Claims,
 ) -> Result<Json<Scope>, Error> {
-    let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
         let removed_scope = application::remove_scope(&*pg_conn, application_id, scope_id)?;

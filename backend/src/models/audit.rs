@@ -16,17 +16,12 @@ pub struct Activity<T: ActivityType, D: Serialize + Deserialize<'static>> {
     pub details: D,
 }
 
+#[derive(Clone, Copy)]
 pub struct Signin;
 
 impl ActivityType for Signin {
     fn to_i32(&self) -> i32 {
         0
-    }
-}
-
-impl Clone for Signin {
-    fn clone(&self) -> Self {
-        Signin
     }
 }
 
@@ -65,7 +60,7 @@ pub fn create<C: GenericConnection, T: ActivityType, D: Serialize + Deserialize<
     }
 }
 
-pub fn select<C: GenericConnection, T: ActivityType + Clone, D>(
+pub fn select<C: GenericConnection, T: ActivityType + Copy, D>(
     pg_conn: &C,
     username: &str,
     activity_type: T,
@@ -88,7 +83,7 @@ where
             let client_addr: String = row.get("client_addr");
             let details: Value = row.get("details");
             let activity = Activity {
-                activity_type: activity_type.clone(),
+                activity_type: activity_type,
                 client_addr: client_addr.parse().unwrap(),
                 happened_time: row.get("happened_time"),
                 details: serde_json::from_value(details).unwrap(),

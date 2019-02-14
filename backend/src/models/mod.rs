@@ -12,6 +12,7 @@ pub mod crypto;
 pub mod email;
 pub mod group;
 pub mod mailer;
+pub mod permission;
 pub mod profile;
 pub mod ratelimit;
 pub mod role;

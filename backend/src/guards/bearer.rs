@@ -6,7 +6,9 @@ use jwt::{Header, Validation};
 use rocket::http::Status;
 use rocket::request::{self, FromRequest, Request};
 use rocket::Outcome;
+use rocket::State;
 
+use super::super::config_parser::Config;
 use super::super::models::user::User;
 
 const CLAIMS_EXPIRE: i64 = 60 * 60 * 24;
@@ -16,7 +18,7 @@ pub struct Claims {
     iss: String,
     exp: i64,
     pub uid: i64,
-    pub role: i32,
+    pub role_id: i32,
     pub status: i32,
 }
 
@@ -25,7 +27,7 @@ pub fn encode(secret: &str, user: &User) -> Result<String, JwtError> {
         iss: "sso.feblr.org".to_string(),
         exp: Utc::now().timestamp() + CLAIMS_EXPIRE,
         uid: user.id,
-        role: user.role.id,
+        role_id: user.role.id,
         status: user.status,
     };
 
@@ -40,12 +42,11 @@ pub fn decode(secret: &str, token: &str) -> Result<Claims, JwtError> {
     Ok(data.claims)
 }
 
-pub struct AuthorizationBearer(pub String);
-
-impl<'a, 'r> FromRequest<'a, 'r> for AuthorizationBearer {
+impl<'a, 'r> FromRequest<'a, 'r> for Claims {
     type Error = ();
 
-    fn from_request(request: &'a Request<'r>) -> request::Outcome<AuthorizationBearer, ()> {
+    fn from_request(request: &'a Request<'r>) -> request::Outcome<Claims, ()> {
+        let config = request.guard::<State<Config>>()?;
         let keys: Vec<_> = request.headers().get("Authorization").collect();
         if keys.len() != 1 {
             return Outcome::Failure((Status::Unauthorized, ()));
@@ -58,6 +59,9 @@ impl<'a, 'r> FromRequest<'a, 'r> for AuthorizationBearer {
         }
 
         let bearer = parts[1];
-        return Outcome::Success(AuthorizationBearer(bearer.to_string()));
+        match decode(&config.jwt.secret, bearer) {
+            Ok(claims) => Outcome::Success(claims),
+            Err(_err) => Outcome::Failure((Status::Unauthorized, ())),
+        }
     }
 }

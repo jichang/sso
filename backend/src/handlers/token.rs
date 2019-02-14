@@ -9,7 +9,7 @@ use redis::Commands;
 use super::super::common;
 use super::super::config_parser::Config;
 use super::super::guards::bearer;
-use super::super::guards::bearer::AuthorizationBearer;
+use super::super::guards::bearer::Claims;
 use super::super::models::contact;
 use super::super::models::mailer;
 use super::super::storage::{Cache, Database};
@@ -32,9 +32,8 @@ pub fn create_token(
     cache: State<Cache>,
     user_id: i64,
     params: Json<CreateTokenParams>,
-    bearer: AuthorizationBearer,
+    claims: Claims,
 ) -> Result<Created<Json<()>>, Error> {
-    let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let redis_conn = cache.get_conn()?;
         let token = common::gen_rand_bytes(TOKEN_SIZE)?;
@@ -73,9 +72,8 @@ pub fn delete_token(
     cache: State<Cache>,
     user_id: i64,
     params: Form<DeleteTokenParams>,
-    bearer: AuthorizationBearer,
+    claims: Claims,
 ) -> Result<Json<()>, Error> {
-    let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let redis_conn = cache.get_conn()?;
         let key = format!(

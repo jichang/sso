@@ -13,7 +13,7 @@ use uuid::Uuid;
 use super::super::common;
 use super::super::config_parser::Config;
 use super::super::guards::bearer;
-use super::super::guards::bearer::AuthorizationBearer;
+use super::super::guards::bearer::Claims;
 use super::super::models::application;
 use super::super::models::authorization;
 use super::super::models::authorization::{Authorization, AuthorizationPreview};
@@ -45,9 +45,8 @@ pub fn create_authorization(
     db: State<Database>,
     user_id: i64,
     params: Json<CreateAuthorizationParams>,
-    bearer: AuthorizationBearer,
+    claims: Claims,
 ) -> Result<Created<Json<Credientials>>, Error> {
-    let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
         let name = user_id.to_string() + &params.client_id + &params.server_id;
@@ -97,9 +96,8 @@ pub fn select_authorizations(
     config: State<Config>,
     db: State<Database>,
     user_id: i64,
-    bearer: AuthorizationBearer,
+    claims: Claims,
 ) -> Result<Json<Vec<Authorization>>, Error> {
-    let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
         let authorizations = authorization::select(&*pg_conn, user_id)?;
@@ -116,9 +114,8 @@ pub fn remove_authorization(
     db: State<Database>,
     user_id: i64,
     authorization_id: i64,
-    bearer: AuthorizationBearer,
+    claims: Claims,
 ) -> Result<Json<Authorization>, Error> {
-    let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
         let removed_authorization = authorization::remove(&*pg_conn, user_id, authorization_id)?;

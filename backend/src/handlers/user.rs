@@ -108,7 +108,7 @@ pub fn signin(
                 };
 
                 Ok(Json(auth))
-            },
+            }
             Err(model_err) => {
                 let activity = SigninActivity {
                     client_addr: client_addr.0,

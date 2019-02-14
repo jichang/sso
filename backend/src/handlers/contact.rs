@@ -4,7 +4,7 @@ use rocket_contrib::json::Json;
 
 use super::super::config_parser::Config;
 use super::super::guards::bearer;
-use super::super::guards::bearer::AuthorizationBearer;
+use super::super::guards::bearer::Claims;
 use super::super::models::contact;
 use super::super::models::contact::{Contact, ContactType};
 use super::super::storage::Database;
@@ -32,9 +32,8 @@ pub fn create_contact(
     db: State<Database>,
     params: Json<CreateContactParams>,
     user_id: i64,
-    bearer: AuthorizationBearer,
+    claims: Claims,
 ) -> Result<Created<Json<Contact>>, Error> {
-    let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
         let new_contact = contact::create(&*pg_conn, user_id, params.type_id, &params.identity)?;
@@ -51,9 +50,8 @@ pub fn select_contacts(
     config: State<Config>,
     db: State<Database>,
     user_id: i64,
-    bearer: AuthorizationBearer,
+    claims: Claims,
 ) -> Result<Json<Vec<Contact>>, Error> {
-    let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
         let contacts = contact::select(&*pg_conn, user_id)?;
@@ -70,9 +68,8 @@ pub fn remove_contact(
     db: State<Database>,
     user_id: i64,
     contact_id: i64,
-    bearer: AuthorizationBearer,
+    claims: Claims,
 ) -> Result<Json<Contact>, Error> {
-    let claims = bearer::decode(&config.jwt.secret, bearer.0.as_str())?;
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
         let removed_contact = contact::remove(&*pg_conn, contact_id, user_id)?;
