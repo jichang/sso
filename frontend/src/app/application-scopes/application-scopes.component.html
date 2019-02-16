@@ -1,8 +1,12 @@
 <div>
   <header>
-    <h4>Scopes</h4>
+    <h4 i18n="title of application scopes">Scopes</h4>
     <div>
-      <a [routerLink]="['create']">New Scope</a>
+      <a
+        [routerLink]="['create']"
+        i18n="title of link to create application scopes"
+        >New Scope</a
+      >
     </div>
   </header>
   <scopes-list [scopes]="scopes"></scopes-list>

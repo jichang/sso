@@ -6,7 +6,7 @@
           <div class="tools">
             <a [routerLink]="['..']">
               <mat-icon>chevron_left</mat-icon>
-              <span>Contacts</span>
+              <span i18n>Contacts</span>
             </a>
           </div>
         </div>
@@ -33,13 +33,18 @@
             [editable]="this.steps[1].editable"
             [completed]="this.steps[1].completed"
           >
-            <p>Verify Your Email right Now</p>
+            <p i18n>Verify Your Email right Now</p>
             <div class="button-group">
               <div class="button-group-item">
-                <button mat-button matStepperNext>Skip</button>
+                <button mat-button matStepperNext i18n>Skip</button>
               </div>
               <div class="button-group-item">
-                <button mat-flat-button color="primary" (click)="createToken()">
+                <button
+                  mat-flat-button
+                  color="primary"
+                  (click)="createToken()"
+                  i18n
+                >
                   Verify
                 </button>
               </div>
@@ -50,7 +55,7 @@
             [editable]="this.steps[2].editable"
             [completed]="this.steps[2].completed"
           >
-            <p>Congractulation</p>
+            <p i18n>Congractulation</p>
           </mat-step>
         </mat-vertical-stepper>
       </mat-card-content>

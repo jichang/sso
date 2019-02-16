@@ -6,7 +6,7 @@
           <div class="tools">
             <a [routerLink]="['..']">
               <mat-icon>chevron_left</mat-icon>
-              <span>Applications</span>
+              <span i18n="title of applicatins page">Applications</span>
             </a>
           </div>
         </div>
@@ -17,7 +17,7 @@
   <section class="page__body">
     <mat-card>
       <mat-card-content>
-        <h2>New Application</h2>
+        <h2 i18n="title of application create page">New Application</h2>
         <application-form (result)="created()"></application-form>
       </mat-card-content>
     </mat-card>

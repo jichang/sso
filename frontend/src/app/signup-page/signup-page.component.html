@@ -1,12 +1,15 @@
 <div class="page">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>Sign Up</mat-card-title>
+      <mat-card-title i18n>Sign Up</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <signup-form (success)="created($event)" (failure)="failed($event)"></signup-form>
+      <signup-form
+        (success)="created($event)"
+        (failure)="failed($event)"
+      ></signup-form>
     </mat-card-content>
   </mat-card>
 
-  <a mat-button [routerLink]="['/signin']">Sign In</a>
+  <a mat-button [routerLink]="['/signin']" i18n>Sign In</a>
 </div>

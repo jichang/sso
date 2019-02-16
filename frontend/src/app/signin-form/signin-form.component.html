@@ -1,11 +1,29 @@
 <form class="form" [formGroup]="user" (ngSubmit)="signin(user)" novalidate>
   <mat-form-field>
-    <input matInput type="text" id="username" placeholder="Username" name="username" formControlName="username" />
+    <input
+      matInput
+      type="text"
+      id="username"
+      placeholder="Username"
+      name="username"
+      formControlName="username"
+      i18n-placeholder
+    />
   </mat-form-field>
   <mat-form-field>
-    <input matInput type="password" id="password" placeholder="Password" name="password" formControlName="password" />
+    <input
+      matInput
+      type="password"
+      id="password"
+      placeholder="Password"
+      name="password"
+      formControlName="password"
+      i18n-placeholder
+    />
   </mat-form-field>
   <div>
-    <button mat-flat-button color="primary" [disabled]="!user.valid">Sign In</button>
+    <button mat-flat-button color="primary" [disabled]="!user.valid" i18n>
+      Sign In
+    </button>
   </div>
 </form>

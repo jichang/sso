@@ -6,7 +6,7 @@
           <div class="tools">
             <a [routerLink]="['']">
               <mat-icon>chevron_left</mat-icon>
-              <span>Home</span>
+              <span i18n>Home</span>
             </a>
           </div>
         </div>
@@ -19,7 +19,7 @@
       (action)="handleAction($event)"
     ></authorizations-list>
     <div *ngIf="authorizations.length === 0" class="placeholder--list">
-      <span>No Authorizations</span>
+      <span i18n>No Authorizations</span>
     </div>
   </section>
 </div>

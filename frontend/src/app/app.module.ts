@@ -11,6 +11,10 @@ import {
 } from "@angular/http";
 import { RouterModule, Routes } from "@angular/router";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { registerLocaleData } from "@angular/common";
+import localeZhHans from "@angular/common/locales/zh-Hans";
+
+registerLocaleData(localeZhHans, "zh-Hans");
 
 import { MaskPipe } from "./mask.pipe";
 

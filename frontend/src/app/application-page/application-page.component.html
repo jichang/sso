@@ -6,7 +6,7 @@
           <div class="tools">
             <a [routerLink]="['..']">
               <mat-icon>chevron_left</mat-icon>
-              <span>Applications</span>
+              <span i18n="title of applicatins page">Applications</span>
             </a>
           </div>
         </div>
@@ -19,7 +19,11 @@
   <section class="page__body">
     <mat-card>
       <mat-card-content>
-        <div class="flex__box"><mat-card-title>Basic</mat-card-title></div>
+        <div class="flex__box">
+          <mat-card-title i18n="title of application basic information"
+            >Basic</mat-card-title
+          >
+        </div>
         <mat-divider></mat-divider>
         <application-basic [application]="application"></application-basic>
       </mat-card-content>
@@ -28,7 +32,9 @@
     <mat-card>
       <mat-card-content>
         <div class="flex__box">
-          <mat-card-title class="flex__item">Scopes</mat-card-title>
+          <mat-card-title class="flex__item" i18n="title of scopes"
+            >Scopes</mat-card-title
+          >
           <a mat-flat-button color="primary" [routerLink]="['scopes/create']">
             <mat-icon>add</mat-icon>
           </a>
@@ -39,7 +45,7 @@
           (remove)="removeScope($event)"
         ></scopes-list>
         <div *ngIf="scopes.length === 0" class="placeholder--list">
-          <span>No Scopes</span>
+          <span i18n="hint for no scopes">No Scopes</span>
         </div>
       </mat-card-content>
     </mat-card>

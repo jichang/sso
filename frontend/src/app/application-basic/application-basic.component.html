@@ -5,11 +5,11 @@
     </thead>
     <tbody>
       <tr>
-        <td>Name</td>
+        <td i18n="application name">Name</td>
         <td>{{ application.name }}</td>
       </tr>
       <tr>
-        <td>Website</td>
+        <td i18n="application website">Website</td>
         <td>
           <a [href]="application.website_uri" target="_blank">{{
             application.website_uri
@@ -17,7 +17,7 @@
         </td>
       </tr>
       <tr>
-        <td>Client Id</td>
+        <td i18n="application client id">Client Id</td>
         <td>
           <copy-text-span [text]="application.client_id">
             <span>{{ application.client_id | mask: 4 }}</span>
@@ -25,7 +25,7 @@
         </td>
       </tr>
       <tr>
-        <td>Client Secret</td>
+        <td i18n="application client secret">Client Secret</td>
         <td>
           <copy-text-span [text]="application.client_secret.Plaintext">
             <span>{{ application.client_secret.Plaintext | mask: 4 }}</span>
@@ -33,7 +33,7 @@
         </td>
       </tr>
       <tr>
-        <td>Redirect Uri</td>
+        <td i18n="application redirect uri">Redirect Uri</td>
         <td>{{ application.callback_uri }}</td>
       </tr>
     </tbody>

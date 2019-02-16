@@ -6,12 +6,12 @@
           <div class="tools">
             <a [routerLink]="['']">
               <mat-icon>chevron_left</mat-icon>
-              <span>Home</span>
+              <span i18n>Home</span>
             </a>
           </div>
         </div>
         <a [routerLink]="['create']" mat-flat-button color="primary">
-          添加应用程序<mat-icon>add</mat-icon>
+          <span i18n>Create Application</span><mat-icon>add</mat-icon>
         </a>
       </mat-toolbar-row>
     </mat-toolbar>
@@ -19,8 +19,10 @@
   <section class="page__body">
     <applications-list [applications]="applications"></applications-list>
     <div *ngIf="applications.length === 0" class="placeholder--list">
-      <span>No Applications</span>
-      <a mat-button [routerLink]="['create']" color="primary">添加应用程序</a>
+      <span i18n>No Applications</span>
+      <a mat-button [routerLink]="['create']" color="primary" i18n
+        >Create Application</a
+      >
     </div>
   </section>
 </div>

@@ -3,23 +3,23 @@
     <mat-card-content>
       <div class="flex__box">
         <div class="flex__item">
-          <h4>{{application.name}}</h4>
+          <h4>{{ application.name }}</h4>
           <table>
             <tbody>
               <tr>
-                <td>Website URL</td>
-                <td>{{application.website_uri}}</td>
+                <td i18n>Website URL</td>
+                <td>{{ application.website_uri }}</td>
               </tr>
               <tr>
-                <td>Callback URL</td>
-                <td>{{application.callback_uri}}</td>
+                <td i18n>Callback URL</td>
+                <td>{{ application.callback_uri }}</td>
               </tr>
             </tbody>
           </table>
         </div>
         <div>
           <a [routerLink]="[application.id]">
-            <span>Details</span>
+            <span i18n>Details</span>
             <mat-icon>chevron_right</mat-icon>
           </a>
         </div>

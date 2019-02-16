@@ -1,12 +1,14 @@
 <form [formGroup]="verification" (ngSubmit)="verify(verification)" novalidate>
   <div>
-    <label>Email</label>
+    <label i18n>Email</label>
     <select name="contact_id" formControlName="contact_id">
-      <option *ngFor="let contact of contacts" [value]="contact.type_id">{{contact.identity}}</option>
+      <option *ngFor="let contact of contacts" [value]="contact.type_id">{{
+        contact.identity
+      }}</option>
     </select>
   </div>
 
   <div>
-    <button [disabled]="!verification.valid">Verify</button>
+    <button [disabled]="!verification.valid" i18n>Verify</button>
   </div>
 </form>

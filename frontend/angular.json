@@ -41,6 +41,14 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
+            },
+            "production-zh-Hans": {
+              "aot": true,
+              "outputPath": "dist/feblr-zh-Hans/",
+              "i18nFile": "src/locale/messages.zh-Hans.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "fr",
+              "i18nMissingTranslation": "warn"
             }
           }
         },
@@ -52,6 +60,9 @@
           "configurations": {
             "production": {
               "browserTarget": "frontend:build:production"
+            },
+            "production-zh-Hans": {
+              "browserTarget": "frontend:build:production-zh-Hans"
             }
           }
         },

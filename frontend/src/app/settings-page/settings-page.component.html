@@ -6,7 +6,7 @@
           <div class="tools">
             <a [routerLink]="['']">
               <mat-icon>chevron_left</mat-icon>
-              <span>Home</span>
+              <span i18n>Home</span>
             </a>
           </div>
         </div>
@@ -16,7 +16,7 @@
   <section class="page__body">
     <mat-nav-list>
       <mat-list-item>
-        <span matLine>Profile</span>
+        <span matLine i18n>Profile</span>
         <a mat-icon-button [routerLink]="['/profile']">
           <mat-icon>edit</mat-icon>
         </a>
@@ -28,6 +28,7 @@
       mat-raised-button
       color="warn"
       (click)="signOut()"
+      i18n
     >
       Sign Out
     </button>

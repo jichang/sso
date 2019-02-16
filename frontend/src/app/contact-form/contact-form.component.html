@@ -12,15 +12,16 @@
       placeholder="Email"
       name="identity"
       formControlName="identity"
+      i18n-placeholder
     />
   </mat-form-field>
 
   <div class="button-group">
     <div class="button-group-item">
-      <a mat-stroked-button [routerLink]="['..']">Cancel</a>
+      <a mat-stroked-button [routerLink]="['..']" i18n>Cancel</a>
     </div>
     <div class="button-group-item">
-      <button mat-flat-button color="primary" [disabled]="!contact.valid">
+      <button mat-flat-button color="primary" [disabled]="!contact.valid" i18n>
         Create
       </button>
     </div>

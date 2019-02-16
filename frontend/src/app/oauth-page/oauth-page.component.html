@@ -5,7 +5,7 @@
         <div class="flex__item">
           <div class="tools">
             <mat-icon svgIcon="logo"></mat-icon>
-            <span>Feblr</span>
+            <span i18n>Feblr</span>
           </div>
         </div>
       </mat-toolbar-row>
@@ -15,26 +15,27 @@
     <mat-card>
       <mat-card-content>
         <div *ngIf="authorization.client_app">
-          <p>Request Application</p>
+          <p i18n>Request Application</p>
           <h4>{{ authorization.client_app.name }}</h4>
         </div>
         <mat-divider></mat-divider>
         <div *ngIf="authorization.server_app">
-          <p>Authorize Application</p>
+          <p i18n>Authorize Application</p>
           <h4>{{ authorization.server_app.name }}</h4>
         </div>
         <div *ngIf="authorization.scope">
-          <p>Priviledge</p>
+          <p i18n>Priviledge</p>
           <h4>{{ authorization.scope.name }}</h4>
           <p>{{ authorization.scope.description }}</p>
         </div>
         <div>
-          <button mat-button type="button">Cancel</button>
+          <button mat-button type="button" i18n>Cancel</button>
           <button
             mat-flat-button
             color="primary"
             type="button"
             (click)="authorize()"
+            i18n
           >
             Authorize
           </button>

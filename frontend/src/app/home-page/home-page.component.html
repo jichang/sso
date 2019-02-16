@@ -5,12 +5,12 @@
         <div class="flex__item">
           <div class="tools">
             <mat-icon svgIcon="logo"></mat-icon>
-            <span>Feblr</span>
+            <span i18n>Feblr</span>
           </div>
         </div>
         <div class="tools">
           <a [routerLink]="['settings']">
-            <mat-icon>settings</mat-icon><span>Settings</span>
+            <mat-icon>settings</mat-icon><span i18n>Settings</span>
           </a>
         </div>
       </mat-toolbar-row>
@@ -20,8 +20,10 @@
     <div *ngIf="!summary">
       <div><img class="site__logo" src="/assets/logo.svg" /></div>
       <nav class="button-group">
-        <a mat-stroked-button [routerLink]="['signin']">Sign In</a>
-        <a mat-flat-button color="primary" [routerLink]="['signup']">Sign Up</a>
+        <a mat-stroked-button [routerLink]="['signin']" i18n>Sign In</a>
+        <a mat-flat-button color="primary" [routerLink]="['signup']" i18n
+          >Sign Up</a
+        >
       </nav>
     </div>
     <div *ngIf="!!summary">

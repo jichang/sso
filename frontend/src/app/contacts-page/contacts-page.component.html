@@ -6,12 +6,12 @@
           <div class="tools">
             <a [routerLink]="['']">
               <mat-icon>chevron_left</mat-icon>
-              <span>Home</span>
+              <span i18n>Home</span>
             </a>
           </div>
         </div>
-        <a [routerLink]="['create']" mat-flat-button color="primary">
-          添加联系方式<mat-icon>add</mat-icon>
+        <a [routerLink]="['create']" mat-flat-button color="primary" i18n>
+          <span>Create Contact</span><mat-icon>add</mat-icon>
         </a>
       </mat-toolbar-row>
     </mat-toolbar>
@@ -22,8 +22,10 @@
       (action)="handleAction($event)"
     ></contacts-list>
     <div *ngIf="contacts.length === 0" class="placeholder--list">
-      <span>No Contacts</span>
-      <a mat-button [routerLink]="['create']" color="primary">添加联系方式</a>
+      <span i18n>No Contacts</span>
+      <a mat-button [routerLink]="['create']" color="primary" i18n
+        >Create Contact</a
+      >
     </div>
   </section>
 </div>

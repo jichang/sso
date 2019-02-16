@@ -3,15 +3,18 @@
     <mat-card-content>
       <div class="flex__box">
         <div class="flex__item">
-          <h4>Contacts</h4>
+          <h4 i18n>Contacts</h4>
           <div>
-            <span>Total: {{ summary.contacts.total }}</span> <span> / </span>
-            <span>Used: {{ summary.contacts.used }}</span>
+            <span>Total: </span>
+            <span>{{ summary.contacts.total }}</span>
+            <span> / </span>
+            <span>Used: </span>
+            <span>{{ summary.contacts.used }}</span>
           </div>
         </div>
         <div>
           <a [routerLink]="['contacts']"
-            ><span>Details</span>
+            ><span i18n>Details</span>
             <mat-icon>chevron_right</mat-icon>
           </a>
         </div>
@@ -22,15 +25,18 @@
     <mat-card-content>
       <div class="flex__box">
         <div class="flex__item">
-          <h4>Applications</h4>
+          <h4 i18n>Applications</h4>
           <div>
-            <span>Total: {{ summary.applications.total }}</span>
-            <span> / </span> <span>Used: {{ summary.applications.used }}</span>
+            <span i18n>Total:</span>
+            <span>{{ summary.applications.total }}</span>
+            <span> / </span>
+            <span>Used: </span>
+            <span>{{ summary.applications.used }}</span>
           </div>
         </div>
         <div>
           <a [routerLink]="['applications']"
-            ><span>Details</span>
+            ><span i18n>Details</span>
             <mat-icon>chevron_right</mat-icon>
           </a>
         </div>
@@ -41,16 +47,18 @@
     <mat-card-content>
       <div class="flex__box">
         <div class="flex__item">
-          <h4>Authorizations</h4>
+          <h4 i18n>Authorizations</h4>
           <div>
-            <span>Total: {{ summary.authorizations.total }}</span>
+            <span i18n>Total:</span>
+            <span>{{ summary.authorizations.total }}</span>
             <span> / </span>
-            <span>Used: {{ summary.authorizations.used }}</span>
+            <span i18n>Used:</span
+            ><span> {{ summary.authorizations.used }}</span>
           </div>
         </div>
         <div>
           <a [routerLink]="['authorizations']"
-            ><span>Details</span>
+            ><span i18n>Details</span>
             <mat-icon>chevron_right</mat-icon>
           </a>
         </div>

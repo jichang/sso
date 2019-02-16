@@ -7,15 +7,15 @@
           <table>
             <tbody>
               <tr>
-                <td>Server App</td>
+                <td i18n>Server App</td>
                 <td>{{ authorization.server_app.name }}</td>
               </tr>
               <tr>
-                <td>Scope</td>
+                <td i18n>Scope</td>
                 <td>{{ authorization.scope.name }}</td>
               </tr>
               <tr>
-                <td>Description</td>
+                <td i18n>Description</td>
                 <td>{{ authorization.scope.description }}</td>
               </tr>
             </tbody>
@@ -26,6 +26,7 @@
             mat-flat-button
             color="primary"
             (click)="revoke(authorization)"
+            i18n
           >
             Revoke
           </button>
