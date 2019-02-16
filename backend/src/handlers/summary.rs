@@ -12,13 +12,11 @@ use super::Error;
 
 #[get("/users/<user_id>/summary")]
 pub fn select_summary(
-    config: State<Config>,
     db: State<Database>,
     user_id: i64,
     claims: Claims,
     permissions: Permissions,
 ) -> Result<Json<Summary>, Error> {
-    println!("{:?}", permissions);
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
         let new_summary = summary::select(&*pg_conn, user_id)?;

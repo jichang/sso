@@ -21,7 +21,6 @@ pub struct CreateProfileParams {
 
 #[post("/users/<user_id>/profile", data = "<params>")]
 pub fn create_profile(
-    config: State<Config>,
     db: State<Database>,
     params: Json<CreateProfileParams>,
     user_id: i64,
@@ -47,7 +46,6 @@ pub fn create_profile(
 
 #[get("/users/<user_id>/profile")]
 pub fn select_profile(
-    config: State<Config>,
     db: State<Database>,
     user_id: i64,
     claims: Claims,
@@ -64,7 +62,6 @@ pub fn select_profile(
 
 #[delete("/users/<user_id>/profile")]
 pub fn remove_profile(
-    config: State<Config>,
     db: State<Database>,
     user_id: i64,
     claims: Claims,

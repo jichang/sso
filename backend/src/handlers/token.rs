@@ -67,7 +67,6 @@ pub struct DeleteTokenParams {
 
 #[delete("/users/<user_id>/tokens?<params..>")]
 pub fn delete_token(
-    config: State<Config>,
     db: State<Database>,
     cache: State<Cache>,
     user_id: i64,

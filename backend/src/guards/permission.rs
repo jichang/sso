@@ -4,13 +4,22 @@ use rocket::Outcome;
 use rocket::State;
 
 use super::super::models::permission;
-use super::super::models::permission::Permission;
+use super::super::models::permission::{ActionType, Permission, ResourceType};
 use super::super::storage::Database;
 use super::bearer::Claims;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Permissions {
     permissions: Vec<Permission>,
+}
+
+impl Permissions {
+    pub fn contains(&self, resource_type: ResourceType, action_type: ActionType) -> bool {
+        self.permissions.contains(&Permission {
+            resource_type,
+            action_type,
+        })
+    }
 }
 
 impl<'a, 'r> FromRequest<'a, 'r> for Permissions {

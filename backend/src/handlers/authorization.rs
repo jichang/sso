@@ -40,7 +40,6 @@ pub struct Credientials {
 
 #[post("/users/<user_id>/authorizations", data = "<params>")]
 pub fn create_authorization(
-    config: State<Config>,
     cache: State<Cache>,
     db: State<Database>,
     user_id: i64,
@@ -93,7 +92,6 @@ pub fn create_authorization(
 
 #[get("/users/<user_id>/authorizations")]
 pub fn select_authorizations(
-    config: State<Config>,
     db: State<Database>,
     user_id: i64,
     claims: Claims,
@@ -110,7 +108,6 @@ pub fn select_authorizations(
 
 #[delete("/users/<user_id>/authorizations/<authorization_id>")]
 pub fn remove_authorization(
-    config: State<Config>,
     db: State<Database>,
     user_id: i64,
     authorization_id: i64,

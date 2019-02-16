@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::net::IpAddr;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Eq, PartialEq, Ord, PartialOrd)]
 pub enum ActionType {
     NONE = 0,
     CREATE,
@@ -26,7 +26,7 @@ impl ActionType {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Eq, PartialEq, Ord, PartialOrd)]
 pub enum ResourceType {
     NONE = 0,
     Application,
@@ -41,10 +41,10 @@ impl ResourceType {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Eq, PartialEq, Ord, PartialOrd)]
 pub struct Permission {
-    resource_type: ResourceType,
-    action_type: ActionType,
+    pub resource_type: ResourceType,
+    pub action_type: ActionType,
 }
 
 pub fn select<C: GenericConnection>(

@@ -28,7 +28,6 @@ pub struct CreateContactParams {
 
 #[post("/users/<user_id>/contacts", data = "<params>")]
 pub fn create_contact(
-    config: State<Config>,
     db: State<Database>,
     params: Json<CreateContactParams>,
     user_id: i64,
@@ -47,7 +46,6 @@ pub fn create_contact(
 
 #[get("/users/<user_id>/contacts")]
 pub fn select_contacts(
-    config: State<Config>,
     db: State<Database>,
     user_id: i64,
     claims: Claims,
@@ -64,7 +62,6 @@ pub fn select_contacts(
 
 #[delete("/users/<user_id>/contacts/<contact_id>")]
 pub fn remove_contact(
-    config: State<Config>,
     db: State<Database>,
     user_id: i64,
     contact_id: i64,

@@ -9,8 +9,10 @@ use super::super::common;
 use super::super::config_parser::Config;
 use super::super::guards::bearer;
 use super::super::guards::bearer::Claims;
+use super::super::guards::permission::Permissions;
 use super::super::models::application;
 use super::super::models::application::{Application, Scope};
+use super::super::models::permission::{ActionType, ResourceType};
 use super::super::storage::Database;
 use super::Error;
 
@@ -26,13 +28,13 @@ pub struct CreateApplicationParams {
 
 #[post("/users/<user_id>/applications", data = "<params>")]
 pub fn create_application(
-    config: State<Config>,
     db: State<Database>,
     params: Json<CreateApplicationParams>,
     user_id: i64,
     claims: Claims,
+    permissins: Permissions,
 ) -> Result<Created<Json<Application>>, Error> {
-    if claims.uid == user_id {
+    if claims.uid == user_id && permissins.contains(ResourceType::Application, ActionType::CREATE) {
         let client_id = common::gen_rand_bytes(CLIENT_ID_LEN)?;
         let client_secret = common::gen_rand_bytes(CLIENT_SECRET_LEN)?;
         let pg_conn = db.get_conn()?;
@@ -56,12 +58,12 @@ pub fn create_application(
 
 #[get("/users/<user_id>/applications")]
 pub fn select_applications(
-    config: State<Config>,
     db: State<Database>,
     user_id: i64,
     claims: Claims,
+    permissins: Permissions,
 ) -> Result<Json<Vec<Application>>, Error> {
-    if claims.uid == user_id {
+    if claims.uid == user_id && permissins.contains(ResourceType::Application, ActionType::SELECT) {
         let pg_conn = db.get_conn()?;
         let applications = application::select(&*pg_conn, user_id)?;
 
@@ -73,13 +75,13 @@ pub fn select_applications(
 
 #[delete("/users/<user_id>/applications/<application_id>")]
 pub fn remove_application(
-    config: State<Config>,
     db: State<Database>,
     user_id: i64,
     application_id: i64,
     claims: Claims,
+    permissins: Permissions,
 ) -> Result<Json<Application>, Error> {
-    if claims.uid == user_id {
+    if claims.uid == user_id && permissins.contains(ResourceType::Application, ActionType::DELETE) {
         let pg_conn = db.get_conn()?;
         let removed_application = application::remove(&*pg_conn, user_id, application_id)?;
 
@@ -100,7 +102,6 @@ pub struct CreateScopeParams {
     data = "<params>"
 )]
 pub fn create_scope(
-    config: State<Config>,
     db: State<Database>,
     params: Json<CreateScopeParams>,
     user_id: i64,
@@ -126,7 +127,6 @@ pub fn create_scope(
 
 #[get("/users/<user_id>/applications/<application_id>/scopes")]
 pub fn select_scopes(
-    config: State<Config>,
     db: State<Database>,
     user_id: i64,
     application_id: i64,
@@ -144,7 +144,6 @@ pub fn select_scopes(
 
 #[delete("/users/<user_id>/applications/<application_id>/scopes/<scope_id>")]
 pub fn remove_scope(
-    config: State<Config>,
     db: State<Database>,
     user_id: i64,
     application_id: i64,
