@@ -25,7 +25,7 @@ export class SettingsPageComponent implements OnInit {
 
     return this.http.post(apiUri, options).subscribe(() => {
       session.destory();
-      this.router.navigate(["/"]);
+      this.router.navigate(["/signin"]);
     });
   }
 }

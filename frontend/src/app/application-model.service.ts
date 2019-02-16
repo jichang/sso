@@ -48,10 +48,15 @@ export class ApplicationModelService {
     };
 
     let apiUri = `/api/v1/users/${userId}/applications`;
-    this.http.get(apiUri, options).subscribe((applications: Application[]) => {
-      this.store.applications = applications;
-      this.subject.next(applications);
-    });
+    this.http.get(apiUri, options).subscribe(
+      (applications: Application[]) => {
+        this.store.applications = applications;
+        this.subject.next(applications);
+      },
+      err => {
+        this.subject.error(err);
+      }
+    );
   }
 
   create(application: Application) {

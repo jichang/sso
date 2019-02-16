@@ -34,25 +34,29 @@ pub fn create_application(
     claims: Claims,
     permissins: Permissions,
 ) -> Result<Created<Json<Application>>, Error> {
-    if claims.uid == user_id && permissins.contains(ResourceType::Application, ActionType::CREATE) {
-        let client_id = common::gen_rand_bytes(CLIENT_ID_LEN)?;
-        let client_secret = common::gen_rand_bytes(CLIENT_SECRET_LEN)?;
-        let pg_conn = db.get_conn()?;
-        let new_application = application::create(
-            &*pg_conn,
-            user_id,
-            &params.name,
-            &params.website_uri,
-            &client_id,
-            &client_secret,
-            &params.callback_uri,
-        )?;
+    if permissins.contains(ResourceType::Application, ActionType::CREATE) {
+        if claims.uid == user_id {
+            let client_id = common::gen_rand_bytes(CLIENT_ID_LEN)?;
+            let client_secret = common::gen_rand_bytes(CLIENT_SECRET_LEN)?;
+            let pg_conn = db.get_conn()?;
+            let new_application = application::create(
+                &*pg_conn,
+                user_id,
+                &params.name,
+                &params.website_uri,
+                &client_id,
+                &client_secret,
+                &params.callback_uri,
+            )?;
 
-        let url = String::from("/applications");
+            let url = String::from("/applications");
 
-        Ok(Created(url, Some(Json(new_application))))
+            Ok(Created(url, Some(Json(new_application))))
+        } else {
+            Err(Error::Privilege)
+        }
     } else {
-        Err(Error::Privilege)
+        Err(Error::Forbidden)
     }
 }
 
@@ -63,13 +67,17 @@ pub fn select_applications(
     claims: Claims,
     permissins: Permissions,
 ) -> Result<Json<Vec<Application>>, Error> {
-    if claims.uid == user_id && permissins.contains(ResourceType::Application, ActionType::SELECT) {
-        let pg_conn = db.get_conn()?;
-        let applications = application::select(&*pg_conn, user_id)?;
+    if permissins.contains(ResourceType::Application, ActionType::SELECT) {
+        if claims.uid == user_id {
+            let pg_conn = db.get_conn()?;
+            let applications = application::select(&*pg_conn, user_id)?;
 
-        Ok(Json(applications))
+            Ok(Json(applications))
+        } else {
+            Err(Error::Privilege)
+        }
     } else {
-        Err(Error::Privilege)
+        Err(Error::Forbidden)
     }
 }
 
@@ -81,13 +89,17 @@ pub fn remove_application(
     claims: Claims,
     permissins: Permissions,
 ) -> Result<Json<Application>, Error> {
-    if claims.uid == user_id && permissins.contains(ResourceType::Application, ActionType::DELETE) {
-        let pg_conn = db.get_conn()?;
-        let removed_application = application::remove(&*pg_conn, user_id, application_id)?;
+    if permissins.contains(ResourceType::Application, ActionType::DELETE) {
+        if claims.uid == user_id {
+            let pg_conn = db.get_conn()?;
+            let removed_application = application::remove(&*pg_conn, user_id, application_id)?;
 
-        Ok(Json(removed_application))
+            Ok(Json(removed_application))
+        } else {
+            Err(Error::Privilege)
+        }
     } else {
-        Err(Error::Privilege)
+        Err(Error::Forbidden)
     }
 }
 
