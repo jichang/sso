@@ -609,6 +609,42 @@
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ee5b16adf0b237e70b8567f7af3e5c8a547d50ac" datatype="html">
+        <source>Total: </source>
+        <target>可用：</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="92f366c76d129167e503517f6c12fb7da95ca2c6" datatype="html">
+        <source>Used: </source>
+        <target>已用：</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9610487cbeb5796d34d8601b5ac0c0a65f9e1d19" datatype="html">
+        <source>Roles</source>
+        <target>用户角色</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c22ba03540aa3217da059f45e7eab138b51a96e2" datatype="html">
+        <source>Groups</source>
+        <target>用户组</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="e657507a4e9ff27ce501080e9e0b93cf6811a185" datatype="html">
         <source>Total:</source>
         <target>可用</target>

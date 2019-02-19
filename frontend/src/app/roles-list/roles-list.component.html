@@ -1,0 +1,31 @@
+<div class="roles-list">
+  <mat-expansion-panel *ngFor="let role of roles">
+    <mat-expansion-panel-header>
+      <mat-panel-title>{{ role.name }} </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="role-permissions">
+      <table mat-table [dataSource]="permissions">
+        <ng-container matColumnDef="resource_type">
+          <td mat-cell *matCellDef="let permission">
+            {{ permission.resource_type | resourceType }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="action_type">
+          <td mat-cell *matCellDef="let permission">
+            {{ permission.action_type | actionType }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="toggle">
+          <td mat-cell *matCellDef="let permission">
+            <mat-slide-toggle
+              (change)="updatePermission($event, role, permission)"
+              [checked]="isChecked(role, permission)"
+              >启用</mat-slide-toggle
+            >
+          </td>
+        </ng-container>
+        <tr mat-row *matRowDef="let myRowData; columns: columns"></tr>
+      </table>
+    </div>
+  </mat-expansion-panel>
+</div>

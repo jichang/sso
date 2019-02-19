@@ -1,14 +1,14 @@
 <div class="summary-panel">
-  <mat-card>
+  <mat-card *ngIf="summary.contacts.enabled">
     <mat-card-content>
       <div class="flex__box">
         <div class="flex__item">
           <h4 i18n>Contacts</h4>
           <div>
-            <span>Total: </span>
+            <span i18n>Total: </span>
             <span>{{ summary.contacts.total }}</span>
             <span> / </span>
-            <span>Used: </span>
+            <span i18n>Used: </span>
             <span>{{ summary.contacts.used }}</span>
           </div>
         </div>
@@ -21,7 +21,51 @@
       </div>
     </mat-card-content>
   </mat-card>
-  <mat-card>
+  <mat-card *ngIf="summary.roles.enabled">
+    <mat-card-content>
+      <div class="flex__box">
+        <div class="flex__item">
+          <h4 i18n>Roles</h4>
+          <div>
+            <span i18n>Total: </span>
+            <span>{{ summary.roles.total }}</span>
+            <span> / </span>
+            <span i18n>Used: </span>
+            <span>{{ summary.roles.used }}</span>
+          </div>
+        </div>
+        <div>
+          <a [routerLink]="['roles']"
+            ><span i18n>Details</span>
+            <mat-icon>chevron_right</mat-icon>
+          </a>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card *ngIf="summary.groups.enabled">
+    <mat-card-content>
+      <div class="flex__box">
+        <div class="flex__item">
+          <h4 i18n>Groups</h4>
+          <div>
+            <span i18n>Total: </span>
+            <span>{{ summary.groups.total }}</span>
+            <span> / </span>
+            <span i18n>Used: </span>
+            <span>{{ summary.groups.used }}</span>
+          </div>
+        </div>
+        <div>
+          <a [routerLink]="['groups']"
+            ><span i18n>Details</span>
+            <mat-icon>chevron_right</mat-icon>
+          </a>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card *ngIf="summary.applications.enabled">
     <mat-card-content>
       <div class="flex__box">
         <div class="flex__item">
@@ -30,7 +74,7 @@
             <span i18n>Total:</span>
             <span>{{ summary.applications.total }}</span>
             <span> / </span>
-            <span>Used: </span>
+            <span i18n>Used: </span>
             <span>{{ summary.applications.used }}</span>
           </div>
         </div>
@@ -43,7 +87,7 @@
       </div>
     </mat-card-content>
   </mat-card>
-  <mat-card>
+  <mat-card *ngIf="summary.authorizations.enabled">
     <mat-card-content>
       <div class="flex__box">
         <div class="flex__item">

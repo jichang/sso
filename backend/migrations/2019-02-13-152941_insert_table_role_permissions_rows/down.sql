@@ -1,1 +1,1 @@
-DELETE FROM sso.role_permissions;
+DELETE FROM sso.role_permissions WHERE resource_type = 1;

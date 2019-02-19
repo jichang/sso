@@ -1,0 +1,27 @@
+<div class="page">
+  <header class="page__header">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <div class="flex__item">
+          <div class="tools">
+            <a [routerLink]="['']">
+              <mat-icon>chevron_left</mat-icon>
+              <span i18n>Home</span>
+            </a>
+          </div>
+        </div>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </header>
+  <section class="page__body">
+    <roles-list
+      [permissions]="permissions"
+      [roles]="roles"
+      (grantPermission)="grantPermission($event)"
+      (revokePermission)="revokePermission($event)"
+    ></roles-list>
+    <div *ngIf="roles.length === 0" class="placeholder--list">
+      <span i18n>No Roles</span>
+    </div>
+  </section>
+</div>

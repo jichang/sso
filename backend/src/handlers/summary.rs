@@ -19,9 +19,9 @@ pub fn select_summary(
 ) -> Result<Json<Summary>, Error> {
     if claims.uid == user_id {
         let pg_conn = db.get_conn()?;
-        let new_summary = summary::select(&*pg_conn, user_id)?;
+        let user_summary = summary::select(&*pg_conn, user_id, &permissions)?;
 
-        Ok(Json(new_summary))
+        Ok(Json(user_summary))
     } else {
         Err(Error::Privilege)
     }

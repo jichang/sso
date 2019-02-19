@@ -319,6 +319,14 @@
           <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
           <context context-type="linenumber">61</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
+          <context context-type="linenumber">83</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
+          <context context-type="linenumber">105</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="f1abafaeb40ce52355ddcc24686e3cd17b64e08a" datatype="html">
         <source>Applications</source>
@@ -332,7 +340,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">72</context>
         </context-group>
         <note priority="1" from="description">title of applicatins page</note>
       </trans-unit>
@@ -551,8 +559,12 @@
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="e657507a4e9ff27ce501080e9e0b93cf6811a185" datatype="html">
-        <source>Total:</source>
+      <trans-unit id="ee5b16adf0b237e70b8567f7af3e5c8a547d50ac" datatype="html">
+        <source>Total: </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
           <context context-type="linenumber">30</context>
@@ -562,18 +574,62 @@
           <context context-type="linenumber">52</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="92f366c76d129167e503517f6c12fb7da95ca2c6" datatype="html">
+        <source>Used: </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9610487cbeb5796d34d8601b5ac0c0a65f9e1d19" datatype="html">
+        <source>Roles</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c22ba03540aa3217da059f45e7eab138b51a96e2" datatype="html">
+        <source>Groups</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e657507a4e9ff27ce501080e9e0b93cf6811a185" datatype="html">
+        <source>Total:</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
+          <context context-type="linenumber">74</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
+          <context context-type="linenumber">96</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="d90790b67aca7b58d2f8d550a348f46cd8193cbe" datatype="html">
         <source>Authorizations</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="903f3631e6831ca8a70b429b7493a0b7cf683599" datatype="html">
         <source>Used:</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/summary-panel/summary-panel.component.html</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cba4c170355f67defdb328b44f86ebd4f30255fb" datatype="html">

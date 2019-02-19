@@ -23,6 +23,7 @@ extern crate serde;
 extern crate serde_derive;
 extern crate mime;
 extern crate serde_json;
+extern crate serde_repr;
 extern crate toml;
 extern crate url;
 extern crate uuid;
@@ -65,6 +66,9 @@ pub fn create(config_file: &str) -> Rocket {
             routes![
                 handlers::index,
                 handlers::role::select_roles,
+                handlers::role::create_permission,
+                handlers::role::remove_permission,
+                handlers::permission::select_permissions,
                 handlers::user::signup,
                 handlers::user::signin,
                 handlers::user::signout,

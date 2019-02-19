@@ -61,6 +61,17 @@ import { TokenInterceptorService } from "./token-interceptor.service";
 import { ProfilePageComponent } from "./profile-page/profile-page.component";
 import { ScopeCreatePageComponent } from "./scope-create-page/scope-create-page.component";
 import { TokenModelService } from "./token-model.service";
+import { RolesPageComponent } from "./roles-page/roles-page.component";
+import { GroupsPageComponent } from "./groups-page/groups-page.component";
+import { GroupPageComponent } from "./group-page/group-page.component";
+import { RolesListComponent } from "./roles-list/roles-list.component";
+import { RoleModelService } from "./role-model.service";
+import { PermissionModelService } from "./permission-model.service";
+import {
+  PermissionPipe,
+  ResourceTypePipe,
+  ActionTypePipe
+} from "./permission.pipe";
 
 @Injectable()
 export class TrackableHttpOptions extends BaseRequestOptions {
@@ -116,7 +127,22 @@ const routes: Routes = [
     path: "authorizations",
     component: AuthorizationsPageComponent
   },
-  { path: "oauth", component: OauthPageComponent }
+  {
+    path: "roles",
+    component: RolesPageComponent
+  },
+  {
+    path: "groups",
+    component: GroupsPageComponent
+  },
+  {
+    path: "groups/:id",
+    component: GroupPageComponent
+  },
+  {
+    path: "oauth",
+    component: OauthPageComponent
+  }
 ];
 
 @NgModule({
@@ -156,7 +182,14 @@ const routes: Routes = [
     ContactStatePipe,
     SummaryPanelComponent,
     ConfirmDialogComponent,
-    ScopeCreatePageComponent
+    ScopeCreatePageComponent,
+    RolesPageComponent,
+    GroupsPageComponent,
+    GroupPageComponent,
+    RolesListComponent,
+    PermissionPipe,
+    ResourceTypePipe,
+    ActionTypePipe
   ],
   imports: [
     BrowserModule,
@@ -170,6 +203,8 @@ const routes: Routes = [
   entryComponents: [ConfirmDialogComponent],
   providers: [
     { provide: RequestOptions, useClass: TrackableHttpOptions },
+    { provide: PermissionModelService, useClass: PermissionModelService },
+    { provide: RoleModelService, useClass: RoleModelService },
     { provide: ApplicationModelService, useClass: ApplicationModelService },
     { provide: ContactModelService, useClass: ContactModelService },
     { provide: ScopeModelService, useClass: ScopeModelService },

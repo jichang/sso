@@ -7,8 +7,4 @@ VALUES
   (
     ( SELECT id FROM sso.groups WHERE name = 'normal'),
     ( SELECT id FROM sso.roles WHERE name = 'normal')
-  ),
-  (
-    ( SELECT id FROM sso.groups WHERE name = 'guest'),
-    ( SELECT id FROM sso.roles WHERE name = 'guest')
   );

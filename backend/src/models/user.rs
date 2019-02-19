@@ -112,6 +112,7 @@ pub fn create<T: GenericConnection>(
         role: Role {
             id: role_row.get("id"),
             name: role_row.get("name"),
+            permissions: vec![],
             created_time: role_row.get("created_time"),
             updated_time: role_row.get("updated_time"),
             removed_time: role_row.get("removed_time"),
@@ -193,6 +194,7 @@ pub fn auth<T: GenericConnection>(
                     role: Role {
                         id: row.get("role_id"),
                         name: row.get("role_name"),
+                        permissions: vec![],
                         created_time: row.get("role_created_time"),
                         updated_time: row.get("role_updated_time"),
                         removed_time: row.get("role_removed_time"),

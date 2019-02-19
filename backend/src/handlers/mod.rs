@@ -24,6 +24,7 @@ pub mod authorization;
 pub mod contact;
 pub mod gender;
 pub mod group;
+pub mod permission;
 pub mod profile;
 pub mod role;
 pub mod summary;
