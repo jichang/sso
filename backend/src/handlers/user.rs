@@ -7,9 +7,13 @@ use uuid::Uuid;
 
 use super::super::config_parser::Config;
 use super::super::guards::bearer;
+use super::super::guards::bearer::Claims;
 use super::super::guards::client_addr::ClientAddr;
 use super::super::models::audit;
-use super::super::models::audit::{Signin, SigninActivity, SigninActivityDetails};
+use super::super::models::audit::{
+    ChangePassword, ChangePasswordActivity, ChangePasswordActivityDetails, Signin, SigninActivity,
+    SigninActivityDetails,
+};
 use super::super::models::group::GroupId;
 use super::super::models::user;
 use super::super::models::user::User;
@@ -130,4 +134,31 @@ pub struct SignoutResponse {}
 #[post("/signout")]
 pub fn signout() -> Result<Json<SignoutResponse>, Error> {
     Ok(Json(SignoutResponse {}))
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct ChangePasswordParams {
+    old_password: String,
+    new_password: String,
+}
+
+#[post("/users/<user_id>/password", data = "<params>")]
+pub fn change_password(
+    config: State<Config>,
+    db: State<Database>,
+    client_addr: ClientAddr,
+    user_id: i64,
+    claims: Claims,
+    params: Json<ChangePasswordParams>,
+) -> Result<Json<()>, Error> {
+    if claims.uid == user_id {
+        let conn = db.get_conn()?;
+
+        match user::change_password(&*conn, user_id, &params.old_password, &params.new_password) {
+            Ok(()) => Ok(Json(())),
+            Err(model_err) => Err(Error::Model(model_err)),
+        }
+    } else {
+        Err(Error::Privilege)
+    }
 }

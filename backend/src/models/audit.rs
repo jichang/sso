@@ -32,6 +32,22 @@ pub struct SigninActivityDetails {
 
 pub type SigninActivity = Activity<Signin, SigninActivityDetails>;
 
+#[derive(Clone, Copy)]
+pub struct ChangePassword;
+
+impl ActivityType for ChangePassword {
+    fn to_i32(&self) -> i32 {
+        1
+    }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ChangePasswordActivityDetails {
+    pub is_succeed: bool,
+}
+
+pub type ChangePasswordActivity = Activity<ChangePassword, ChangePasswordActivityDetails>;
+
 pub fn create<C: GenericConnection, T: ActivityType, D: Serialize + Deserialize<'static>>(
     pg_conn: &C,
     username: &str,

@@ -23,6 +23,10 @@
           <context context-type="sourcefile">app/profile-page/profile-page.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/password-page/password-page.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="ba4f24bf9bf3dc4db3d6bc1b8b63339295f0b806" datatype="html">
         <source>Sign In</source>
@@ -180,6 +184,14 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/authorizations-page/authorizations-page.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/roles-page/roles-page.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/groups-page/groups-page.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
@@ -472,13 +484,20 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="5edf054f14aa57bc25a28cb7db01956fee53dac8" datatype="html">
+        <source>Change Password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings-page/settings-page.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="dcda7d76397986d2f2d129efc53e1827aa15a4d0" datatype="html">
         <source>
       Sign Out
     </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings-page/settings-page.component.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9b475bb63675494482effde989c7f1f18c232620" datatype="html">
@@ -637,6 +656,41 @@
         <context-group purpose="location">
           <context context-type="sourcefile">app/scope-create-page/scope-create-page.component.html</context>
           <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="93b50d284ded8246d2d63790befbbba9f83eb648" datatype="html">
+        <source>No Roles</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/roles-page/roles-page.component.html</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a07ba51116d4539698c8e69946fb54e88a7c081a" datatype="html">
+        <source>old password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/password-form/password-form.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4f94eaa3c972a07aae0605dc6d98e780c2804d3a" datatype="html">
+        <source>new password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/password-form/password-form.component.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="966ca7c5a5c2a131698322a3eaa54d88336950b2" datatype="html">
+        <source>confirm password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/password-form/password-form.component.html</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7568a255bae416b6fc4c485336ae0f2ec07272c0" datatype="html">
+        <source>Update Password</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/password-form/password-form.component.html</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
     </body>

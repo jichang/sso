@@ -221,3 +221,56 @@ pub fn auth<T: GenericConnection>(
         }
     }
 }
+
+pub fn change_password<T: GenericConnection>(
+    pg_conn: &T,
+    user_id: i64,
+    old_password: &str,
+    new_password: &str,
+) -> Result<(), ModelError> {
+    let plaintext = Plaintext::new(old_password)?;
+
+    let trans = pg_conn.transaction()?;
+
+    let stmt = r#"
+    SELECT id, salt, hash
+    FROM sso.accounts
+    WHERE user_id = $1;
+    "#;
+
+    let rows = trans.query(&stmt, &[&user_id])?;
+    if rows.len() == 0 {
+        Err(ModelError::NotFound)
+    } else {
+        let row = rows.get(0);
+        let account_id: i64 = row.get("id");
+        let hash: Vec<u8> = row.get("hash");
+        let salt: String = row.get("salt");
+
+        match crypto::compare(&plaintext, salt, hash) {
+            Ok(_) => {
+                let plaintext = Plaintext::new(new_password)?;
+                let ciphertext = crypto::generate(&plaintext)?;
+
+                let stmt = r#"
+                    UPDATE sso.accounts
+                    SET salt = $1, hash = $2
+                    WHERE user_id = $3
+                    RETURNING id
+                "#;
+                let rows = trans.query(&stmt, &[&ciphertext.salt, &ciphertext.hash, &user_id])?;
+                if rows.len() == 0 {
+                    Err(ModelError::NotFound)
+                } else {
+                    trans.set_commit();
+
+                    Ok(())
+                }
+            }
+            Err(err) => Err(ModelError::InvalidParam(
+                "old_password".to_string(),
+                Box::new(err),
+            )),
+        }
+    }
+}

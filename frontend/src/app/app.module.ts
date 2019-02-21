@@ -72,6 +72,8 @@ import {
   ResourceTypePipe,
   ActionTypePipe
 } from "./permission.pipe";
+import { PasswordPageComponent } from "./password-page/password-page.component";
+import { PasswordFormComponent } from './password-form/password-form.component';
 
 @Injectable()
 export class TrackableHttpOptions extends BaseRequestOptions {
@@ -122,6 +124,10 @@ const routes: Routes = [
   {
     path: "profile",
     component: ProfilePageComponent
+  },
+  {
+    path: "password",
+    component: PasswordPageComponent
   },
   {
     path: "authorizations",
@@ -189,7 +195,9 @@ const routes: Routes = [
     RolesListComponent,
     PermissionPipe,
     ResourceTypePipe,
-    ActionTypePipe
+    ActionTypePipe,
+    PasswordPageComponent,
+    PasswordFormComponent
   ],
   imports: [
     BrowserModule,
