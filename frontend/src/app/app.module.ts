@@ -73,7 +73,9 @@ import {
   ActionTypePipe
 } from "./permission.pipe";
 import { PasswordPageComponent } from "./password-page/password-page.component";
-import { PasswordFormComponent } from './password-form/password-form.component';
+import { PasswordFormComponent } from "./password-form/password-form.component";
+import { GroupsListComponent } from "./groups-list/groups-list.component";
+import { GroupModelService } from "./group-model.service";
 
 @Injectable()
 export class TrackableHttpOptions extends BaseRequestOptions {
@@ -197,7 +199,8 @@ const routes: Routes = [
     ResourceTypePipe,
     ActionTypePipe,
     PasswordPageComponent,
-    PasswordFormComponent
+    PasswordFormComponent,
+    GroupsListComponent
   ],
   imports: [
     BrowserModule,
@@ -216,6 +219,7 @@ const routes: Routes = [
     { provide: ApplicationModelService, useClass: ApplicationModelService },
     { provide: ContactModelService, useClass: ContactModelService },
     { provide: ScopeModelService, useClass: ScopeModelService },
+    { provide: GroupModelService, useClass: GroupModelService },
     { provide: TokenModelService, useClass: TokenModelService },
     { provide: AuthorizationModelService, useClass: AuthorizationModelService },
     {

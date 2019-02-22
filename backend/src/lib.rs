@@ -73,6 +73,7 @@ pub fn create(config_file: &str) -> Rocket {
                 handlers::user::signin,
                 handlers::user::signout,
                 handlers::user::change_password,
+                handlers::group::select_groups,
                 handlers::summary::select_summary,
                 handlers::contact::select_types,
                 handlers::contact::create_contact,

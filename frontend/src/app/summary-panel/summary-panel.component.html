@@ -21,6 +21,28 @@
       </div>
     </mat-card-content>
   </mat-card>
+  <mat-card *ngIf="summary.authorizations.enabled">
+    <mat-card-content>
+      <div class="flex__box">
+        <div class="flex__item">
+          <h4 i18n>Authorizations</h4>
+          <div>
+            <span i18n>Total:</span>
+            <span>{{ summary.authorizations.total }}</span>
+            <span> / </span>
+            <span i18n>Used:</span
+            ><span> {{ summary.authorizations.used }}</span>
+          </div>
+        </div>
+        <div>
+          <a [routerLink]="['authorizations']"
+            ><span i18n>Details</span>
+            <mat-icon>chevron_right</mat-icon>
+          </a>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
   <mat-card *ngIf="summary.roles.enabled">
     <mat-card-content>
       <div class="flex__box">
@@ -80,28 +102,6 @@
         </div>
         <div>
           <a [routerLink]="['applications']"
-            ><span i18n>Details</span>
-            <mat-icon>chevron_right</mat-icon>
-          </a>
-        </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
-  <mat-card *ngIf="summary.authorizations.enabled">
-    <mat-card-content>
-      <div class="flex__box">
-        <div class="flex__item">
-          <h4 i18n>Authorizations</h4>
-          <div>
-            <span i18n>Total:</span>
-            <span>{{ summary.authorizations.total }}</span>
-            <span> / </span>
-            <span i18n>Used:</span
-            ><span> {{ summary.authorizations.used }}</span>
-          </div>
-        </div>
-        <div>
-          <a [routerLink]="['authorizations']"
             ><span i18n>Details</span>
             <mat-icon>chevron_right</mat-icon>
           </a>
