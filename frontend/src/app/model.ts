@@ -1,5 +1,10 @@
 import { Contact } from "./contact-model.service";
 
+export interface PaginatorParams {
+  offset: number;
+  limit: number;
+}
+
 export enum GenderType {
   Male = 1,
   Female,
@@ -31,6 +36,11 @@ export interface User {
   password: string;
   contacts: Contact[];
   status: number;
+}
+
+export interface ResourceCollection<T> {
+  total: number;
+  items: T[];
 }
 
 export let session = {

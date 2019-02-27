@@ -14,6 +14,7 @@ pub struct SummaryQuota {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Summary {
+    users: SummaryQuota,
     roles: SummaryQuota,
     groups: SummaryQuota,
     applications: SummaryQuota,
@@ -28,6 +29,7 @@ pub fn select<T: GenericConnection>(
 ) -> Result<Summary, ModelError> {
     let stmt = r#"
     SELECT 
+        (SELECT count(*) FROM sso.users) as users_used,
         (SELECT count(*) FROM sso.roles) as roles_used,
         (SELECT count(*) FROM sso.groups) as groups_used,
         (SELECT count(*) FROM sso.applications WHERE user_id = $1) as applications_used,
@@ -41,6 +43,8 @@ pub fn select<T: GenericConnection>(
     }
 
     let row = rows.get(0);
+    let users_enabled = permissions.contains(ResourceType::User, ActionType::CREATE);
+    let users_used: i64 = row.get("users_used");
     let roles_enabled = permissions.contains(ResourceType::Role, ActionType::CREATE);
     let roles_used: i64 = row.get("roles_used");
     let groups_enabled = permissions.contains(ResourceType::Group, ActionType::CREATE);
@@ -51,14 +55,19 @@ pub fn select<T: GenericConnection>(
     let contacts_used: i64 = row.get("contacts_used");
 
     Ok(Summary {
+        users: SummaryQuota {
+            enabled: users_enabled,
+            total: i64::max_value(),
+            used: if users_enabled { users_used } else { 0 },
+        },
         roles: SummaryQuota {
             enabled: roles_enabled,
-            total: QUOTA_LIMIT,
+            total: i64::max_value(),
             used: if roles_enabled { roles_used } else { 0 },
         },
         groups: SummaryQuota {
             enabled: groups_enabled,
-            total: QUOTA_LIMIT,
+            total: i64::max_value(),
             used: if groups_enabled { groups_used } else { 0 },
         },
         applications: SummaryQuota {

@@ -14,9 +14,17 @@
     </mat-toolbar>
   </header>
   <section class="page__body">
-    <groups-list [groups]="groups"></groups-list>
-    <div *ngIf="groups.length === 0" class="placeholder--list">
-      <span i18n>No Groups</span>
+    <users-list [users]="store.users"></users-list>
+    <div *ngIf="store.total === 0" class="placeholder--list">
+      <span i18n>No Users</span>
     </div>
+    <mat-paginator
+      *ngIf="store.total !== 0"
+      [length]="store.total"
+      [pageSize]="paginatorParams.limit"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="changePage($event)"
+    >
+    </mat-paginator>
   </section>
 </div>

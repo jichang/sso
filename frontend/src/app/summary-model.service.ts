@@ -10,6 +10,7 @@ export interface SummaryQuota {
 }
 
 export interface Summary {
+  users: SummaryQuota;
   roles: SummaryQuota;
   groups: SummaryQuota;
   applications: SummaryQuota;

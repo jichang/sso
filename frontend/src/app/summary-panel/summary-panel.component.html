@@ -43,6 +43,28 @@
       </div>
     </mat-card-content>
   </mat-card>
+  <mat-card *ngIf="summary.users.enabled">
+    <mat-card-content>
+      <div class="flex__box">
+        <div class="flex__item">
+          <h4 i18n>Users</h4>
+          <div>
+            <span i18n>Total: </span>
+            <span>{{ summary.users.total }}</span>
+            <span> / </span>
+            <span i18n>Used: </span>
+            <span>{{ summary.users.used }}</span>
+          </div>
+        </div>
+        <div>
+          <a [routerLink]="['users']"
+            ><span i18n>Details</span>
+            <mat-icon>chevron_right</mat-icon>
+          </a>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
   <mat-card *ngIf="summary.roles.enabled">
     <mat-card-content>
       <div class="flex__box">

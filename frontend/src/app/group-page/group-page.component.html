@@ -1,3 +1,44 @@
-<p>
-  group-page works!
-</p>
+<div class="page">
+  <header class="page__header">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <div class="flex__item">
+          <div class="tools">
+            <a [routerLink]="['..']">
+              <mat-icon>chevron_left</mat-icon>
+              <span i18n="title of groups page">Groups</span>
+            </a>
+          </div>
+        </div>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </header>
+  <section class="page__body">
+    <table mat-table matSort [dataSource]="users">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
+        <td mat-cell *matCellDef="let user">{{ user.account.username }}</td>
+      </ng-container>
+      <ng-container matColumnDef="group_name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Group</th>
+        <td mat-cell *matCellDef="let user">{{ user.role.name }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let myRowData; columns: columns"></tr>
+    </table>
+
+    <div *ngIf="users.length === 0" class="placeholder--list">
+      <span i18n>No Users</span>
+    </div>
+
+    <mat-paginator
+      *ngIf="users.length !== 0"
+      [length]="users.length"
+      [pageSize]="paginatorParams.limit"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="changePage($event)"
+    >
+    </mat-paginator>
+  </section>
+</div>

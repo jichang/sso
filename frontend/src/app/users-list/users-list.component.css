@@ -1,0 +1,12 @@
+table {
+  width: 100%;
+}
+
+td:last-child {
+  text-align: right;
+}
+
+a span,
+a .mat-icon {
+  vertical-align: middle;
+}

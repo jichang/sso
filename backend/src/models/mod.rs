@@ -1,3 +1,4 @@
+use serde::{Deserialize, Serialize};
 use serde_json::Error as JsonError;
 use std::convert::From;
 use std::error::Error as StdError;
@@ -26,6 +27,7 @@ use self::crypto::Error as CryptoError;
 use self::mailer::MailerError;
 use self::username::Error as UsernameError;
 use postgres::error::Error as PgError;
+use rocket::request::Form;
 
 #[derive(Debug)]
 pub enum Error {
@@ -100,4 +102,16 @@ impl From<MailerError> for Error {
     fn from(err: MailerError) -> Error {
         Error::Mailer(err)
     }
+}
+
+#[derive(Serialize, Deserialize, FromForm)]
+pub struct PaginatorParams {
+    pub limit: i64,
+    pub offset: i64,
+}
+
+#[derive(Serialize)]
+pub struct ResourceCollection<T: Serialize> {
+    total: i64,
+    items: Vec<T>,
 }

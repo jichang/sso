@@ -130,8 +130,7 @@ impl From<FromUtf8Error> for Error {
 
 impl<'r> Responder<'r> for Error {
     fn respond_to(self, _req: &Request) -> Result<Response<'r>, HttpStatus> {
-        println!("{}", self);
-
+        println!("{:?}", self);
         let mut body = HashMap::new();
 
         let status = match self {

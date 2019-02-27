@@ -1,5 +1,7 @@
+use super::super::models::ResourceCollection;
 use chrono::{Duration, Utc};
 use rocket::http::{Cookie, Cookies};
+use rocket::request::Form;
 use rocket::response::status::Created;
 use rocket::State;
 use rocket_contrib::json::Json;
@@ -9,14 +11,17 @@ use super::super::config_parser::Config;
 use super::super::guards::bearer;
 use super::super::guards::bearer::Claims;
 use super::super::guards::client_addr::ClientAddr;
+use super::super::guards::permission::Permissions;
 use super::super::models::audit;
 use super::super::models::audit::{
     ChangePassword, ChangePasswordActivity, ChangePasswordActivityDetails, Signin, SigninActivity,
     SigninActivityDetails,
 };
 use super::super::models::group::GroupId;
+use super::super::models::permission::{ActionType, ResourceType};
 use super::super::models::user;
 use super::super::models::user::User;
+use super::super::models::PaginatorParams;
 use super::super::storage::Database;
 use super::Error;
 
@@ -49,7 +54,7 @@ pub fn signup(
         union_id,
         &params.username,
         &params.password,
-        GroupId::Normal as i64,
+        GroupId::Guest as i64,
     )?;
     let url = String::from("/users/self");
 
@@ -160,5 +165,25 @@ pub fn change_password(
         }
     } else {
         Err(Error::Privilege)
+    }
+}
+
+#[get("/users?<group_id>&<paginator_params..>")]
+pub fn select_users(
+    config: State<Config>,
+    db: State<Database>,
+    client_addr: ClientAddr,
+    permissions: Permissions,
+    group_id: Option<i64>,
+    paginator_params: Form<PaginatorParams>,
+) -> Result<Json<ResourceCollection<User>>, Error> {
+    if permissions.contains(ResourceType::User, ActionType::SELECT) {
+        let conn = db.get_conn()?;
+
+        let users = user::select_users(&*conn, group_id, &paginator_params)?;
+
+        Ok(Json(users))
+    } else {
+        Err(Error::Forbidden)
     }
 }

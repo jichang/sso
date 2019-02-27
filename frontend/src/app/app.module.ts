@@ -76,6 +76,8 @@ import { PasswordPageComponent } from "./password-page/password-page.component";
 import { PasswordFormComponent } from "./password-form/password-form.component";
 import { GroupsListComponent } from "./groups-list/groups-list.component";
 import { GroupModelService } from "./group-model.service";
+import { UsersPageComponent } from "./users-page/users-page.component";
+import { UsersListComponent } from './users-list/users-list.component';
 
 @Injectable()
 export class TrackableHttpOptions extends BaseRequestOptions {
@@ -148,6 +150,10 @@ const routes: Routes = [
     component: GroupPageComponent
   },
   {
+    path: "users",
+    component: UsersPageComponent
+  },
+  {
     path: "oauth",
     component: OauthPageComponent
   }
@@ -200,7 +206,9 @@ const routes: Routes = [
     ActionTypePipe,
     PasswordPageComponent,
     PasswordFormComponent,
-    GroupsListComponent
+    GroupsListComponent,
+    UsersPageComponent,
+    UsersListComponent
   ],
   imports: [
     BrowserModule,
