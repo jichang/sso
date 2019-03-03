@@ -13,34 +13,40 @@
   </header>
   <section class="page__body">
     <mat-card>
-      <mat-card-content>
-        <div *ngIf="authorization.client_app">
-          <p i18n>Request Application</p>
-          <h4>{{ authorization.client_app.name }}</h4>
-        </div>
-        <mat-divider></mat-divider>
-        <div *ngIf="authorization.server_app">
-          <p i18n>Authorize Application</p>
-          <h4>{{ authorization.server_app.name }}</h4>
-        </div>
-        <div *ngIf="authorization.scope">
-          <p i18n>Priviledge</p>
-          <h4>{{ authorization.scope.name }}</h4>
-          <p>{{ authorization.scope.description }}</p>
-        </div>
-        <div>
-          <button mat-button type="button" i18n>Cancel</button>
-          <button
-            mat-flat-button
-            color="primary"
-            type="button"
-            (click)="authorize()"
-            i18n
-          >
-            Authorize
-          </button>
-        </div>
+      <mat-card-content *ngIf="authorization">
+        <table>
+          <tr>
+            <td><span i18n>Request Application</span></td>
+            <td>
+              <p>{{ authorization.client_app.name }}</p>
+            </td>
+          </tr>
+          <tr>
+            <td><span i18n>Authorize Application</span></td>
+            <td>
+              <p>{{ authorization.server_app.name }}</p>
+            </td>
+          </tr>
+          <tr>
+            <td><span i18n>Priviledge</span></td>
+            <td>
+              <p>{{ authorization.scope.description }}</p>
+            </td>
+          </tr>
+        </table>
       </mat-card-content>
+      <mat-card-actions>
+        <button mat-button type="button" i18n>Cancel</button>
+        <button
+          mat-flat-button
+          color="primary"
+          type="button"
+          (click)="authorize()"
+          i18n
+        >
+          Authorize
+        </button>
+      </mat-card-actions>
     </mat-card>
   </section>
 </div>

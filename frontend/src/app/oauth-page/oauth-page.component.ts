@@ -8,6 +8,7 @@ import {
 import { Scope } from "../scope-model.service";
 import { Authorization } from "../authorization-model.service";
 import { session } from "../model";
+import { MatSnackBar } from "@angular/material";
 
 interface OauthParams {
   server_id: string;
@@ -24,13 +25,14 @@ interface OauthParams {
   styleUrls: ["./oauth-page.component.css"]
 })
 export class OauthPageComponent implements OnInit {
-  authorization: Authorization;
+  authorization?: Authorization;
   params: OauthParams;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private snackBar: MatSnackBar
   ) {
     this.params = {
       server_id: this.route.snapshot.queryParams["server_id"],
@@ -41,12 +43,7 @@ export class OauthPageComponent implements OnInit {
       state: this.route.snapshot.queryParams["state"]
     };
 
-    this.authorization = {
-      id: -1,
-      client_app: null,
-      server_app: null,
-      scope: null
-    };
+    this.authorization = null;
   }
 
   queryAuthorization() {
@@ -87,12 +84,25 @@ export class OauthPageComponent implements OnInit {
     let user = session.currUser();
     let apiUri = "/api/v1/users/" + user.id + "/authorizations";
 
-    this.http.post(apiUri, this.params, options).subscribe((response: any) => {
-      let redirectUri = new URL(this.params.redirect_uri);
-      redirectUri.searchParams.append("code", response.code);
-      redirectUri.searchParams.append("state", response.state);
+    this.http.post(apiUri, this.params, options).subscribe(
+      (response: any) => {
+        let redirectUri = new URL(this.params.redirect_uri);
+        redirectUri.searchParams.append("code", response.code);
+        redirectUri.searchParams.append("state", response.state);
 
-      window.location.href = redirectUri.toString();
-    });
+        window.location.href = redirectUri.toString();
+      },
+      err => {
+        switch (err.status) {
+          case 422:
+            this.snackBar.open("Invalid authorization", "Dismiss", {
+              duration: 3000
+            });
+            break;
+          default:
+            break;
+        }
+      }
+    );
   }
 }
