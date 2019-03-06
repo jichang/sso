@@ -34,7 +34,7 @@ export class TokenInterceptorService implements HttpInterceptor {
       let redirectUrl = this.router.url;
       this.router.navigate(["/signin"], {
         queryParams: {
-          redirectUrl
+          redirectUrl: encodeURIComponent(redirectUrl)
         }
       });
     }

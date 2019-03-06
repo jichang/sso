@@ -25,7 +25,7 @@ export class SigninPageComponent implements OnInit {
     this.route.queryParamMap.subscribe(params => {
       const redirectUrl = params.get("redirectUrl");
       if (redirectUrl) {
-        this.router.navigate([redirectUrl]);
+        window.location.href = decodeURIComponent(redirectUrl);
       } else {
         this.router.navigate(["/"]);
       }

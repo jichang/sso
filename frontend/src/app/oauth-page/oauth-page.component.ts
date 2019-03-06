@@ -82,27 +82,36 @@ export class OauthPageComponent implements OnInit {
     };
 
     let user = session.currUser();
-    let apiUri = "/api/v1/users/" + user.id + "/authorizations";
-
-    this.http.post(apiUri, this.params, options).subscribe(
-      (response: any) => {
-        let redirectUri = new URL(this.params.redirect_uri);
-        redirectUri.searchParams.append("code", response.code);
-        redirectUri.searchParams.append("state", response.state);
-
-        window.location.href = redirectUri.toString();
-      },
-      err => {
-        switch (err.status) {
-          case 422:
-            this.snackBar.open("Invalid authorization", "Dismiss", {
-              duration: 3000
-            });
-            break;
-          default:
-            break;
+    if (!user) {
+      let redirectUrl = this.router.url;
+      this.router.navigate(["/signin"], {
+        queryParams: {
+          redirectUrl: encodeURIComponent(redirectUrl)
         }
-      }
-    );
+      });
+    } else {
+      let apiUri = "/api/v1/users/" + user.id + "/authorizations";
+
+      this.http.post(apiUri, this.params, options).subscribe(
+        (response: any) => {
+          let redirectUri = new URL(this.params.redirect_uri);
+          redirectUri.searchParams.append("code", response.code);
+          redirectUri.searchParams.append("state", response.state);
+
+          window.location.href = redirectUri.toString();
+        },
+        err => {
+          switch (err.status) {
+            case 422:
+              this.snackBar.open("Invalid authorization", "Dismiss", {
+                duration: 3000
+              });
+              break;
+            default:
+              break;
+          }
+        }
+      );
+    }
   }
 }

@@ -392,10 +392,10 @@ pub fn verify<T: GenericConnection>(
     let stmt = r#"
         SELECT authorizations.open_id
         FROM sso.authorizations as authorizations
-        LEFT JOIN sso.applications as client_apps ON authorizations.client_id = client_apps.id
+        LEFT JOIN sso.applications as applications ON authorizations.client_id = applications.id
         WHERE authorizations.id = $1
-          AND client_apps.client_id = $2
-          AND client_apps.client_secret = $3
+          AND applications.client_id = $2
+          AND applications.client_secret = $3
     "#;
 
     let rows = pg_conn.query(&stmt, &[&authorization_id, &client_id, &client_secret])?;
