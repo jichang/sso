@@ -26,6 +26,11 @@ pub struct CreateTokenParams {
     action: String,
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct CreateTokenResponse {
+    token: Option<String>,
+}
+
 #[post("/users/<user_id>/tokens", data = "<params>")]
 pub fn create_token(
     config: State<Config>,
@@ -33,7 +38,7 @@ pub fn create_token(
     user_id: i64,
     params: Json<CreateTokenParams>,
     claims: Claims,
-) -> Result<Created<Json<()>>, Error> {
+) -> Result<Created<Json<CreateTokenResponse>>, Error> {
     if claims.uid == user_id {
         let redis_conn = cache.get_conn()?;
         let token = common::gen_rand_bytes(TOKEN_SIZE)?;
@@ -43,15 +48,22 @@ pub fn create_token(
         );
         let _: String = redis_conn.set_ex(&key, hex::encode(&token), TOKEN_EXPIRE_DURATION)?;
 
-        let _ = mailer::send_token(
-            &config,
-            params.target_id,
-            &params.target_identity,
-            &hex::encode(&token),
-        )?;
-
         let url = String::from("/tokens");
-        Ok(Created(url, Some(Json(()))))
+        if params.target_type == "email" && params.action == "verify" {
+            let _ = mailer::send_token(
+                &config,
+                params.target_id,
+                &params.target_identity,
+                &hex::encode(&token),
+            )?;
+
+            Ok(Created(
+                url,
+                Some(Json(CreateTokenResponse { token: None })),
+            ))
+        } else {
+            Err(Error::Params)
+        }
     } else {
         Err(Error::Privilege)
     }
@@ -84,9 +96,11 @@ pub fn delete_token(
         match token_result {
             Some(token) => {
                 if token == params.token {
-                    let pg_conn = db.get_conn()?;
-                    let _ = contact::verify(&*pg_conn, user_id, params.target_id)?;
-                    let _: () = redis_conn.del(&key)?;
+                    if params.target_type == "email" && params.action == "verify" {
+                        let pg_conn = db.get_conn()?;
+                        let _ = contact::verify(&*pg_conn, user_id, params.target_id)?;
+                        let _: () = redis_conn.del(&key)?;
+                    }
 
                     Ok(Json(()))
                 } else {

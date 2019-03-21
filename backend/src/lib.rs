@@ -21,9 +21,13 @@ extern crate rocket_contrib;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
+extern crate base32;
 extern crate mime;
+extern crate oath;
+extern crate qrcodegen;
 extern crate serde_json;
 extern crate serde_repr;
+extern crate time;
 extern crate toml;
 extern crate url;
 extern crate uuid;
@@ -74,9 +78,14 @@ pub fn create(config_file: &str) -> Rocket {
                 handlers::user::signout,
                 handlers::user::change_password,
                 handlers::user::select_users,
+                handlers::user::verify_totp,
+                handlers::totp::select_qrcode,
+                handlers::totp::update_totp,
                 handlers::group::select_groups,
                 handlers::group::select_users,
                 handlers::summary::select_summary,
+                handlers::preference::select_preferences,
+                handlers::preference::create_preference,
                 handlers::contact::select_types,
                 handlers::contact::create_contact,
                 handlers::contact::select_contacts,

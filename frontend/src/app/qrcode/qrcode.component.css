@@ -1,0 +1,35 @@
+.qrcode {
+  display: inline-block;
+  padding: 1rem;
+  margin: 0 auto;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.qrcode__table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.qrcode__table tbody {
+  display: table-row-group;
+  vertical-align: middle;
+  border-color: inherit;
+}
+
+.qrcode__table tr,
+.qrcode__table td {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+.qrcode__square {
+  width: 3px;
+  height: 3px;
+
+  background: white;
+}
+
+.qrcode__square--dark {
+  background: black;
+}

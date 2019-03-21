@@ -1,10 +1,12 @@
 use super::super::models::ResourceCollection;
 use chrono::{Duration, Utc};
+use oath::{totp_raw_now, HashType};
 use rocket::http::{Cookie, Cookies};
 use rocket::request::Form;
 use rocket::response::status::Created;
 use rocket::State;
 use rocket_contrib::json::Json;
+use serde_repr::*;
 use uuid::Uuid;
 
 use super::super::config_parser::Config;
@@ -19,6 +21,9 @@ use super::super::models::audit::{
 };
 use super::super::models::group::GroupId;
 use super::super::models::permission::{ActionType, ResourceType};
+use super::super::models::preference;
+use super::super::models::preference::{Preference, PreferenceKey};
+use super::super::models::totp;
 use super::super::models::user;
 use super::super::models::user::User;
 use super::super::models::PaginatorParams;
@@ -27,10 +32,19 @@ use super::Error;
 
 pub const UNION_ID_LEN: usize = 32;
 
+#[derive(Debug, Serialize_repr, Deserialize_repr, Clone, Copy, Eq, PartialEq, Ord, PartialOrd)]
+#[repr(u8)]
+pub enum AuthState {
+    PASS = 0,
+    NEED_TOTP = 1,
+    NEED_WEBAUTHN = 2,
+}
+
 #[derive(Serialize, Deserialize)]
 pub struct Auth {
-    user: User,
-    jwt: String,
+    state: AuthState,
+    user: Option<User>,
+    jwt: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -56,15 +70,15 @@ pub fn signup(
         &params.password,
         GroupId::Guest as i64,
     )?;
-    let url = String::from("/users/self");
 
-    cookies.add_private(Cookie::new("identity", new_user.id.to_string()));
+    let url = String::from("/users/self");
 
     let jwt = bearer::encode(&config.jwt.secret, &new_user)?;
 
     let auth = Auth {
-        user: new_user,
-        jwt: jwt,
+        state: AuthState::PASS,
+        user: Some(new_user),
+        jwt: Some(jwt),
     };
 
     Ok(Created(url, Some(Json(auth))))
@@ -100,7 +114,6 @@ pub fn signin(
     } else {
         match user::auth(&*conn, &params.username, &params.password) {
             Ok(auth_user) => {
-                let jwt = bearer::encode(&config.jwt.secret, &auth_user)?;
                 let activity = SigninActivity {
                     client_addr: client_addr.0,
                     happened_time: Utc::now(),
@@ -111,11 +124,27 @@ pub fn signin(
 
                 cookies.add_private(Cookie::new("identity", auth_user.id.to_string()));
 
-                let auth = Auth {
-                    user: auth_user,
-                    jwt: jwt,
-                };
+                let preferences = preference::select(&*conn, auth_user.id)?;
+                let totp_preference = preferences.iter().find(|preference| {
+                    preference.key == PreferenceKey::SIGNIN_TOTP as i32
+                        && preference.enabled == true
+                });
 
+                let auth = match totp_preference {
+                    Some(_) => Auth {
+                        state: AuthState::NEED_TOTP,
+                        user: None,
+                        jwt: None,
+                    },
+                    None => {
+                        let jwt = bearer::encode(&config.jwt.secret, &auth_user)?;
+                        Auth {
+                            state: AuthState::PASS,
+                            user: Some(auth_user),
+                            jwt: Some(jwt),
+                        }
+                    }
+                };
                 Ok(Json(auth))
             }
             Err(model_err) => {
@@ -130,6 +159,46 @@ pub fn signin(
                 Err(Error::Model(model_err))
             }
         }
+    }
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct TotpVerifyParams {
+    code: u64,
+}
+
+#[post("/signin/totp", data = "<params>")]
+pub fn verify_totp(
+    db: State<Database>,
+    mut cookies: Cookies,
+    config: State<Config>,
+    params: Json<TotpVerifyParams>,
+) -> Result<Json<Auth>, Error> {
+    match cookies.get_private("identity") {
+        Some(identity) => {
+            let conn = db.get_conn()?;
+            match identity.value().parse::<i64>() {
+                Ok(user_id) => {
+                    let is_valid = totp::verify(&*conn, user_id, params.code)?;
+                    if (is_valid) {
+                        let auth_user = user::select_user(&*conn, user_id)?;
+                        let jwt = bearer::encode(&config.jwt.secret, &auth_user)?;
+
+                        cookies.remove_private(Cookie::named("identity"));
+
+                        Ok(Json(Auth {
+                            state: AuthState::PASS,
+                            user: Some(auth_user),
+                            jwt: Some(jwt),
+                        }))
+                    } else {
+                        Err(Error::Params)
+                    }
+                }
+                Err(_err) => Err(Error::Params),
+            }
+        }
+        None => Err(Error::Params),
     }
 }
 

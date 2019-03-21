@@ -1,0 +1,55 @@
+<div class="page">
+  <header class="page__header">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <div class="flex__item">
+          <div class="tools">
+            <a [routerLink]="['/settings']">
+              <mat-icon>chevron_left</mat-icon>
+              <span i18n>Settings</span>
+            </a>
+          </div>
+        </div>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </header>
+  <section class="page__body">
+    <mat-tab-group mat-align-tabs="center">
+      <mat-tab label="TOTP">
+        <form
+          class="form form--totp"
+          [formGroup]="totpForm"
+          (ngSubmit)="setupTOTP(totpForm)"
+        >
+          <div class="form__field">
+            <qrcode *ngIf="totp" [data]="totp.qrcodeConfig"></qrcode>
+          </div>
+          <mat-form-field>
+            <input
+              matInput
+              type="text"
+              id="totp-code"
+              placeholder="Totp Code"
+              name="code"
+              formControlName="code"
+              i18n-placeholder
+            />
+          </mat-form-field>
+          <div>
+            <button
+              mat-flat-button
+              color="primary"
+              [disabled]="!totpForm.valid"
+              i18n
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </mat-tab>
+      <mat-tab label="WebAuthn">
+        <h1>Some more tab content</h1>
+      </mat-tab>
+    </mat-tab-group>
+  </section>
+</div>

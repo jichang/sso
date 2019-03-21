@@ -1,0 +1,13 @@
+<div class="qrcode">
+  <table class="qrcode__table" cellspacing="0" cellpadding="0">
+    <tbody>
+      <tr *ngFor="let module of data.modules">
+        <td
+          *ngFor="let point of module"
+          class="qrcode__square"
+          [ngClass]="{ 'qrcode__square--dark': point }"
+        ></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

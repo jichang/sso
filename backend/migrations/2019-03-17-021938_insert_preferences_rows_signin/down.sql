@@ -1,0 +1,1 @@
+DELETE FROM sso.preferences WHERE key = 0 OR key = 1;

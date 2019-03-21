@@ -7,3 +7,5 @@ port = 5051
 [production]
 address = "127.0.0.1"
 port = 5051
+[global]
+secret_key = "itlYmFR2vYKrOmFhupMIn/hyB6lYCCTXz4yaQX89XVg="

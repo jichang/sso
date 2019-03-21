@@ -2,6 +2,13 @@ import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { session } from "../model";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import {
+  PreferenceService,
+  Preference,
+  PREFERENCES
+} from "../preference.service";
+import { Subscription } from "rxjs";
+import { MatSnackBar, MatSlideToggleChange } from "@angular/material";
 
 @Component({
   selector: "settings-page",
@@ -9,9 +16,56 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
   styleUrls: ["./settings-page.component.css"]
 })
 export class SettingsPageComponent implements OnInit {
-  constructor(private router: Router, private http: HttpClient) {}
+  PREFERENCES = PREFERENCES;
+  preferences: {
+    [index: number]: Preference;
+  } = {};
+  preferencesSubscription: Subscription;
 
-  ngOnInit() {}
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+    private preferenceService: PreferenceService,
+    private snackBar: MatSnackBar
+  ) {}
+
+  ngOnInit() {
+    this.preferencesSubscription = this.preferenceService.preferences.subscribe(
+      preferences => {
+        this.preferences = {};
+        for (let preference of preferences) {
+          this.preferences[preference.key] = preference;
+        }
+      },
+      err => {
+        if (err.status === 403) {
+          this.snackBar.open("action is forbidden", "Dismiss", {
+            duration: 3000
+          });
+        }
+      }
+    );
+
+    let currUser = session.currUser();
+    if (currUser) {
+      this.preferenceService.sync(currUser.id);
+    } else {
+      this.router.navigate(["signin"]);
+    }
+  }
+
+  updatePreference(evt: MatSlideToggleChange, key: number) {
+    let currUser = session.currUser();
+    if (currUser) {
+      this.preferenceService.update(currUser.id, {
+        key,
+        enabled: evt.checked,
+        details: {}
+      });
+    } else {
+      this.router.navigate(["signin"]);
+    }
+  }
 
   signOut() {
     let headers = new HttpHeaders({

@@ -1,0 +1,12 @@
+.form--totp {
+  display: block;
+  margin: 0 auto;
+
+  width: 30rem;
+
+  text-align: center;
+}
+
+.form--totp .form__field {
+  margin: 1rem;
+}

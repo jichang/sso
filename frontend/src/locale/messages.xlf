@@ -132,7 +132,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/oauth-page/oauth-page.component.html</context>
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0f8d412b21b180c72c06ba7b5bb3f19a705965b3" datatype="html">
@@ -411,30 +411,30 @@
         <source>Request Application</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/oauth-page/oauth-page.component.html</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e636a0520c1797b64f64299317069d0d9d148fb3" datatype="html">
         <source>Authorize Application</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/oauth-page/oauth-page.component.html</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6880a77f3d67b95e66d6c1b60673dff91c089849" datatype="html">
         <source>Priviledge</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/oauth-page/oauth-page.component.html</context>
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="8a51ce77409feae59d2c1baa4dab5c1e1768b0b0" datatype="html">
+      <trans-unit id="572b744f792f44690520ebef3a48058934a956c4" datatype="html">
         <source>
-            Authorize
-          </source>
+          Authorize
+        </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/oauth-page/oauth-page.component.html</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="67a94bdfbc3ae31c30b69b11676f19e03256232b" datatype="html">
@@ -507,13 +507,20 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="f9f9ac530d2b0671df43fa83b32e36c1617eee07" datatype="html">
+        <source>Enable WebAuthn</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings-page/settings-page.component.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="dcda7d76397986d2f2d129efc53e1827aa15a4d0" datatype="html">
         <source>
       Sign Out
     </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings-page/settings-page.component.html</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9b475bb63675494482effde989c7f1f18c232620" datatype="html">

@@ -14,12 +14,14 @@ pub mod email;
 pub mod group;
 pub mod mailer;
 pub mod permission;
+pub mod preference;
 pub mod profile;
 pub mod ratelimit;
 pub mod role;
 pub mod summary;
 pub mod ticket;
 pub mod token;
+pub mod totp;
 pub mod user;
 pub mod username;
 

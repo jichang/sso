@@ -4,10 +4,20 @@
       <mat-card-title i18n>Sign In</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <signin-form
-        (success)="signined($event)"
-        (failure)="failure($event)"
-      ></signin-form>
+      <div [ngSwitch]="step">
+        <div *ngSwitchCase="SigninStep.PASSWORD">
+          <signin-form
+            (success)="passwordPassed($event)"
+            (failure)="failure($event)"
+          ></signin-form>
+        </div>
+        <div *ngSwitchCase="SigninStep.TOTP">
+          <totp-form
+            (success)="totpPassed($event)"
+            (failure)="failure($event)"
+          ></totp-form>
+        </div>
+      </div>
     </mat-card-content>
   </mat-card>
 

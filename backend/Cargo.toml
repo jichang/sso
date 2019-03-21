@@ -29,3 +29,7 @@ uuid = { version = "0.5", features = ["serde", "v4", "v5"] }
 r2d2 = "*"
 r2d2_redis = "*"
 r2d2_postgres = "*"
+qrcodegen = "*"
+base32 = "*"
+oath = "*"
+time = "*"

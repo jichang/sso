@@ -77,7 +77,10 @@ import { PasswordFormComponent } from "./password-form/password-form.component";
 import { GroupsListComponent } from "./groups-list/groups-list.component";
 import { GroupModelService } from "./group-model.service";
 import { UsersPageComponent } from "./users-page/users-page.component";
-import { UsersListComponent } from './users-list/users-list.component';
+import { UsersListComponent } from "./users-list/users-list.component";
+import { TwoFaPageComponent } from "./two-fa-page/two-fa-page.component";
+import { QrcodeComponent } from "./qrcode/qrcode.component";
+import { TotpFormComponent } from './totp-form/totp-form.component';
 
 @Injectable()
 export class TrackableHttpOptions extends BaseRequestOptions {
@@ -132,6 +135,10 @@ const routes: Routes = [
   {
     path: "password",
     component: PasswordPageComponent
+  },
+  {
+    path: "2fa",
+    component: TwoFaPageComponent
   },
   {
     path: "authorizations",
@@ -208,7 +215,10 @@ const routes: Routes = [
     PasswordFormComponent,
     GroupsListComponent,
     UsersPageComponent,
-    UsersListComponent
+    UsersListComponent,
+    TwoFaPageComponent,
+    QrcodeComponent,
+    TotpFormComponent
   ],
   imports: [
     BrowserModule,

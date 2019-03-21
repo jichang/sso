@@ -39,7 +39,7 @@ export class TokenModelService {
     let httpParams = new HttpParams()
       .set("target_id", params.target_id.toString())
       .set("target_type", params.target_type)
-      .set("action", "verify")
+      .set("action", params.action)
       .set("token", params.token);
 
     let apiUri = `/api/v1/users/${session.currUser().id}/tokens`;

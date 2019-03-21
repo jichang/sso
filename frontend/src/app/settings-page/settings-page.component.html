@@ -14,22 +14,52 @@
     </mat-toolbar>
   </header>
   <section class="page__body">
-    <mat-nav-list>
-      <mat-list-item>
-        <span matLine i18n>Profile</span>
-        <a mat-icon-button [routerLink]="['/profile']">
-          <mat-icon>edit</mat-icon>
-        </a>
-      </mat-list-item>
-      <mat-divider></mat-divider>
-      <mat-list-item>
-        <span matLine i18n>Change Password</span>
-        <a mat-icon-button [routerLink]="['/password']">
-          <mat-icon>edit</mat-icon>
-        </a>
-      </mat-list-item>
-      <mat-divider></mat-divider>
-    </mat-nav-list>
+    <mat-accordion>
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <p>Basic</p>
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          <mat-list-item>
+            <span matLine i18n>Profile</span>
+            <a mat-icon-button [routerLink]="['/profile']">
+              <mat-icon>edit</mat-icon>
+            </a>
+          </mat-list-item>
+          <mat-list-item>
+            <span matLine i18n>Change Password</span>
+            <a mat-icon-button [routerLink]="['/password']">
+              <mat-icon>edit</mat-icon>
+            </a>
+          </mat-list-item>
+          <mat-list-item>
+            <span matLine i18n>Two Factor Auth</span>
+            <a mat-icon-button [routerLink]="['/2fa']">
+              <mat-icon>edit</mat-icon>
+            </a>
+          </mat-list-item>
+        </mat-nav-list>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <p>Security</p>
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          <mat-list-item *ngFor="let preference of PREFERENCES">
+            <span matLine i18n>{{ preference.title }}</span>
+            <mat-slide-toggle
+              [checked]="
+                preferences[preference.key] &&
+                preferences[preference.key].enabled
+              "
+              (change)="updatePreference($event, preference.key)"
+            ></mat-slide-toggle>
+          </mat-list-item>
+        </mat-nav-list>
+      </mat-expansion-panel>
+    </mat-accordion>
+
     <button
       class="signout-button"
       mat-raised-button

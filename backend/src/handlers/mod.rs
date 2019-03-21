@@ -25,11 +25,13 @@ pub mod contact;
 pub mod gender;
 pub mod group;
 pub mod permission;
+pub mod preference;
 pub mod profile;
 pub mod role;
 pub mod summary;
 pub mod ticket;
 pub mod token;
+pub mod totp;
 pub mod user;
 
 #[derive(Debug)]

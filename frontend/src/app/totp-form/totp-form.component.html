@@ -1,0 +1,18 @@
+<form class="form" [formGroup]="totp" (ngSubmit)="verify(totp)" novalidate>
+  <mat-form-field>
+    <input
+      matInput
+      type="text"
+      id="code"
+      placeholder="TOTP code"
+      name="code"
+      formControlName="code"
+      i18n-placeholder
+    />
+  </mat-form-field>
+  <div>
+    <button mat-flat-button color="primary" [disabled]="!totp.valid" i18n>
+      Verity
+    </button>
+  </div>
+</form>

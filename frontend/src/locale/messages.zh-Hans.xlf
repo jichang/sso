@@ -555,6 +555,14 @@
           <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="f9f9ac530d2b0671df43fa83b32e36c1617eee07" datatype="html">
+        <source>Enable WebAuthn</source>
+        <target>启用WebAuthn</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/settings-page/settings-page.component.html</context>
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="dcda7d76397986d2f2d129efc53e1827aa15a4d0" datatype="html">
         <source>
       Sign Out

@@ -224,6 +224,72 @@ pub fn auth<T: GenericConnection>(
     }
 }
 
+pub fn select_user<T: GenericConnection>(pg_conn: &T, user_id: i64) -> Result<User, ModelError> {
+    let trans = pg_conn.transaction()?;
+
+    let stmt = r#"
+    SELECT users.id as user_id,
+           users.union_id as user_union_id,
+           users.created_time as user_created_time,
+           users.updated_time as user_updated_time,
+           users.removed_time as user_removed_time,
+           users.status as user_status,
+           accounts.id as account_id,
+           accounts.username as account_username,
+           accounts.salt as account_salt,
+           accounts.hash as account_hash,
+           accounts.created_time as account_created_time,
+           accounts.updated_time as account_updated_time,
+           accounts.removed_time as account_removed_time,
+           accounts.status as account_status,
+           roles.id as role_id,
+           roles.name as role_name,
+           roles.created_time as role_created_time,
+           roles.updated_time as role_updated_time,
+           roles.removed_time as role_removed_time,
+           roles.status as role_status
+    FROM sso.accounts as accounts
+    LEFT JOIN sso.users as users ON users.id = accounts.user_id
+    LEFT JOIN sso.group_users as group_users ON group_users.user_id = users.id
+    LEFT JOIN sso.group_roles as group_roles ON group_roles.group_id = group_users.group_id
+    LEFT JOIN sso.roles as roles ON roles.id = group_roles.role_id
+    WHERE users.id = $1;
+    "#;
+
+    let rows = trans.query(&stmt, &[&user_id])?;
+    if rows.len() == 0 {
+        Err(ModelError::NotFound)
+    } else {
+        let row = rows.get(0);
+
+        Ok(User {
+            id: row.get("user_id"),
+            union_id: row.get("user_union_id"),
+            role: Role {
+                id: row.get("role_id"),
+                name: row.get("role_name"),
+                permissions: vec![],
+                created_time: row.get("role_created_time"),
+                updated_time: row.get("role_updated_time"),
+                removed_time: row.get("role_removed_time"),
+                status: row.get("role_status"),
+            },
+            account: Account {
+                id: row.get("account_id"),
+                username: row.get("account_username"),
+                created_time: row.get("account_created_time"),
+                updated_time: row.get("account_updated_time"),
+                removed_time: row.get("account_removed_time"),
+                status: row.get("account_status"),
+            },
+            created_time: row.get("user_created_time"),
+            updated_time: row.get("user_updated_time"),
+            removed_time: row.get("user_removed_time"),
+            status: row.get("user_status"),
+        })
+    }
+}
+
 pub fn change_password<T: GenericConnection>(
     pg_conn: &T,
     user_id: i64,
@@ -283,10 +349,10 @@ pub fn select_users<T: GenericConnection>(
     params: &PaginatorParams,
 ) -> Result<ResourceCollection<User>, ModelError> {
     let where_clause = if group_id.is_some() {
-            "WHERE group_users.group_id = $3"
-        } else {
-            ""
-        };
+        "WHERE group_users.group_id = $3"
+    } else {
+        ""
+    };
 
     let stmt = format!(
         "
@@ -323,7 +389,7 @@ pub fn select_users<T: GenericConnection>(
 
     let rows = match group_id {
         Some(group_id) => pg_conn.query(&stmt, &[&params.limit, &params.offset, &group_id])?,
-        None => pg_conn.query(&stmt, &[&params.limit, &params.offset])?
+        None => pg_conn.query(&stmt, &[&params.limit, &params.offset])?,
     };
 
     let total: i64 = match rows.len() {
