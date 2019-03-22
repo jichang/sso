@@ -122,7 +122,9 @@ pub fn signin(
                 };
                 audit::create(&*conn, &params.username, activity)?;
 
-                cookies.add_private(Cookie::new("identity", auth_user.id.to_string()));
+                let mut cookie = Cookie::new("identity", auth_user.id.to_string());
+                cookie.set_http_only(true);
+                cookies.add_private(cookie);
 
                 let preferences = preference::select(&*conn, auth_user.id)?;
                 let totp_preference = preferences.iter().find(|preference| {

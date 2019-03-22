@@ -53,7 +53,9 @@ pub fn select_qrcode(
             modules.push(row);
         }
 
-        cookies.add_private(Cookie::new("user.totp.secret", totp_secret));
+        let mut cookie = Cookie::new("user.totp.secret", totp_secret);
+        cookie.set_http_only(true);
+        cookies.add_private(cookie);
 
         Ok(Json(QrCodeConfig {
             size: size,
