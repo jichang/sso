@@ -47,7 +47,7 @@
         </mat-expansion-panel-header>
         <mat-nav-list>
           <mat-list-item *ngFor="let preference of PREFERENCES">
-            <span matLine i18n>{{ preference.title }}</span>
+            <span matLine>{{ preference.title }}</span>
             <mat-slide-toggle
               [checked]="
                 preferences[preference.key] &&

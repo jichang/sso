@@ -27,6 +27,10 @@
           <context context-type="sourcefile">app/password-page/password-page.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/two-fa-page/two-fa-page.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
       </trans-unit>
       <trans-unit id="ba4f24bf9bf3dc4db3d6bc1b8b63339295f0b806" datatype="html">
         <source>Sign In</source>
@@ -55,7 +59,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">app/signin-page/signin-page.component.html</context>
-          <context context-type="linenumber">14</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48" datatype="html">
@@ -497,21 +501,21 @@
         <source>Profile</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings-page/settings-page.component.html</context>
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5edf054f14aa57bc25a28cb7db01956fee53dac8" datatype="html">
         <source>Change Password</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings-page/settings-page.component.html</context>
-          <context context-type="linenumber">26</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="f9f9ac530d2b0671df43fa83b32e36c1617eee07" datatype="html">
-        <source>Enable WebAuthn</source>
+      <trans-unit id="6702a2db571caf46baa27884f51903ae42631dd8" datatype="html">
+        <source>Two Factor Auth</source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings-page/settings-page.component.html</context>
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dcda7d76397986d2f2d129efc53e1827aa15a4d0" datatype="html">
@@ -520,7 +524,7 @@
     </source>
         <context-group purpose="location">
           <context context-type="sourcefile">app/settings-page/settings-page.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9b475bb63675494482effde989c7f1f18c232620" datatype="html">
@@ -751,6 +755,35 @@
         <context-group purpose="location">
           <context context-type="sourcefile">app/password-form/password-form.component.html</context>
           <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b45c87ae486bb190bd91c6d7dbe385d2138cc62f" datatype="html">
+        <source>TOTP Code</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/two-fa-page/two-fa-page.component.html</context>
+          <context context-type="linenumber">32</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/totp-form/totp-form.component.html</context>
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="61f265d3383f9478ff338a4eae7b1368bd461d54" datatype="html">
+        <source>
+              Submit
+            </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/two-fa-page/two-fa-page.component.html</context>
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7d9f713de6ede79d23195edf7cea607b1e20e0a7" datatype="html">
+        <source>
+      Verity
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">app/totp-form/totp-form.component.html</context>
+          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
     </body>

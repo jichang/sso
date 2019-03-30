@@ -81,6 +81,7 @@ import { UsersListComponent } from "./users-list/users-list.component";
 import { TwoFaPageComponent } from "./two-fa-page/two-fa-page.component";
 import { QrcodeComponent } from "./qrcode/qrcode.component";
 import { TotpFormComponent } from './totp-form/totp-form.component';
+import { environment } from '../environments/environment';
 
 @Injectable()
 export class TrackableHttpOptions extends BaseRequestOptions {
@@ -227,7 +228,8 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     ServiceWorkerModule,
     BrowserAnimationsModule,
-    FeblrMaterialModule
+    FeblrMaterialModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   entryComponents: [ConfirmDialogComponent],
   providers: [
