@@ -80,8 +80,9 @@ import { UsersPageComponent } from "./users-page/users-page.component";
 import { UsersListComponent } from "./users-list/users-list.component";
 import { TwoFaPageComponent } from "./two-fa-page/two-fa-page.component";
 import { QrcodeComponent } from "./qrcode/qrcode.component";
-import { TotpFormComponent } from './totp-form/totp-form.component';
-import { environment } from '../environments/environment';
+import { TotpFormComponent } from "./totp-form/totp-form.component";
+import { environment } from "../environments/environment";
+import { NotFoundPageComponent } from "./not-found-page/not-found-page.component";
 
 @Injectable()
 export class TrackableHttpOptions extends BaseRequestOptions {
@@ -164,6 +165,10 @@ const routes: Routes = [
   {
     path: "oauth",
     component: OauthPageComponent
+  },
+  {
+    path: "**",
+    component: NotFoundPageComponent
   }
 ];
 
@@ -219,7 +224,8 @@ const routes: Routes = [
     UsersListComponent,
     TwoFaPageComponent,
     QrcodeComponent,
-    TotpFormComponent
+    TotpFormComponent,
+    NotFoundPageComponent
   ],
   imports: [
     BrowserModule,
@@ -229,7 +235,9 @@ const routes: Routes = [
     ServiceWorkerModule,
     BrowserAnimationsModule,
     FeblrMaterialModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register("ngsw-worker.js", {
+      enabled: environment.production
+    })
   ],
   entryComponents: [ConfirmDialogComponent],
   providers: [
