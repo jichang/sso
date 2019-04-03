@@ -68,7 +68,7 @@ pub fn signup(
         union_id,
         &params.username,
         &params.password,
-        GroupId::Guest as i64,
+        GroupId::Normal as i64,
     )?;
 
     let url = String::from("/users/self");
