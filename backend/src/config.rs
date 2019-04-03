@@ -5,6 +5,7 @@ use toml;
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Server {
     pub addr: String,
+    pub domain: String,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

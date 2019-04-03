@@ -8,6 +8,7 @@ use rocket::State;
 use rocket_contrib::json::Json;
 
 use super::super::common;
+use super::super::config_parser::Config;
 use super::super::guards::bearer;
 use super::super::guards::bearer::Claims;
 use super::super::models::totp;
@@ -29,6 +30,7 @@ pub struct QrCodeConfig {
 
 #[get("/users/<user_id>/totp/qrcode")]
 pub fn select_qrcode(
+    config: State<Config>,
     db: State<Database>,
     user_id: i64,
     claims: Claims,
@@ -38,7 +40,9 @@ pub fn select_qrcode(
         let random_bytes = common::gen_rand_bytes(TOTP_SECRET_LEN)?;
         let totp_secret = base32::encode(Alphabet::RFC4648 { padding: true }, &random_bytes);
         let data = format!(
-            "otpauth://totp/Feblr:JacobChang?secret={}&issuer=Feblr",
+            "otpauth://totp/{}:{}?secret={}&issuer=Feblr",
+            config.server.domain,
+            user_id,
             totp_secret
         );
 
