@@ -131,4 +131,26 @@
       </div>
     </mat-card-content>
   </mat-card>
+  <mat-card *ngIf="summary.invitations.enabled">
+    <mat-card-content>
+      <div class="flex__box">
+        <div class="flex__item">
+          <h4 i18n>Invitations</h4>
+          <div>
+            <span i18n>Total:</span>
+            <span>{{ summary.invitations.total }}</span>
+            <span> / </span>
+            <span i18n>Used: </span>
+            <span>{{ summary.invitations.used }}</span>
+          </div>
+        </div>
+        <div>
+          <a [routerLink]="['invitations']"
+            ><span i18n>Details</span>
+            <mat-icon>chevron_right</mat-icon>
+          </a>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

@@ -1,6 +1,5 @@
 import { Component, OnInit } from "@angular/core";
 import { Validators, FormBuilder, FormGroup } from "@angular/forms";
-import { HttpClient } from "@angular/common/http";
 import { session } from "../model";
 import { Group, GroupModelService } from "../group-model.service";
 import { Subscription } from "rxjs";

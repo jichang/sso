@@ -41,9 +41,7 @@ pub fn select_qrcode(
         let totp_secret = base32::encode(Alphabet::RFC4648 { padding: true }, &random_bytes);
         let data = format!(
             "otpauth://totp/{}:{}?secret={}&issuer=Feblr",
-            config.server.domain,
-            user_id,
-            totp_secret
+            config.server.domain, user_id, totp_secret
         );
 
         let qr = QrCode::encode_text(&data, QrCodeEcc::Medium).unwrap();

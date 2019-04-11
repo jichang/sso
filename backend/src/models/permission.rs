@@ -40,6 +40,7 @@ pub enum ResourceType {
     RolePermission = 6,
     User = 7,
     Contact = 8,
+    Invitation = 9,
 }
 
 impl ResourceType {
@@ -53,6 +54,7 @@ impl ResourceType {
             6 => ResourceType::RolePermission,
             7 => ResourceType::User,
             8 => ResourceType::Contact,
+            9 => ResourceType::Invitation,
             _ => ResourceType::NONE,
         }
     }

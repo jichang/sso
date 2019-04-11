@@ -16,6 +16,7 @@ export interface Summary {
   applications: SummaryQuota;
   authorizations: SummaryQuota;
   contacts: SummaryQuota;
+  invitations: SummaryQuota;
 }
 
 export interface SummaryStore {

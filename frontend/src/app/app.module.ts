@@ -83,6 +83,9 @@ import { QrcodeComponent } from "./qrcode/qrcode.component";
 import { TotpFormComponent } from "./totp-form/totp-form.component";
 import { environment } from "../environments/environment";
 import { NotFoundPageComponent } from "./not-found-page/not-found-page.component";
+import { InvitationsPageComponent } from "./invitations-page/invitations-page.component";
+import { InvitationsListComponent } from "./invitations-list/invitations-list.component";
+import { InvitationModelService } from "./invitation-model.service";
 
 @Injectable()
 export class TrackableHttpOptions extends BaseRequestOptions {
@@ -167,6 +170,10 @@ const routes: Routes = [
     component: OauthPageComponent
   },
   {
+    path: "invitations",
+    component: InvitationsPageComponent
+  },
+  {
     path: "**",
     component: NotFoundPageComponent
   }
@@ -225,7 +232,9 @@ const routes: Routes = [
     TwoFaPageComponent,
     QrcodeComponent,
     TotpFormComponent,
-    NotFoundPageComponent
+    NotFoundPageComponent,
+    InvitationsPageComponent,
+    InvitationsListComponent
   ],
   imports: [
     BrowserModule,
@@ -254,6 +263,10 @@ const routes: Routes = [
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,
       multi: true
+    },
+    {
+      provide: InvitationModelService,
+      useClass: InvitationModelService
     }
   ],
   bootstrap: [AppComponent]

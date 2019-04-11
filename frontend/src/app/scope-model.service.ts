@@ -76,7 +76,7 @@ export class ScopeModelService {
     let apiUri = `/api/v1/users/${userId}/applications/${applicationId}//scopes/${
       scope.id
     }`;
-    return this.http.delete(apiUri).pipe(
+    return this.http.delete(apiUri, options).pipe(
       map((scope: Scope) => {
         this.store.scopes = this.store.scopes.filter(
           _scope => _scope.id !== scope.id

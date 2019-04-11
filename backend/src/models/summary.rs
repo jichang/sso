@@ -20,6 +20,7 @@ pub struct Summary {
     applications: SummaryQuota,
     authorizations: SummaryQuota,
     contacts: SummaryQuota,
+    invitations: SummaryQuota,
 }
 
 pub fn select<T: GenericConnection>(
@@ -34,7 +35,8 @@ pub fn select<T: GenericConnection>(
         (SELECT count(*) FROM sso.groups) as groups_used,
         (SELECT count(*) FROM sso.applications WHERE user_id = $1) as applications_used,
         (SELECT count(*) FROM sso.authorizations WHERE user_id = $1) as authorizations_used,
-        (SELECT count(*) FROM sso.contacts WHERE user_id = $1) as contacts_used
+        (SELECT count(*) FROM sso.contacts WHERE user_id = $1) as contacts_used,
+        (SELECT count(*) FROM sso.invitations WHERE user_id = $1) as invitations_used
     "#;
 
     let rows = pg_conn.query(stmt, &[&user_id])?;
@@ -53,6 +55,7 @@ pub fn select<T: GenericConnection>(
     let applications_used: i64 = row.get("applications_used");
     let authorizations_used: i64 = row.get("authorizations_used");
     let contacts_used: i64 = row.get("contacts_used");
+    let invitations_used: i64 = row.get("invitations_used");
 
     Ok(Summary {
         users: SummaryQuota {
@@ -88,6 +91,11 @@ pub fn select<T: GenericConnection>(
             enabled: true,
             total: QUOTA_LIMIT,
             used: contacts_used,
+        },
+        invitations: SummaryQuota {
+            enabled: true,
+            total: QUOTA_LIMIT,
+            used: invitations_used,
         },
     })
 }

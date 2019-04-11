@@ -1,0 +1,31 @@
+<div class="page">
+  <header class="page__header">
+    <mat-toolbar>
+      <mat-toolbar-row>
+        <div class="flex__item">
+          <div class="tools">
+            <a [routerLink]="['']">
+              <mat-icon>chevron_left</mat-icon>
+              <span i18n>Home</span>
+            </a>
+          </div>
+        </div>
+        <button (click)="createInvitation()" mat-flat-button color="primary">
+          <span i18n>Create Invitation</span><mat-icon>add</mat-icon>
+        </button>
+      </mat-toolbar-row>
+    </mat-toolbar>
+  </header>
+  <section class="page__body">
+    <invitations-list
+      [invitations]="invitations"
+      (remove)="removeInvitation($event)"
+    ></invitations-list>
+    <div *ngIf="invitations.length === 0" class="placeholder--list">
+      <span i18n>No Invitations</span>
+      <button (click)="createInvitation()" mat-button color="primary" i18n>
+        Create Invitation
+      </button>
+    </div>
+  </section>
+</div>

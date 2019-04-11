@@ -1,0 +1,1 @@
+DELETE FROM sso.permissions WHERE resource_type = 9;

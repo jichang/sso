@@ -12,6 +12,7 @@ pub mod contact;
 pub mod crypto;
 pub mod email;
 pub mod group;
+pub mod invitation;
 pub mod mailer;
 pub mod permission;
 pub mod preference;
