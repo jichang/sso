@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS sso.invitations (
   removed_time timestamp with time zone,
   status integer DEFAULT 0,
   CONSTRAINT invitation_pkey PRIMARY KEY (id),
-  CONSTRAINT invitation_id_fkey FOREIGN KEY (user_id) REFERENCES sso.users (id) ON UPDATE NO ACTION ON DELETE CASCADE
+  CONSTRAINT invitation_user_id_fkey FOREIGN KEY (user_id) REFERENCES sso.users (id) ON UPDATE NO ACTION ON DELETE CASCADE
 )
 WITH (
   OIDS=FALSE

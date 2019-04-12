@@ -21,6 +21,17 @@
       i18n-placeholder
     />
   </mat-form-field>
+  <mat-form-field>
+    <input
+      matInput
+      id="invitation-code"
+      type="text"
+      placeholder="Invitation Code"
+      name="invitation-code"
+      formControlName="invitation_code"
+      i18n-placeholder
+    />
+  </mat-form-field>
   <div>
     <button mat-flat-button color="primary" [disabled]="!user.valid" i18n>
       Sign Up

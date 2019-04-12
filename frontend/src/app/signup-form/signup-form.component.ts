@@ -1,12 +1,12 @@
 import { Component, OnInit, Output, EventEmitter } from "@angular/core";
-import {
-  FormBuilder,
-  FormGroup,
-  FormControl,
-  Validators
-} from "@angular/forms";
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
-import { User } from "../model";
+
+interface SignupParams {
+  username: string;
+  password: string;
+  invitation_code: string;
+}
 
 @Component({
   selector: "signup-form",
@@ -27,16 +27,21 @@ export class SignupFormComponent implements OnInit {
       password: [
         "",
         [Validators.compose([Validators.required, Validators.minLength(1)])]
+      ],
+      invitation_code: [
+        "",
+        [Validators.compose([Validators.required, Validators.minLength(1)])]
       ]
     });
   }
 
   ngOnInit() {}
 
-  signup({ value, valid }: { value: User; valid: boolean }) {
+  signup({ value, valid }: { value: SignupParams; valid: boolean }) {
     let params = {
       username: value.username,
-      password: value.password
+      password: value.password,
+      invitation_code: value.invitation_code
     };
 
     this.http.post("/api/v1/signup", params).subscribe(

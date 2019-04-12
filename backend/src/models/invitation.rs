@@ -74,6 +74,35 @@ pub fn select<T: GenericConnection>(
     Ok(invitations)
 }
 
+pub fn update<T: GenericConnection>(
+    pg_conn: &T,
+    invitation_code: &str,
+) -> Result<Invitation, ModelError> {
+    let stmt = r#"
+    UPDATE sso.invitations
+    SET updated_time = now(), status = 1
+    WHERE code = $1 and status = 0
+    RETURNING *
+    "#;
+
+    let rows = pg_conn.query(&stmt, &[&invitation_code])?;
+    if rows.len() != 1 {
+        Err(ModelError::NotFound)
+    } else {
+        let row = rows.get(0);
+
+        Ok(Invitation {
+            id: row.get("id"),
+            user_id: row.get("user_id"),
+            code: row.get("code"),
+            created_time: row.get("created_time"),
+            updated_time: row.get("updated_time"),
+            removed_time: row.get("removed_time"),
+            status: row.get("status"),
+        })
+    }
+}
+
 pub fn remove<T: GenericConnection>(
     pg_conn: &T,
     invitation_id: i64,

@@ -22,8 +22,18 @@ export class SignupPageComponent implements OnInit {
 
   failed(response: Response) {
     switch (response.status) {
+      case 404:
+        this.snackBar.open("Invitation code is invalid", "Dismiss", {
+          duration: 3000
+        });
+        break;
       case 409:
         this.snackBar.open("User already exist", "Dismiss", {
+          duration: 3000
+        });
+        break;
+      case 500:
+        this.snackBar.open("Server error", "Dismiss", {
           duration: 3000
         });
         break;

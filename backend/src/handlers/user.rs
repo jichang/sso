@@ -51,6 +51,7 @@ pub struct Auth {
 pub struct SignupParams {
     username: String,
     password: String,
+    invitation_code: String,
 }
 
 #[post("/signup", data = "<params>")]
@@ -68,6 +69,7 @@ pub fn signup(
         union_id,
         &params.username,
         &params.password,
+        &params.invitation_code,
         GroupId::Normal as i64,
     )?;
 

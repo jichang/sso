@@ -1,5 +1,6 @@
 use super::crypto;
 use super::crypto::Plaintext;
+use super::invitation;
 use super::role::Role;
 use super::username::Username;
 use super::Error as ModelError;
@@ -49,6 +50,7 @@ pub fn create<T: GenericConnection>(
     union_id: Uuid,
     username: &str,
     password: &str,
+    invitation_code: &str,
     group_id: i64,
 ) -> Result<User, ModelError> {
     let username = Username::new(username)?;
@@ -56,6 +58,8 @@ pub fn create<T: GenericConnection>(
     let ciphertext = crypto::generate(&plaintext)?;
 
     let trans = pg_conn.transaction()?;
+
+    invitation::update(&trans, invitation_code)?;
 
     let stmt = r#"
         INSERT INTO sso.users(union_id)

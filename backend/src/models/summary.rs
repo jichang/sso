@@ -55,6 +55,7 @@ pub fn select<T: GenericConnection>(
     let applications_used: i64 = row.get("applications_used");
     let authorizations_used: i64 = row.get("authorizations_used");
     let contacts_used: i64 = row.get("contacts_used");
+    let invitations_enabled = permissions.contains(ResourceType::Invitation, ActionType::CREATE);
     let invitations_used: i64 = row.get("invitations_used");
 
     Ok(Summary {
@@ -93,7 +94,7 @@ pub fn select<T: GenericConnection>(
             used: contacts_used,
         },
         invitations: SummaryQuota {
-            enabled: true,
+            enabled: invitations_enabled,
             total: QUOTA_LIMIT,
             used: invitations_used,
         },
