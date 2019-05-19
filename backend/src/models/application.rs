@@ -1,3 +1,6 @@
+use super::quota;
+use super::resource::{ActionType, ResourceType};
+use super::role::RoleId;
 use super::Error as ModelError;
 use chrono::{DateTime, Utc};
 use hex;
@@ -22,6 +25,7 @@ pub struct Application {
 
 pub fn create<T: GenericConnection>(
     pg_conn: &T,
+    role_id: i32,
     user_id: i64,
     name: &str,
     website_uri: &str,
@@ -34,13 +38,35 @@ pub fn create<T: GenericConnection>(
     let callback_uri = Url::parse(callback_uri)
         .map_err(|err| ModelError::InvalidParam(String::from("callback_uri"), Box::new(err)))?;
 
+    let trans = pg_conn.transaction()?;
+
+    let is_admin = role_id == RoleId::Admin as i32;
+    let applications_quota = quota::select(&trans, is_admin, user_id, ResourceType::Application)?;
+
+    let select_stmt = r#"
+    SELECT count(*) as used_quota
+    FROM sso.applications
+    WHERE user_id = $1
+    "#;
+
+    let rows = pg_conn.query(&select_stmt, &[&user_id])?;
+    if rows.len() != 1 {
+        return Err(ModelError::Unknown);
+    }
+
+    let row = rows.get(0);
+    let used_quota: i64 = row.get("used_quota");
+    if (used_quota >= applications_quota.quota as i64) {
+        return Err(ModelError::QuotaLimit);
+    }
+
     let stmt = r#"
     INSERT INTO sso.applications(user_id, name, website_uri, client_id, client_secret, callback_uri)
     VALUES ($1, $2, $3, $4, $5, $6)
     RETURNING *
     "#;
 
-    let rows = pg_conn.query(
+    let rows = trans.query(
         &stmt,
         &[
             &user_id,
@@ -54,6 +80,8 @@ pub fn create<T: GenericConnection>(
     if rows.len() != 1 {
         Err(ModelError::Unknown)
     } else {
+        trans.set_commit();
+
         let row = rows.get(0);
         let client_secret: Vec<u8> = row.get("client_secret");
 

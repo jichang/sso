@@ -10,7 +10,7 @@ use super::super::guards::bearer::Claims;
 use super::super::guards::permission::Permissions;
 use super::super::models::invitation;
 use super::super::models::invitation::Invitation;
-use super::super::models::permission::{ActionType, ResourceType};
+use super::super::models::resource::{ActionType, ResourceType};
 use super::super::storage::Database;
 use super::Error;
 
@@ -26,7 +26,7 @@ pub fn create_invitation(
             let pg_conn = db.get_conn()?;
             let code: String = thread_rng().sample_iter(&Alphanumeric).take(30).collect();
 
-            let new_invitation = invitation::create(&*pg_conn, user_id, &code)?;
+            let new_invitation = invitation::create(&*pg_conn, claims.role_id, user_id, &code)?;
 
             let url = String::from("/invitations");
             Ok(Created(url, Some(Json(new_invitation))))

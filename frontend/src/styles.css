@@ -29,7 +29,7 @@ body {
 }
 
 .page__body {
-  padding: 1rem 0;
+  padding: 1rem 0.5rem;
 }
 
 .section {
@@ -60,10 +60,6 @@ body {
 .tools span,
 .tools .mat-icon {
   vertical-align: middle;
-}
-
-.tools span {
-  margin-left: 0.5rem;
 }
 
 .button-group {

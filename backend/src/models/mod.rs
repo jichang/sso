@@ -17,7 +17,9 @@ pub mod mailer;
 pub mod permission;
 pub mod preference;
 pub mod profile;
+pub mod quota;
 pub mod ratelimit;
+pub mod resource;
 pub mod role;
 pub mod summary;
 pub mod ticket;
@@ -40,6 +42,7 @@ pub enum Error {
     Mailer(MailerError),
     Forbidden,
     NotFound,
+    QuotaLimit,
     Unknown,
 }
 
@@ -52,6 +55,7 @@ impl fmt::Display for Error {
             Error::Mailer(ref err) => err.fmt(f),
             Error::Forbidden => write!(f, "forbidden action"),
             Error::NotFound => write!(f, "Resource not found"),
+            Error::QuotaLimit => write!(f, "Quota limit"),
             Error::Unknown => write!(f, "Unknown error"),
         }
     }
@@ -66,6 +70,7 @@ impl StdError for Error {
             Error::Mailer(ref err) => err.description(),
             Error::Forbidden => "Forbidden action",
             Error::NotFound => "Resource not found",
+            Error::QuotaLimit => "Quota limit",
             Error::Unknown => "Unknown",
         }
     }

@@ -20,9 +20,9 @@ use super::super::models::audit::{
     SigninActivityDetails,
 };
 use super::super::models::group::GroupId;
-use super::super::models::permission::{ActionType, ResourceType};
 use super::super::models::preference;
 use super::super::models::preference::{Preference, PreferenceKey};
+use super::super::models::resource::{ActionType, ResourceType};
 use super::super::models::totp;
 use super::super::models::user;
 use super::super::models::user::User;

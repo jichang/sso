@@ -12,7 +12,7 @@ use super::super::guards::bearer::Claims;
 use super::super::guards::permission::Permissions;
 use super::super::models::application;
 use super::super::models::application::{Application, Scope};
-use super::super::models::permission::{ActionType, ResourceType};
+use super::super::models::resource::{ActionType, ResourceType};
 use super::super::storage::Database;
 use super::Error;
 
@@ -41,6 +41,7 @@ pub fn create_application(
             let pg_conn = db.get_conn()?;
             let new_application = application::create(
                 &*pg_conn,
+                claims.role_id,
                 user_id,
                 &params.name,
                 &params.website_uri,

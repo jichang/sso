@@ -3,7 +3,8 @@ use rocket_contrib::json::Json;
 
 use super::super::guards::permission::Permissions;
 use super::super::models::permission;
-use super::super::models::permission::{ActionType, Permission, ResourceType};
+use super::super::models::permission::Permission;
+use super::super::models::resource::{ActionType, ResourceType};
 use super::super::storage::Database;
 use super::Error;
 

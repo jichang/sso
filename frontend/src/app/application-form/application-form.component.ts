@@ -20,7 +20,8 @@ import { session } from "../model";
 })
 export class ApplicationFormComponent implements OnInit {
   application: FormGroup;
-  @Output() result = new EventEmitter();
+  @Output() succeed = new EventEmitter();
+  @Output() failed = new EventEmitter();
 
   constructor(
     private fb: FormBuilder,
@@ -37,10 +38,13 @@ export class ApplicationFormComponent implements OnInit {
   ngOnInit() {}
 
   create({ value, valid }: { value: Application; valid: boolean }) {
-    this.applicationModelService
-      .create(value)
-      .subscribe((application: Application) => {
-        this.result.emit(application);
-      });
+    this.applicationModelService.create(value).subscribe(
+      (application: Application) => {
+        this.succeed.emit(application);
+      },
+      error => {
+        this.failed.emit(error);
+      }
+    );
   }
 }

@@ -1,5 +1,6 @@
 use super::permission;
-use super::permission::{ActionType, Permission, ResourceType};
+use super::permission::Permission;
+use super::resource::{ActionType, ResourceType};
 use super::Error as ModelError;
 use chrono::{DateTime, Utc};
 use postgres::GenericConnection;

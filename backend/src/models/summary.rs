@@ -1,9 +1,9 @@
 use super::super::guards::permission::Permissions;
-use super::super::models::permission::{ActionType, ResourceType};
+use super::quota::default_quota;
+use super::resource::{ActionType, ResourceType};
+use super::role::RoleId;
 use super::Error as ModelError;
 use postgres::GenericConnection;
-
-const QUOTA_LIMIT: i64 = 10;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct SummaryQuota {
@@ -25,6 +25,7 @@ pub struct Summary {
 
 pub fn select<T: GenericConnection>(
     pg_conn: &T,
+    role_id: i32,
     user_id: i64,
     permissions: &Permissions,
 ) -> Result<Summary, ModelError> {
@@ -53,50 +54,51 @@ pub fn select<T: GenericConnection>(
     let groups_used: i64 = row.get("groups_used");
     let applications_enabled = permissions.contains(ResourceType::Application, ActionType::CREATE);
     let applications_used: i64 = row.get("applications_used");
+    let authorizations_enabled =
+        permissions.contains(ResourceType::Authorization, ActionType::CREATE);
     let authorizations_used: i64 = row.get("authorizations_used");
+    let contacts_enabled = permissions.contains(ResourceType::Contact, ActionType::CREATE);
     let contacts_used: i64 = row.get("contacts_used");
     let invitations_enabled = permissions.contains(ResourceType::Invitation, ActionType::CREATE);
     let invitations_used: i64 = row.get("invitations_used");
 
+    let is_admin = role_id == RoleId::Admin as i32;
+
     Ok(Summary {
         users: SummaryQuota {
             enabled: users_enabled,
-            total: i64::max_value(),
+            total: default_quota(is_admin, ResourceType::User),
             used: if users_enabled { users_used } else { 0 },
         },
         roles: SummaryQuota {
             enabled: roles_enabled,
-            total: i64::max_value(),
+            total: default_quota(is_admin, ResourceType::Role),
             used: if roles_enabled { roles_used } else { 0 },
         },
         groups: SummaryQuota {
             enabled: groups_enabled,
-            total: i64::max_value(),
+            total: default_quota(is_admin, ResourceType::Group),
             used: if groups_enabled { groups_used } else { 0 },
         },
         applications: SummaryQuota {
             enabled: applications_enabled,
-            total: QUOTA_LIMIT,
-            used: if applications_enabled {
-                applications_used
-            } else {
-                0
-            },
+            total: default_quota(is_admin, ResourceType::Application),
+            used: applications_used,
+        },
+        invitations: SummaryQuota {
+            enabled: invitations_enabled,
+            total: default_quota(is_admin, ResourceType::Invitation),
+            used: invitations_used,
         },
         authorizations: SummaryQuota {
             enabled: true,
-            total: QUOTA_LIMIT,
+            total: default_quota(is_admin, ResourceType::Authorization),
             used: authorizations_used,
         },
         contacts: SummaryQuota {
             enabled: true,
-            total: QUOTA_LIMIT,
+            total: default_quota(is_admin, ResourceType::Contact),
             used: contacts_used,
-        },
-        invitations: SummaryQuota {
-            enabled: invitations_enabled,
-            total: QUOTA_LIMIT,
-            used: invitations_used,
         },
     })
 }

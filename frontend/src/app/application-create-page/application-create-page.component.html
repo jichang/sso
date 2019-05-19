@@ -18,7 +18,10 @@
     <mat-card>
       <mat-card-content>
         <h2 i18n="title of application create page">New Application</h2>
-        <application-form (result)="created()"></application-form>
+        <application-form
+          (result)="created()"
+          (failed)="failed()"
+        ></application-form>
       </mat-card-content>
     </mat-card>
   </section>

@@ -161,6 +161,11 @@ impl<'r> Responder<'r> for Error {
                     body.insert("errmsg", "internal server error");
                     HttpStatus::NotFound
                 }
+                &ModelError::QuotaLimit => {
+                    body.insert("errno", "402000");
+                    body.insert("errmsg", "reach quota limit, need payment");
+                    HttpStatus::PaymentRequired
+                }
                 &ModelError::Database(ref pg_err) => match pg_err.code() {
                     Some(state) if *state == UNIQUE_VIOLATION => {
                         body.insert("errno", "40900001");
@@ -175,8 +180,8 @@ impl<'r> Responder<'r> for Error {
                 },
                 &ModelError::InvalidParam(ref field, ref _err) => {
                     body.insert("errno", "40000000");
-                    body.insert("errmsg", "invalid params");
-                    body.insert("field", "password");
+                    body.insert("errmsg", "invalid paramemter");
+                    body.insert("field", field);
                     HttpStatus::BadRequest
                 }
                 _ => {

@@ -5,7 +5,7 @@ use rocket_contrib::json::Json;
 use super::super::guards::permission::Permissions;
 use super::super::models::group;
 use super::super::models::group::Group;
-use super::super::models::permission::{ActionType, ResourceType};
+use super::super::models::resource::{ActionType, ResourceType};
 use super::super::models::user::User;
 use super::super::models::PaginatorParams;
 use super::super::models::ResourceCollection;

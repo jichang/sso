@@ -1,3 +1,6 @@
+use super::quota;
+use super::resource::{ActionType, ResourceType};
+use super::role::RoleId;
 use super::Error as ModelError;
 use chrono::{DateTime, Utc};
 use postgres::GenericConnection;
@@ -15,18 +18,43 @@ pub struct Invitation {
 
 pub fn create<T: GenericConnection>(
     pg_conn: &T,
+    role_id: i32,
     user_id: i64,
     code: &str,
 ) -> Result<Invitation, ModelError> {
+    let trans = pg_conn.transaction()?;
+
+    let is_admin = role_id == RoleId::Admin as i32;
+    let invitations_quota = quota::select(&trans, is_admin, user_id, ResourceType::Invitation)?;
+
+    let select_stmt = r#"
+    SELECT count(*) as used_quota
+    FROM sso.invitations
+    WHERE user_id = $1
+    "#;
+
+    let rows = pg_conn.query(&select_stmt, &[&user_id])?;
+    if rows.len() != 1 {
+        return Err(ModelError::Unknown);
+    }
+
+    let row = rows.get(0);
+    let used_quota: i64 = row.get("used_quota");
+    if (used_quota >= invitations_quota.quota as i64) {
+        return Err(ModelError::QuotaLimit);
+    }
+
     let stmt = r#"
     INSERT INTO sso.invitations(user_id, code)
     VALUES ($1, $2)
     RETURNING *
     "#;
-    let rows = pg_conn.query(stmt, &[&user_id, &code])?;
+    let rows = trans.query(stmt, &[&user_id, &code])?;
     if rows.len() != 1 {
         Err(ModelError::Unknown)
     } else {
+        trans.set_commit();
+
         let row = rows.get(0);
 
         Ok(Invitation {

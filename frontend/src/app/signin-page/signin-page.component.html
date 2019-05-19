@@ -1,25 +1,27 @@
 <div class="page">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title i18n>Sign In</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <div [ngSwitch]="step">
-        <div *ngSwitchCase="SigninStep.PASSWORD">
-          <signin-form
-            (success)="passwordPassed($event)"
-            (failure)="failure($event)"
-          ></signin-form>
+  <div class="page__body">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title i18n>Sign In</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div [ngSwitch]="step">
+          <div *ngSwitchCase="SigninStep.PASSWORD">
+            <signin-form
+              (success)="passwordPassed($event)"
+              (failure)="failure($event)"
+            ></signin-form>
+          </div>
+          <div *ngSwitchCase="SigninStep.TOTP">
+            <totp-form
+              (success)="totpPassed($event)"
+              (failure)="failure($event)"
+            ></totp-form>
+          </div>
         </div>
-        <div *ngSwitchCase="SigninStep.TOTP">
-          <totp-form
-            (success)="totpPassed($event)"
-            (failure)="failure($event)"
-          ></totp-form>
-        </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
+      </mat-card-content>
+    </mat-card>
 
-  <a mat-button [routerLink]="['/signup']" i18n>Sign Up</a>
+    <a mat-button [routerLink]="['/signup']" i18n>Sign Up</a>
+  </div>
 </div>
