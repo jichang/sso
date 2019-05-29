@@ -6,7 +6,8 @@ import {
 } from "../application-model.service";
 import { map } from "rxjs/operators";
 import { Subscription } from "rxjs";
-import { MatDialogRef, MatDialog, MatSnackBar } from "@angular/material";
+import { MatDialogRef, MatDialog } from "@angular/material/dialog";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 import { ScopeModelService, Scope } from "../scope-model.service";
 import { SessionService } from "../session.service";

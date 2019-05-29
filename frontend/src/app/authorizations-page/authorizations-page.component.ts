@@ -7,7 +7,7 @@ import { session } from "../model";
 import { Subscription } from "rxjs";
 import { Router } from "@angular/router";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
-import { MatDialog, MatDialogRef } from "@angular/material";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { AuthorizationAction } from "../authorizations-list/authorizations-list.component";
 
 @Component({

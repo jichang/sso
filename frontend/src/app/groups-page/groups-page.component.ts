@@ -4,7 +4,7 @@ import { session } from "../model";
 import { Group, GroupModelService } from "../group-model.service";
 import { Subscription } from "rxjs";
 import { Router } from "@angular/router";
-import { MatSnackBar } from "@angular/material";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "groups-page",

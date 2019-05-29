@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Router, ActivatedRoute } from "@angular/router";
 import * as model from "../model";
 import { HttpErrorResponse } from "@angular/common/http";
-import { MatSnackBar } from "@angular/material";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 export enum AuthState {
   PASS = 0,

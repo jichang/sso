@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { Role, RoleModelService } from "../role-model.service";
 import { session } from "../model";
 import { Subscription } from "rxjs";
-import { MatSnackBar } from "@angular/material";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import {
   Permission,
   PermissionModelService

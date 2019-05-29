@@ -6,7 +6,7 @@ import {
 } from "../application-model.service";
 import { session } from "../model";
 import { Subscription } from "rxjs";
-import { MatSnackBar } from "@angular/material";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "applications-page",

@@ -1,8 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Response, RequestOptions } from "@angular/http";
-import { Observable, BehaviorSubject } from "rxjs";
-import { map } from "rxjs/operators";
-import { session } from "./model";
+import { BehaviorSubject } from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 export enum ResourceType {

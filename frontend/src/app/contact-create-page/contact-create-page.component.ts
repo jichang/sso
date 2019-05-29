@@ -7,7 +7,8 @@ import {
   HttpHeaders,
   HttpErrorResponse
 } from "@angular/common/http";
-import { MatSnackBar, MatVerticalStepper } from "@angular/material";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatVerticalStepper } from "@angular/material/stepper";
 import { TokenModelService, CreateParams } from "../token-model.service";
 
 interface Step {

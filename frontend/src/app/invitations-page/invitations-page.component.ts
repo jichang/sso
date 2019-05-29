@@ -6,7 +6,7 @@ import {
 } from "../invitation-model.service";
 import { Subscription } from "rxjs";
 import { Router } from "@angular/router";
-import { MatSnackBar } from "@angular/material";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "invitations-page",

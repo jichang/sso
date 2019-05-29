@@ -2,7 +2,9 @@ import { Component, OnInit, OnDestroy } from "@angular/core";
 import { GroupModelService, Group } from "../group-model.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { PaginatorParams, User, session } from "../model";
-import { PageEvent, MatSnackBar, MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
+import { PageEvent } from "@angular/material/paginator";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Subscription } from "rxjs";
 
 @Component({

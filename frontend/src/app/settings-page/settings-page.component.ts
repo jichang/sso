@@ -8,7 +8,8 @@ import {
   PREFERENCES
 } from "../preference.service";
 import { Subscription } from "rxjs";
-import { MatSnackBar, MatSlideToggleChange } from "@angular/material";
+import { MatSlideToggleChange } from "@angular/material/slide-toggle";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "settings-page",

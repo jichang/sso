@@ -3,7 +3,8 @@ import { Subscription } from "rxjs";
 import { UsersStore, UsersModelService } from "../users-model.service";
 import { session, PaginatorParams } from "../model";
 import { Router } from "@angular/router";
-import { MatSnackBar, PageEvent } from "@angular/material";
+import { PageEvent } from "@angular/material/paginator";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "users-page",

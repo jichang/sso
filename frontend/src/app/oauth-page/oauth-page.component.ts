@@ -8,7 +8,7 @@ import {
 import { Scope } from "../scope-model.service";
 import { Authorization } from "../authorization-model.service";
 import { session } from "../model";
-import { MatSnackBar } from "@angular/material";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 interface OauthParams {
   server_id: string;

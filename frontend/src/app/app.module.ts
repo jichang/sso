@@ -4,11 +4,6 @@ import { NgModule, Injectable } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { ServiceWorkerModule } from "@angular/service-worker";
-import {
-  RequestOptions,
-  RequestOptionsArgs,
-  BaseRequestOptions
-} from "@angular/common/http";
 import { RouterModule, Routes } from "@angular/router";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { registerLocaleData } from "@angular/common";
@@ -86,20 +81,6 @@ import { NotFoundPageComponent } from "./not-found-page/not-found-page.component
 import { InvitationsPageComponent } from "./invitations-page/invitations-page.component";
 import { InvitationsListComponent } from "./invitations-list/invitations-list.component";
 import { InvitationModelService } from "./invitation-model.service";
-
-@Injectable()
-export class TrackableHttpOptions extends BaseRequestOptions {
-  constructor() {
-    super();
-    this.headers.append("Content-Type", "application/json");
-  }
-
-  merge(options?: RequestOptionsArgs): RequestOptions {
-    var newOptions = super.merge(options);
-    newOptions.headers.set("X-Requested-Id", cuid());
-    return newOptions;
-  }
-}
 
 const routes: Routes = [
   { path: "", component: HomePageComponent },
@@ -250,7 +231,6 @@ const routes: Routes = [
   ],
   entryComponents: [ConfirmDialogComponent],
   providers: [
-    { provide: RequestOptions, useClass: TrackableHttpOptions },
     { provide: PermissionModelService, useClass: PermissionModelService },
     { provide: RoleModelService, useClass: RoleModelService },
     { provide: ApplicationModelService, useClass: ApplicationModelService },

@@ -4,7 +4,7 @@ import { Contact, ContactModelService } from "../contact-model.service";
 import { session } from "../model";
 import { ContactAction } from "../contacts-list/contacts-list.component";
 import { Subscription } from "rxjs";
-import { MatDialog, MatDialogRef } from "@angular/material";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 
 @Component({

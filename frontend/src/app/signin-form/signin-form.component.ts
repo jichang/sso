@@ -5,7 +5,6 @@ import {
   FormControl,
   Validators
 } from "@angular/forms";
-import { Response, Headers, RequestOptions } from "@angular/http";
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { User } from "../model";
 

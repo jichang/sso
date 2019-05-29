@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { Role } from "../role-model.service";
 import { Permission } from "../permission-model.service";
-import { MatSlideToggleChange } from "@angular/material";
+import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 
 @Component({
   selector: "roles-list",

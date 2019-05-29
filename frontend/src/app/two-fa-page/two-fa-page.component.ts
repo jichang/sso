@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { TotpService, TotpStore } from "../totp.service";
 import { FormBuilder, Validators, FormGroup } from "@angular/forms";
-import { MatSnackBar } from "@angular/material";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "two-fa-page",
