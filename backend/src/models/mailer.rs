@@ -1,13 +1,13 @@
 use super::super::config_parser::Config;
 use super::Error as ModelError;
+use lettre::{SendableEmail, EmailAddress, Transport, Envelope, SmtpClient};
 use lettre::smtp::authentication::{Credentials, Mechanism};
 use lettre::smtp::error::Error as SmtpError;
 use lettre::smtp::response::Response;
 use lettre::smtp::ConnectionReuseParameters;
 use lettre::smtp::SmtpTransport;
-use lettre::EmailTransport;
+use lettre_email::Email;
 use lettre_email::error::Error as EmailError;
-use lettre_email::EmailBuilder;
 use std::error::Error as StdError;
 use std::fmt;
 
@@ -57,7 +57,7 @@ pub fn send_token(
         "verify link: {}?target_id={}&target_type=email&token={}",
         config.mailer.verify_link, contact_id, verify_token
     );
-    let email = EmailBuilder::new()
+    let email = Email::builder()
         .to((email_addr, ""))
         .from(config.mailer.username.to_string())
         .subject("Welcome to feblr")
@@ -69,14 +69,15 @@ pub fn send_token(
         config.mailer.username.to_string(),
         config.mailer.password.to_string(),
     );
-    let mut mailer = SmtpTransport::simple_builder(&config.mailer.server)
+    let mut mailer = SmtpClient::new_simple(&config.mailer.server)
         .map_err(MailerError::Smtp)?
         .credentials(credentials)
         .smtp_utf8(true)
         .authentication_mechanism(Mechanism::Login)
         .connection_reuse(ConnectionReuseParameters::ReuseUnlimited)
-        .build();
-    let response = mailer.send(&email).map_err(MailerError::Smtp)?;
+        .transport();
+
+    let response = mailer.send(email.into()).map_err(MailerError::Smtp)?;
     mailer.close();
 
     Ok(response)
