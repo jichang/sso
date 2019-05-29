@@ -35,7 +35,7 @@ export class ContactCreatePageComponent implements OnInit {
       editable: false
     }
   ];
-  @ViewChild(MatVerticalStepper)
+  @ViewChild(MatVerticalStepper, { static: true })
   private stepper: MatVerticalStepper;
   private contact?: Contact;
 

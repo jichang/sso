@@ -7,7 +7,7 @@ import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 })
 export class CopyTextSpanComponent implements OnInit {
   @Input() text: string;
-  @ViewChild('textSpan') spanChild: ElementRef;
+  @ViewChild('textSpan', { static: true }) spanChild: ElementRef;
 
   constructor() { }
 

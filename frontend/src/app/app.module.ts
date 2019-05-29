@@ -8,7 +8,7 @@ import {
   RequestOptions,
   RequestOptionsArgs,
   BaseRequestOptions
-} from "@angular/http";
+} from "@angular/common/http";
 import { RouterModule, Routes } from "@angular/router";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { registerLocaleData } from "@angular/common";
