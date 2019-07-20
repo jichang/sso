@@ -14,24 +14,29 @@ impl<'a, 'r> FromRequest<'a, 'r> for RateLimit {
             Some(identity) => {
                 let cache = request.guard::<State<Cache>>()?;
                 match cache.get_conn() {
-                    Ok(redis_conn) => match RateLimit::select(&redis_conn, identity.value()) {
-                        Ok(rate_limit) => {
-                            if rate_limit.remaining <= 0 {
-                                Outcome::Failure((Status::TooManyRequests, ()))
-                            } else {
-                                let rate_limit = RateLimit {
-                                    limit: rate_limit.limit,
-                                    reset: rate_limit.reset,
-                                    remaining: rate_limit.remaining - 1,
-                                };
-                                let _ =
-                                    RateLimit::update(&redis_conn, identity.value(), &rate_limit);
+                    Ok(mut redis_conn_manager) => {
+                        match RateLimit::select(&mut *redis_conn_manager, identity.value()) {
+                            Ok(rate_limit) => {
+                                if rate_limit.remaining <= 0 {
+                                    Outcome::Failure((Status::TooManyRequests, ()))
+                                } else {
+                                    let rate_limit = RateLimit {
+                                        limit: rate_limit.limit,
+                                        reset: rate_limit.reset,
+                                        remaining: rate_limit.remaining - 1,
+                                    };
+                                    let _ = RateLimit::update(
+                                        &mut *redis_conn_manager,
+                                        identity.value(),
+                                        &rate_limit,
+                                    );
 
-                                Outcome::Success(rate_limit)
+                                    Outcome::Success(rate_limit)
+                                }
                             }
+                            Err(_err) => Outcome::Failure((Status::InternalServerError, ())),
                         }
-                        Err(_err) => Outcome::Failure((Status::InternalServerError, ())),
-                    },
+                    }
                     Err(_err) => Outcome::Failure((Status::InternalServerError, ())),
                 }
             }

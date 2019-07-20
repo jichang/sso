@@ -67,13 +67,12 @@ export class ApplicationPageComponent implements OnInit, OnDestroy {
 
   remove(application: Application) {
     this.dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      height: "400px",
-      width: "600px",
       data: {
         title: "Delete Application?",
         message: "delete application " + application.name
       }
     });
+
     this.dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.applicationModel

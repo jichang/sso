@@ -22,7 +22,7 @@ impl RateLimit {
         }
     }
 
-    pub fn select(redis_conn: &Connection, identity: &str) -> Result<Self, RedisError> {
+    pub fn select(redis_conn: &mut Connection, identity: &str) -> Result<Self, RedisError> {
         let key = format!("ratelimit:identity:{}", identity);
         let result: Result<String, _> = redis_conn.get(key);
         match result {
@@ -32,7 +32,7 @@ impl RateLimit {
     }
 
     pub fn update(
-        redis_conn: &Connection,
+        redis_conn: &mut Connection,
         identity: &str,
         rate_limit: &RateLimit,
     ) -> Result<(), RedisError> {

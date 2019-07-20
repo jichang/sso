@@ -71,7 +71,7 @@ pub fn create_authorization(
             &params.scope_name,
         )?;
 
-        let redis_conn = cache.get_conn()?;
+        let mut redis_conn = cache.get_conn()?;
         let code = common::gen_rand_bytes(AUTH_CODE_SIZE)?;
         let expire = 5 * 60;
         let key = format!("oauth:code:{}", hex::encode(&code));

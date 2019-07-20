@@ -28,7 +28,7 @@ pub fn create_ticket(
     cache: State<Cache>,
     params: Json<CreateTicketParams>,
 ) -> Result<Created<Json<Ticket>>, Error> {
-    let redis_conn = cache.get_conn()?;
+    let mut redis_conn = cache.get_conn()?;
     let key = format!("oauth:code:{}", params.code);
     let code_value: Option<i64> = redis_conn.get(&key)?;
 

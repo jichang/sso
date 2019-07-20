@@ -1,7 +1,7 @@
 use hex;
 use rand::prelude::StdRng;
-use rand::FromEntropy;
 use rand::RngCore;
+use rand::SeedableRng;
 use redis::{Commands, Connection, RedisError};
 use std::error::Error as StdError;
 use std::fmt;
@@ -56,7 +56,7 @@ pub fn create() -> Result<String, TokenError> {
     Ok(hex::encode(token))
 }
 
-pub fn store(redis_conn: &Connection, email_addr: &str, token: &str) -> Result<(), TokenError> {
+pub fn store(redis_conn: &mut Connection, email_addr: &str, token: &str) -> Result<(), TokenError> {
     let expire = 5 * 60;
     let key = format!("token:email:{}", email_addr);
     let _: String = redis_conn.set_ex(&key, token, expire)?;
@@ -64,7 +64,11 @@ pub fn store(redis_conn: &Connection, email_addr: &str, token: &str) -> Result<(
     Ok(())
 }
 
-pub fn verify(redis_conn: &Connection, email_addr: &str, token: &str) -> Result<(), TokenError> {
+pub fn verify(
+    redis_conn: &mut Connection,
+    email_addr: &str,
+    token: &str,
+) -> Result<(), TokenError> {
     let key = format!("token:email:{}", email_addr);
     let saved_token: Option<String> = redis_conn.get(&key)?;
 

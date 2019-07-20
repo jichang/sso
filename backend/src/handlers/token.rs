@@ -40,7 +40,7 @@ pub fn create_token(
     claims: Claims,
 ) -> Result<Created<Json<CreateTokenResponse>>, Error> {
     if claims.uid == user_id {
-        let redis_conn = cache.get_conn()?;
+        let mut redis_conn = cache.get_conn()?;
         let token = common::gen_rand_bytes(TOKEN_SIZE)?;
         let key = format!(
             "token:{}:{}:{}",
@@ -86,7 +86,7 @@ pub fn delete_token(
     claims: Claims,
 ) -> Result<Json<()>, Error> {
     if claims.uid == user_id {
-        let redis_conn = cache.get_conn()?;
+        let mut redis_conn = cache.get_conn()?;
         let key = format!(
             "token:{}:{}:{}",
             params.target_id, params.target_type, params.action

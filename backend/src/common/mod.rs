@@ -1,7 +1,7 @@
 use rand::distributions::Standard;
 use rand::prelude::StdRng;
-use rand::FromEntropy;
 use rand::Rng;
+use rand::SeedableRng;
 use std::io::Error as IoError;
 
 pub fn gen_rand_bytes(len: usize) -> Result<Vec<u8>, IoError> {
