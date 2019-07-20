@@ -262,7 +262,6 @@ pub fn remove<T: GenericConnection>(
 ) -> Result<Authorization, ModelError> {
     let trans = pg_conn.transaction()?;
     let authorization = select_one(&trans, authorization_id)?;
-    println!("{:?}", authorization);
     let stmt = r#"
     DELETE
     FROM sso.authorizations
