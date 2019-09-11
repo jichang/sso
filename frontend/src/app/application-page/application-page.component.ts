@@ -11,6 +11,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 import { ScopeModelService, Scope } from "../scope-model.service";
 import { SessionService } from "../session.service";
+import { Secret, SecretModelService } from '../secret-model.service';
 
 @Component({
   selector: "application-page",
@@ -19,6 +20,7 @@ import { SessionService } from "../session.service";
 })
 export class ApplicationPageComponent implements OnInit, OnDestroy {
   application: Application = null;
+  secrets: Secret[] = [];
   scopes: Scope[] = [];
   subscription: Subscription = null;
   dialogRef: MatDialogRef<ConfirmDialogComponent>;
@@ -28,10 +30,11 @@ export class ApplicationPageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private applicationModel: ApplicationModelService,
+    private secretModel: SecretModelService,
     private scopeModel: ScopeModelService,
     public dialog: MatDialog,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.subscription = this.applicationModel.applications
@@ -51,10 +54,15 @@ export class ApplicationPageComponent implements OnInit, OnDestroy {
       this.scopes = scopes;
     });
 
+    this.secretModel.secrets.subscribe(secrets => {
+      this.secrets = secrets;
+    });
+
     let current = this.session.current();
     if (current) {
       const currUser = current.currUser;
       this.applicationModel.select(currUser.id);
+      this.secretModel.select(currUser.id, this.route.snapshot.params["id"]);
       this.scopeModel.select(currUser.id, this.route.snapshot.params["id"]);
     } else {
       this.router.navigate(["signin"]);
@@ -84,6 +92,32 @@ export class ApplicationPageComponent implements OnInit, OnDestroy {
           });
       }
     });
+  }
+
+  createSecret() {
+    let current = this.session.current();
+    if (current) {
+      this.secretModel
+        .create(current.currUser.id, this.application.id)
+        .subscribe(() => {
+          this.snackBar.open("Secret created", "Dismiss", {
+            duration: 3000
+          });
+        });
+    }
+  }
+
+  removeSecret(secret: Secret) {
+    let current = this.session.current();
+    if (current) {
+      this.secretModel
+        .remove(current.currUser.id, this.application.id, secret)
+        .subscribe(() => {
+          this.snackBar.open("Secret deleted", "Dismiss", {
+            duration: 3000
+          });
+        });
+    }
   }
 
   removeScope(scope: Scope) {

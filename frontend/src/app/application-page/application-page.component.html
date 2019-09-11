@@ -32,6 +32,27 @@
     <mat-card>
       <mat-card-content>
         <div class="flex__box">
+          <mat-card-title class="flex__item" i18n="title of secrets"
+            >Secrets</mat-card-title
+          >
+          <button mat-flat-button color="primary" (click)="createSecret()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+        <mat-divider></mat-divider>
+        <secrets-list
+          [secrets]="secrets"
+          (remove)="removeSecret($event)"
+        ></secrets-list>
+        <div *ngIf="secrets.length === 0" class="placeholder--list">
+          <span i18n="hint for no secrets">No Secrets</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-content>
+        <div class="flex__box">
           <mat-card-title class="flex__item" i18n="title of scopes"
             >Scopes</mat-card-title
           >
