@@ -11,7 +11,7 @@ use super::super::guards::bearer;
 use super::super::guards::bearer::Claims;
 use super::super::guards::permission::Permissions;
 use super::super::models::application;
-use super::super::models::application::{Application, Scope};
+use super::super::models::application::{Application, Scope, Secret};
 use super::super::models::resource::{ActionType, ResourceType};
 use super::super::storage::Database;
 use super::Error;
@@ -36,8 +36,6 @@ pub fn create_application(
 ) -> Result<Created<Json<Application>>, Error> {
     if permissins.contains(ResourceType::Application, ActionType::CREATE) {
         if claims.uid == user_id {
-            let client_id = common::gen_rand_bytes(CLIENT_ID_LEN)?;
-            let client_secret = common::gen_rand_bytes(CLIENT_SECRET_LEN)?;
             let pg_conn = db.get_conn()?;
             let new_application = application::create(
                 &*pg_conn,
@@ -45,8 +43,6 @@ pub fn create_application(
                 user_id,
                 &params.name,
                 &params.website_uri,
-                &client_id,
-                &client_secret,
                 &params.callback_uri,
             )?;
 
@@ -168,6 +164,63 @@ pub fn remove_scope(
         let removed_scope = application::remove_scope(&*pg_conn, application_id, scope_id)?;
 
         Ok(Json(removed_scope))
+    } else {
+        Err(Error::Privilege)
+    }
+}
+
+#[post("/users/<user_id>/applications/<application_id>/secrets")]
+pub fn create_secret(
+    db: State<Database>,
+    user_id: i64,
+    application_id: i64,
+    claims: Claims,
+) -> Result<Created<Json<Secret>>, Error> {
+    if claims.uid == user_id {
+        let client_id = common::gen_rand_bytes(CLIENT_ID_LEN)?;
+        let client_secret = common::gen_rand_bytes(CLIENT_SECRET_LEN)?;
+        let pg_conn = db.get_conn()?;
+        let new_secret =
+            application::create_secret(&*pg_conn, application_id, &client_id, &client_secret)?;
+
+        let url = String::from("/secrets");
+
+        Ok(Created(url, Some(Json(new_secret))))
+    } else {
+        Err(Error::Privilege)
+    }
+}
+
+#[get("/users/<user_id>/applications/<application_id>/secrets")]
+pub fn select_secrets(
+    db: State<Database>,
+    user_id: i64,
+    application_id: i64,
+    claims: Claims,
+) -> Result<Json<Vec<Secret>>, Error> {
+    if claims.uid == user_id {
+        let pg_conn = db.get_conn()?;
+        let secrets = application::select_secrets(&*pg_conn, application_id)?;
+
+        Ok(Json(secrets))
+    } else {
+        Err(Error::Privilege)
+    }
+}
+
+#[delete("/users/<user_id>/applications/<application_id>/secrets/<secret_id>")]
+pub fn remove_secret(
+    db: State<Database>,
+    user_id: i64,
+    application_id: i64,
+    secret_id: i64,
+    claims: Claims,
+) -> Result<Json<Secret>, Error> {
+    if claims.uid == user_id {
+        let pg_conn = db.get_conn()?;
+        let removed_secret = application::remove_secret(&*pg_conn, application_id, secret_id)?;
+
+        Ok(Json(removed_secret))
     } else {
         Err(Error::Privilege)
     }

@@ -17,22 +17,6 @@
         </td>
       </tr>
       <tr>
-        <td i18n="application client id">Client Id</td>
-        <td>
-          <copy-text-span [text]="application.client_id">
-            <span>{{ application.client_id | mask: 4 }}</span>
-          </copy-text-span>
-        </td>
-      </tr>
-      <tr>
-        <td i18n="application client secret">Client Secret</td>
-        <td>
-          <copy-text-span [text]="application.client_secret.Plaintext">
-            <span>{{ application.client_secret.Plaintext | mask: 4 }}</span>
-          </copy-text-span>
-        </td>
-      </tr>
-      <tr>
         <td i18n="application redirect uri">Redirect Uri</td>
         <td>{{ application.callback_uri }}</td>
       </tr>

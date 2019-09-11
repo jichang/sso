@@ -24,7 +24,7 @@ export class AuthorizationsPageComponent implements OnInit, OnDestroy {
     private router: Router,
     private authorizationModel: AuthorizationModelService,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.subscription = this.authorizationModel.authorizations.subscribe(
@@ -51,8 +51,6 @@ export class AuthorizationsPageComponent implements OnInit, OnDestroy {
     switch (type) {
       case "revoke":
         this.dialogRef = this.dialog.open(ConfirmDialogComponent, {
-          height: "400px",
-          width: "600px",
           data: {
             title: "Delete Authorization?",
             message: "delete contact " + authorization.server_app.name

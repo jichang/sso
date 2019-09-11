@@ -5,6 +5,7 @@ import { session } from "./model";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 export interface ClientSeret {
+  client_id?: string;
   Plaintext: string;
 }
 
@@ -12,8 +13,6 @@ export interface Application {
   id?: number;
   name: string;
   website_uri: string;
-  client_id?: string;
-  client_secret?: ClientSeret;
   callback_uri: string;
   status: number;
 }
@@ -80,7 +79,7 @@ export class ApplicationModelService {
   remove(applicatin: Application) {
     let apiUri = `/api/v1/users/${session.currUser().id}/applications/${
       applicatin.id
-    }`;
+      }`;
 
     return this.http.delete(apiUri).pipe(
       map((application: Application) => {

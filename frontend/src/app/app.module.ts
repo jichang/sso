@@ -81,6 +81,8 @@ import { NotFoundPageComponent } from "./not-found-page/not-found-page.component
 import { InvitationsPageComponent } from "./invitations-page/invitations-page.component";
 import { InvitationsListComponent } from "./invitations-list/invitations-list.component";
 import { InvitationModelService } from "./invitation-model.service";
+import { SecretsListComponent } from './secrets-list/secrets-list.component';
+import { SecretModelService } from './secret-model.service';
 
 const routes: Routes = [
   { path: "", component: HomePageComponent },
@@ -215,7 +217,8 @@ const routes: Routes = [
     TotpFormComponent,
     NotFoundPageComponent,
     InvitationsPageComponent,
-    InvitationsListComponent
+    InvitationsListComponent,
+    SecretsListComponent
   ],
   imports: [
     BrowserModule,
@@ -236,6 +239,7 @@ const routes: Routes = [
     { provide: ApplicationModelService, useClass: ApplicationModelService },
     { provide: ContactModelService, useClass: ContactModelService },
     { provide: ScopeModelService, useClass: ScopeModelService },
+    { provide: SecretModelService, useClass: SecretModelService },
     { provide: GroupModelService, useClass: GroupModelService },
     { provide: TokenModelService, useClass: TokenModelService },
     { provide: AuthorizationModelService, useClass: AuthorizationModelService },
@@ -251,4 +255,4 @@ const routes: Routes = [
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
