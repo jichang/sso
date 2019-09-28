@@ -4,6 +4,7 @@ use rocket::State;
 use rocket_contrib::json::Json;
 
 use hex::FromHex;
+use uuid::Uuid;
 
 use super::super::common;
 use super::super::config_parser::Config;
@@ -11,7 +12,7 @@ use super::super::guards::bearer;
 use super::super::guards::bearer::Claims;
 use super::super::guards::permission::Permissions;
 use super::super::models::application;
-use super::super::models::application::{Application, Scope, Secret};
+use super::super::models::application::{Application, Scope, SearchConditions, Secret};
 use super::super::models::resource::{ActionType, ResourceType};
 use super::super::storage::Database;
 use super::Error;
@@ -228,17 +229,40 @@ pub fn remove_secret(
 
 #[derive(Serialize, Deserialize, FromForm)]
 pub struct SelectAppParams {
-    client_id: String,
+    client_id: Option<String>,
+    open_id: Option<String>,
+    access_token: Option<String>,
 }
 
 #[get("/applications?<params..>")]
-pub fn select_application(
+pub fn search_applications(
     db: State<Database>,
     params: Form<SelectAppParams>,
-) -> Result<Json<Application>, Error> {
-    let client_id = Vec::<u8>::from_hex(&params.client_id)?;
+) -> Result<Json<Vec<Application>>, Error> {
     let pg_conn = db.get_conn()?;
-    let match_app = application::select_one(&*pg_conn, &client_id)?;
+    match params.client_id.as_ref() {
+        Some(client_id_str) => {
+            let client_id = Vec::<u8>::from_hex(&client_id_str)?;
+            let app = application::select_one(&*pg_conn, &client_id)?;
+            Ok(Json(vec![app]))
+        }
+        None => match (params.open_id.as_ref(), params.access_token.as_ref()) {
+            (Some(open_id), Some(access_token)) => {
+                let uuid_result = Uuid::parse_str(open_id);
+                match uuid_result {
+                    Ok(open_id) => {
+                        let conditions = SearchConditions {
+                            open_id: open_id,
+                            access_token: Vec::<u8>::from_hex(access_token)?,
+                        };
+                        let apps = application::select_many(&*pg_conn, &conditions)?;
 
-    Ok(Json(match_app))
+                        Ok(Json(apps))
+                    },
+                    Err(_) => Err(Error::Params)
+                }
+            }
+            _ => Err(Error::Params),
+        },
+    }
 }

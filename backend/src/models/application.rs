@@ -7,6 +7,7 @@ use hex;
 use postgres::GenericConnection;
 use std::convert::From;
 use url::Url;
+use uuid::Uuid;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Application {
@@ -172,6 +173,41 @@ pub fn select_one<T: GenericConnection>(
             status: row.get("status"),
         };
         Ok(application)
+    }
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct SearchConditions {
+    pub open_id: Uuid,
+    pub access_token: Vec<u8>,
+}
+
+pub fn select_many<T: GenericConnection>(
+    pg_conn: &T,
+    conditions: &SearchConditions,
+) -> Result<Vec<Application>, ModelError> {
+    let stmt = r#"
+    SELECT authorizations.id AS id,
+           authorizations.user_id AS user_id,
+           authorizations.created_time AS created_time,
+           authorizations.updated_time AS updated_time,
+           authorizations.removed_time AS removed_time,
+           authorizations.status
+    FROM sso.authorizations AS authorizations
+    LEFT JOIN sso.tickets AS tickets ON tickets.authorization_id = authorizations.id
+    LEFT JOIN sso.scopes AS scopes ON scopes.id = authorizations.scope_id
+    WHERE authorizations.open_id = $1 AND tickets.access_token = $2 AND scopes.name = 'user.apps'
+    "#;
+    let rows = pg_conn
+        .query(stmt, &[&conditions.open_id, &conditions.access_token])
+        .map_err(|err| ModelError::Database(err))?;
+
+    if rows.len() != 1 {
+        Err(ModelError::Unknown)
+    } else {
+        let row = rows.get(0);
+        let user_id: i64 = row.get("user_id");
+        select(pg_conn, user_id)
     }
 }
 

@@ -36,8 +36,8 @@ use rocket::request::Form;
 
 #[derive(Debug)]
 pub enum Error {
-    Request(Box<StdError>),
-    InvalidParam(String, Box<StdError>),
+    Request(Box<dyn StdError>),
+    InvalidParam(String, Box<dyn StdError>),
     Database(PgError),
     Mailer(MailerError),
     Forbidden,
